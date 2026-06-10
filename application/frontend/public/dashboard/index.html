@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VCB Admin Console · VoiceBank Inclusive</title>
+<link rel="icon" type="image/png" href="assets/img/vcb-logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"><img src="assets/img/vcb-logo.png" alt="Vietcombank" /></div>
+      <div>
+        <div class="brand-title">VCB Admin Console</div>
+        <div class="brand-sub">VoiceBank Inclusive</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="/user" class="nav-switch">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="17" r="1.5" fill="currentColor" stroke="none"/><path d="M9 7h6M9 10h4"/></svg>
+        Người dùng
+      </a>
+      <hr class="nav-divider" />
+      <button class="active" data-page="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Tổng quan
+      </button>
+      <button data-page="monitor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Giám sát hội thoại
+      </button>
+      <button data-page="tickets">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Ticket hỗ trợ
+      </button>
+      <button data-page="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        Báo cáo
+      </button>
+      <button data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Cài đặt
+      </button>
+    </nav>
+
+    <div class="sidebar-art">
+      <svg class="sidebar-plane" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 28L40 8L70 22L50 26L40 20L30 26L10 28Z" fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"/>
+        <path d="M40 8L42 22" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+        <circle cx="40" cy="8" r="2" fill="rgba(255,255,255,0.5)"/>
+      </svg>
+      <div class="skyline"></div>
+      <div class="water"></div>
+    </div>
+
+    <div class="user-card">
+      <div class="avatar">A</div>
+      <div>
+        <div style="font-weight:800">Admin VCB</div>
+        <div style="font-size:12px;opacity:.8">Quản trị viên</div>
+      </div>
+      <svg style="margin-left:auto;opacity:.7" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- OVERVIEW -->
+    <section class="page active" id="overview">
+      <div class="topbar">
+        <div class="title">
+          <h1>Tổng quan</h1>
+          <p>Dashboard vận hành tổng thể của VoiceBank Inclusive.</p>
+        </div>
+        <div class="tools">
+          <div class="control search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="ov-search" placeholder="Tìm cảnh báo..." />
+            <span class="kbd">⌘ K</span>
+          </div>
+          <button class="control js-daterange" id="ov-daterange">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            7 ngày qua
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="notif" data-notif>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="control admin">
+            <div class="avatar" style="width:34px;height:34px">A</div>
+            <div><b>Admin VCB</b><br><small>Quản trị viên</small></div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid4" id="ov-kpis"></div>
+
+      <div class="grid3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Lưu lượng phiên Bot</h2>
+            <button class="mini-select js-daterange" id="ov-traffic-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div class="chart" id="ov-traffic"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Phân loại yêu cầu</h2>
+            <button class="mini-select js-daterange" id="ov-mix-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div style="display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:center">
+            <div class="donut" id="ov-donut"></div>
+            <div class="legend" id="ov-legend"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Người dùng cần hỗ trợ trợ năng</h2>
+            <button class="mini-select js-daterange" id="ov-access-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div class="access-box" id="ov-access"></div>
+        </div>
+      </div>
+
+      <div class="grid-bottom" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Top lý do chuyển nhân viên</h2>
+            <button class="mini-select js-daterange" id="ov-reasons-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div id="ov-reasons"></div>
+        </div>
+        <div class="card">
+          <h2>Cảnh báo gần đây</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Thời gian</th><th>Mức độ</th><th>Loại cảnh báo</th><th>Nội dung</th><th>Trạng thái</th></tr></thead>
+              <tbody id="ov-alerts"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer"><span>Ngân hàng TMCP Ngoại thương Việt Nam (VCB) · VoiceBank Inclusive Operations</span><span>Phiên bản 1.0.0 · Hệ thống hoạt động ổn định</span></div>
+    </section>
+
+    <!-- MONITOR -->
+    <section class="page" id="monitor">
+      <div class="topbar">
+        <div class="title">
+          <h1>Giám sát hội thoại</h1>
+          <p>Theo dõi và can thiệp các phiên hội thoại Bot theo thời gian thực</p>
+        </div>
+        <div class="tools">
+          <button class="control control-live">
+            <span class="live-dot"></span>
+            Thời gian thực
+          </button>
+          <button class="control" id="mon-priority">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg><span id="mon-priority-label">Ưu tiên: Tất cả</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="control" style="gap:8px;font-weight:700;color:var(--green-800)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Kênh: Bot
+          </div>
+          <div class="notif" data-notif>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <button class="control" id="mon-clock">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="mon-clock-text">--:--:--</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid4" id="mon-kpis"></div>
+
+      <div class="monitor-layout" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Danh sách phiên hội thoại Bot đang diễn ra <span class="badge green" id="mon-count">186 phiên</span></h2>
+            <div class="control search" style="min-width:280px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input id="mon-search" placeholder="Tìm mã phiên, SĐT, khách hàng..." />
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mã phiên</th><th>Khách hàng</th><th>Kênh</th><th>Ý định</th><th>Trạng thái</th><th>Mức rủi ro</th><th>Hành động</th></tr></thead>
+              <tbody id="mon-tbody"></tbody>
+            </table>
+          </div>
+          <div class="footer"><span id="mon-shown">Hiển thị 1-6 / 186 phiên</span><span class="pager" id="mon-pager"></span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Chi tiết hội thoại · <span class="badge green">Đang hoạt động</span></h2><button class="collapse-btn" id="conv-collapse" title="Thu gọn / mở rộng">−</button></div>
+          <div class="collapsible" id="conv-collapsible">
+            <div style="display:flex;justify-content:space-between;gap:10px" id="conv-head"></div>
+            <div class="tabs" id="conv-tabs">
+              <div class="tab active" data-tab="chat">Hội thoại</div>
+              <div class="tab" data-tab="info">Thông tin</div>
+              <div class="tab" data-tab="history">Lịch sử</div>
+              <div class="tab" data-tab="notes">Ghi chú</div>
+            </div>
+            <div id="conv-body" class="detail-scroll"></div>
+            <div class="actions">
+              <button class="btn" id="conv-act-play">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Nghe bản ghi
+              </button>
+              <button class="btn" id="conv-act-takeover">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Tiếp quản
+              </button>
+              <button class="btn blue" id="conv-act-ticket">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Tạo ticket
+              </button>
+              <button class="btn red" id="conv-act-flag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                Đánh dấu rủi ro
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Hàng đợi chuyển nhân viên (Escalations)</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Mã</th><th>Khách hàng</th><th>Nghiệp vụ · lý do</th><th>Ưu tiên</th><th>Trạng thái</th><th>Chờ</th></tr></thead>
+            <tbody id="mon-esc"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKETS -->
+    <section class="page" id="tickets">
+      <div class="topbar">
+        <div class="title">
+          <h1>Ticket hỗ trợ</h1>
+          <p>Quản lý và xử lý các yêu cầu hỗ trợ được tạo từ Bot.</p>
+        </div>
+        <div class="tools">
+          <div class="control search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="tk-search" placeholder="Tìm kiếm ticket, SĐT, chủ đề..." />
+            <span class="kbd">⌘ K</span>
+          </div>
+          <button class="control js-daterange" id="tk-daterange">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            7 ngày qua
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="notif" data-notif>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="control admin">
+            <div class="avatar" style="width:34px;height:34px">A</div>
+            <div><b>Admin VCB</b><br><small>Quản trị viên</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid4" id="tk-kpis"></div>
+      <div class="filter-row" id="tk-filters"></div>
+
+      <div class="ticket-layout">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th><span class="cbox" id="tk-selectall" title="Chọn tất cả">□</span></th><th>Mã ticket</th><th>Chủ đề</th><th>Khách hàng</th><th>Kênh</th><th>Mức ưu tiên</th><th>SLA</th><th>Người phụ trách</th><th>Trạng thái</th></tr></thead>
+              <tbody id="tk-tbody"></tbody>
+            </table>
+          </div>
+          <div class="footer"><span id="tk-shown">Hiển thị 1-5 trong tổng số 256 ticket</span><span class="pager" id="tk-pager"></span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head" id="tk-detail-head"></div>
+          <div style="color:var(--muted);margin-bottom:12px;font-size:13px" id="tk-detail-meta"></div>
+          <div class="tabs" id="tk-tabs">
+            <div class="tab active" data-tab="summary">Tóm tắt</div>
+            <div class="tab" data-tab="thread">Trao đổi</div>
+            <div class="tab" data-tab="customer">Thông tin KH</div>
+            <div class="tab" data-tab="history">Lịch sử</div>
+          </div>
+          <div id="tk-body" class="detail-scroll"></div>
+          <div class="actions">
+            <button class="btn primary" id="tk-act-call">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.62 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Gọi lại
+            </button>
+            <button class="btn" id="tk-act-assign">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Giao cho nhân viên
+            </button>
+            <button class="btn" id="tk-act-email">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Gửi email
+            </button>
+            <button class="btn red" id="tk-act-close">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Đóng ticket
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-widgets">
+        <div class="card">
+          <div class="card-head"><h2>Phân bổ theo kênh</h2></div>
+          <div class="widget-donut-wrap">
+            <div class="donut-small" id="tk-donut-channel"></div>
+            <div class="donut-legend" id="tk-channel-legend"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Hiệu suất SLA</h2></div>
+          <div class="widget-donut-wrap">
+            <div class="donut-small" id="tk-donut-sla"></div>
+            <div class="donut-legend" id="tk-sla-legend"></div>
+          </div>
+        </div>
+        <div class="card"><h2>Top chủ đề phổ biến</h2><div id="tk-topics"></div></div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="page" id="reports">
+      <div class="topbar">
+        <div class="title">
+          <h1>Báo cáo &amp; phân tích</h1>
+          <p>Tổng hợp hiệu quả hoạt động và hành vi người dùng trên VCB VoiceBank Inclusive</p>
+        </div>
+        <div class="tools">
+          <button class="control js-daterange" id="rp-daterange">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            7 ngày qua
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <button class="control" data-toast="Đã xuất file PDF">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Xuất PDF
+          </button>
+          <button class="control" data-toast="Đã xuất file Excel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            Xuất Excel
+          </button>
+          <button class="control" data-toast="Đã tạo liên kết chia sẻ báo cáo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Chia sẻ
+          </button>
+        </div>
+      </div>
+
+      <div class="grid4" id="rp-kpis"></div>
+
+      <div class="report-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Người dùng &amp; phiên tương tác theo thời gian</h2>
+            <button class="mini-select js-daterange" id="rp-us-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div class="legend" style="display:flex;margin-bottom:8px;gap:16px">
+            <span style="display:flex;align-items:center;gap:6px;font-size:13px"><span class="dot" style="background:var(--green-800)"></span>Người dùng</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:13px"><span class="dot" style="background:var(--blue)"></span>Phiên tương tác</span>
+          </div>
+          <div class="chart" id="rp-usersession"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Kênh Bot — Lưu lượng</h2>
+            <button class="mini-select js-daterange" id="rp-ch-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div class="legend" style="display:flex;margin-bottom:8px;gap:16px" id="rp-channel-legend"></div>
+          <div class="chart" id="rp-channel"></div>
+        </div>
+      </div>
+
+      <div class="report-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Phân bố ý định theo ngày (Top 5 intent)</h2>
+            <button class="mini-select js-daterange" id="rp-hm-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div class="table-wrap"><table class="heatmap" id="rp-heatmap"></table></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>Hiệu quả trợ năng</h2>
+            <button class="mini-select js-daterange" id="rp-ac-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+          </div>
+          <div class="table-wrap"><table style="min-width:520px" id="rp-access"></table></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-head">
+          <h2>Bộ chỉ số mục tiêu (KPI Pilot)</h2>
+          <button class="mini-select js-daterange" id="rp-kpi-period">7 ngày qua <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+        </div>
+        <div id="rp-targets" class="targets"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Insight cho quản lý</h2>
+        <div class="insights" id="rp-insights"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="settings">
+      <div class="topbar">
+        <div class="title">
+          <h1>Cài đặt vận hành</h1>
+          <p>Cấu hình phân quyền, bảo mật, luồng cảnh báo và tích hợp hệ thống.</p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h2>Phân quyền RBAC</h2>
+          <div class="access-box" id="st-roles"></div>
+        </div>
+        <div class="card">
+          <h2>Cảnh báo &amp; bảo mật</h2>
+          <div class="access-box" id="st-security"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

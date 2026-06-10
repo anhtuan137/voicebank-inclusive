@@ -1,0 +1,37 @@
+# Application stack: orchestrator (voice2text) + mock core (mockapi).
+# The Next.js frontend is wired in Phase 6. Infra (postgres/minio) lives in
+# docker-compose.infra.yml.
+# Usage: docker compose -f docker/docker-compose.yml --env-file .env up -d
+name: voicebank
+
+services:
+  mockapi:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.python
+    command: ["python", "-m", "mockapi.server"]
+    environment:
+      MOCKAPI_PORT: ${MOCKAPI_PORT:-18890}
+      FEATURE_DEMO: ${FEATURE_DEMO:-false}
+      DB_SOURCE: ${DB_SOURCE:-json}
+    ports:
+      - "${MOCKAPI_PORT:-18890}:18890"
+
+  voice2text:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.python
+    command: ["python", "-m", "voice2text.server"]
+    environment:
+      VOICE2TEXT_PORT: ${VOICE2TEXT_PORT:-18889}
+      STT_PROVIDER: ${STT_PROVIDER:-smoke}
+      TTS_PROVIDER: ${TTS_PROVIDER:-smoke}
+      NLU_PROVIDER: ${NLU_PROVIDER:-smoke}
+      MOCKAPI_BASE_URL: http://mockapi:18890
+      BANKING_BACKEND_BASE_URL: http://mockapi:18890
+      FEATURE_DEMO: ${FEATURE_DEMO:-false}
+      FRONTEND_CORS_ORIGINS: ${FRONTEND_CORS_ORIGINS:-http://localhost:18891}
+    ports:
+      - "${VOICE2TEXT_PORT:-18889}:18889"
+    depends_on:
+      - mockapi

@@ -1,0 +1,38 @@
+[project]
+name = "voicebank-inclusive"
+version = "0.0.0"
+description = "VoiceBank Inclusive — conversational AI banking assistant for VCB Digibank (HackAIthon 2026)"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# Phase 0 scaffold deps. Heavy voice/AI deps (pipecat-ai, pipecat-ai-flows,
+# vi-cleaner, vietnam-number, boto3...) are introduced in Phase 2/3 per §18.
+dependencies = [
+    "fastapi==0.115.0",
+    "uvicorn[standard]==0.30.0",
+    "httpx==0.27.0",
+    "loguru>=0.7.2",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.5.0",
+    "python-dotenv>=1.0.1",
+    "psycopg[binary]>=3.2.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.0",
+    "pytest-asyncio==0.23.0",
+    "ruff>=0.6.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["voice2text/tests", "mockapi/tests"]
+# pytest-asyncio is disabled via `-p no:asyncio` at invocation (§17). Async
+# fixtures are wired in Phase 2 when the first async tests land.
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

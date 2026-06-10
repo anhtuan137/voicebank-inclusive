@@ -1,0 +1,37 @@
+{
+  "periods": [
+    { "key": "today", "label": "Hôm nay" },
+    { "key": "7d", "label": "7 ngày qua" },
+    { "key": "30d", "label": "30 ngày qua" },
+    { "key": "quarter", "label": "Quý này" }
+  ],
+  "channelMeta": {
+    "bot": { "label": "Bot" },
+    "chat": { "label": "Bot" },
+    "call": { "label": "Bot" },
+    "zalo": { "label": "Bot" },
+    "messenger": { "label": "Bot" }
+  },
+  "statusMeta": {
+    "bot": { "label": "Bot xử lý", "cls": "green" },
+    "verify": { "label": "Chờ xác minh", "cls": "orange" },
+    "escalated": { "label": "Chuyển nhân viên", "cls": "blue" },
+    "takenover": { "label": "NV tiếp quản", "cls": "purple" }
+  },
+  "riskMeta": {
+    "low": { "label": "Thấp", "cls": "green", "dot": "green" },
+    "medium": { "label": "Trung bình", "cls": "orange", "dot": "orange" },
+    "high": { "label": "Cao", "cls": "red", "dot": "red" }
+  },
+  "ticketStatusMeta": {
+    "new": { "label": "Mới", "cls": "green" },
+    "processing": { "label": "Đang xử lý", "cls": "orange" },
+    "waiting": { "label": "Chờ phản hồi", "cls": "blue" },
+    "closed": { "label": "Đã đóng", "cls": "gray" }
+  },
+  "historyTemplate": [
+    { "time": "20/05/2025 09:14", "text": "Tra cứu số dư qua Bot · Bot xử lý · CSAT 5★" },
+    { "time": "12/05/2025 15:40", "text": "Chuyển tiền 1.200.000đ · Xác thực PIN+OTP · Thành công" },
+    { "time": "03/05/2025 20:02", "text": "Hỏi đáp chi tiêu \"tháng này tiêu gì nhiều nhất\" · Bot xử lý" }
+  ]
+}

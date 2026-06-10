@@ -1,0 +1,12 @@
+{
+  "roles": [
+    { "name": "Admin", "desc": "Toàn quyền cấu hình, báo cáo, audit log", "state": "Đang bật", "cls": "green", "on": true },
+    { "name": "Operator", "desc": "Giám sát hội thoại, tiếp quản, tạo ticket", "state": "Đang bật", "cls": "green", "on": true },
+    { "name": "Analyst", "desc": "Xem báo cáo, không can thiệp dữ liệu khách", "state": "Chỉ đọc", "cls": "gray", "on": true }
+  ],
+  "security": [
+    { "name": "Che PII", "desc": "Ẩn số CCCD, số điện thoại, số tài khoản khi không cần thiết", "on": true },
+    { "name": "Audit log", "desc": "Ghi nhận mọi thao tác của nhân viên", "on": true },
+    { "name": "Escalation tự động", "desc": "Chuyển nhân viên nếu rủi ro cao hoặc bot không hiểu", "on": true }
+  ]
+}

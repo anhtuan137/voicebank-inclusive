@@ -1,0 +1,9 @@
+{
+  "notifications": [
+    { "icon": "🔴", "title": "Cảnh báo rủi ro cao", "time": "2 phút trước", "text": "Tăng đột biến từ khóa “lừa đảo”, “mất tiền” trong 10 phút qua." },
+    { "icon": "🟠", "title": "Ticket quá hạn SLA", "time": "8 phút trước", "text": "TK-2025-06125 (ATM nuốt thẻ) đã quá hạn 12 phút." },
+    { "icon": "🔵", "title": "Phiên cần can thiệp", "time": "15 phút trước", "text": "Phiên C250526-104167 chuyển nhân viên, cảm xúc tiêu cực." },
+    { "icon": "🟢", "title": "Hệ thống ổn định", "time": "30 phút trước", "text": "API Core Banking đã phục hồi tốc độ phản hồi." },
+    { "icon": "🟣", "title": "Báo cáo tuần sẵn sàng", "time": "1 giờ trước", "text": "Báo cáo hiệu suất trợ lý ảo tuần 26/05–01/06 đã được tạo." }
+  ]
+}

@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VCB Admin Console · VoiceBank Inclusive</title>
+<style>
+:root{
+  --green-950:#003b22;
+  --green-900:#005231;
+  --green-800:#006b3f;
+  --green-700:#0b7a43;
+  --green-600:#198f50;
+  --green-500:#43aa52;
+  --green-400:#83ca55;
+  --green-300:#b9e49d;
+  --green-200:#dff2d8;
+  --green-100:#f2faef;
+  --ink:#15251d;
+  --muted:#68766e;
+  --soft:#f6f9f7;
+  --line:#e4ebe5;
+  --card:#ffffff;
+  --orange:#f59e0b;
+  --red:#ef4444;
+  --blue:#2f80ed;
+  --purple:#8b5cf6;
+  --yellow:#facc15;
+  --shadow:0 12px 34px rgba(4, 55, 29, .08);
+  --shadow-strong:0 22px 70px rgba(4,55,29,.16);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background:#f5f8f7;
+  color:var(--ink);
+}
+button,input,select{font:inherit}
+.app{
+  display:grid;
+  grid-template-columns:270px 1fr;
+  min-height:100vh;
+}
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:24px 18px 18px;
+  background:
+    radial-gradient(circle at 30% 70%,rgba(145,218,97,.32),transparent 24%),
+    linear-gradient(180deg,#00683c 0%,#004929 100%);
+  color:white;
+  overflow:hidden;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:34px;
+}
+.brand-logo{
+  width:44px;height:44px;border-radius:16px;
+  background:rgba(255,255,255,.18);
+  display:grid;place-items:center;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);
+  position:relative;
+}
+.brand-logo:before{
+  content:"";
+  width:27px;height:27px;
+  background:white;
+  clip-path:polygon(50% 0, 95% 18%, 82% 76%, 50% 100%, 18% 76%, 5% 18%);
+  display:block;
+}
+.brand-title{font-weight:850;font-size:20px;letter-spacing:-.3px;line-height:1.1}
+.brand-sub{font-size:13px;opacity:.9;margin-top:3px}
+.nav{display:grid;gap:8px}
+.nav button{
+  border:0;
+  width:100%;
+  padding:14px 14px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  color:white;
+  background:transparent;
+  cursor:pointer;
+  font-weight:720;
+  text-align:left;
+  transition:.18s;
+}
+.nav button svg{width:22px;height:22px;opacity:.95;stroke-width:2.2}
+.nav button:hover{background:rgba(255,255,255,.11)}
+.nav button.active{
+  background:linear-gradient(90deg,rgba(125,205,67,.95),rgba(69,170,82,.62));
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
+}
+.sidebar-art{
+  position:absolute;
+  left:0;right:0;bottom:78px;height:300px;
+  opacity:.95;
+  pointer-events:none;
+}
+.sidebar-art .water{
+  position:absolute;left:0;right:0;bottom:0;height:86px;
+  background:linear-gradient(180deg,rgba(177,230,210,.25),rgba(206,240,220,.72));
+  backdrop-filter:blur(2px);
+}
+.sidebar-art .skyline{
+  position:absolute;left:-12px;right:-12px;bottom:48px;height:230px;
+  background:
+    linear-gradient(90deg,#5bbddb 0 6%,#64d483 6% 12%,#2f8dc0 12% 17%,#73d05c 17% 22%,#55b9df 22% 29%,#2e9c79 29% 35%,#87d45f 35% 42%,#3b92c8 42% 49%,#62d678 49% 55%,#79c4e5 55% 61%,#46a76c 61% 70%,#84d866 70% 77%,#3a8cbd 77% 86%,#92d48a 86% 100%);
+  clip-path:polygon(0 91%,4% 74%,8% 84%,12% 56%,15% 90%,18% 42%,23% 86%,26% 28%,30% 90%,35% 8%,41% 88%,45% 32%,50% 91%,55% 20%,59% 88%,64% 42%,69% 92%,73% 58%,77% 91%,82% 30%,89% 86%,94% 51%,100% 77%,100% 100%,0 100%);
+  filter:drop-shadow(0 12px 16px rgba(0,0,0,.22));
+}
+.sidebar-art .plane{position:absolute;left:8px;bottom:116px;font-size:34px;transform:rotate(-8deg)}
+.user-card{
+  position:absolute;
+  left:18px;right:18px;bottom:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.14);
+  padding:13px 14px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);
+}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:#e7f8de;
+  color:var(--green-800);
+  display:grid;place-items:center;font-weight:850
+}
+.main{
+  min-width:0;
+  padding:22px 26px 26px;
+}
+.page{display:none}
+.page.active{display:block;animation:fade .18s ease-out}
+@keyframes fade{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:18px;
+}
+.title h1{
+  margin:0;
+  font-size:26px;
+  line-height:1.1;
+  letter-spacing:-.6px;
+}
+.title p{margin:6px 0 0;color:var(--muted)}
+.tools{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.control{
+  min-height:44px;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:14px;
+  padding:10px 13px;
+  box-shadow:0 8px 20px rgba(0,0,0,.035);
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  color:#334139;
+}
+.search{min-width:290px;justify-content:space-between}
+.search input{border:0;outline:0;width:100%;background:transparent;color:#233229}
+.kbd{
+  border:1px solid #dde6de;
+  background:#f8fbf8;
+  padding:2px 7px;
+  border-radius:8px;
+  font-size:12px;
+  color:#6b746f
+}
+.admin{
+  display:flex;gap:10px;align-items:center;padding-right:18px
+}
+.notif{
+  position:relative;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);background:white;
+  display:grid;place-items:center;box-shadow:0 8px 20px rgba(0,0,0,.035)
+}
+.notif:after{
+  content:"12";
+  position:absolute;right:-2px;top:-3px;
+  background:var(--green-700);color:white;
+  border-radius:999px;
+  padding:2px 5px;font-size:11px;font-weight:800;
+}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid3{display:grid;grid-template-columns:1.2fr .78fr .68fr;gap:16px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.grid-bottom{display:grid;grid-template-columns:.86fr 1.34fr;gap:16px}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  padding:18px;
+  min-width:0;
+}
+.card h2,.card h3{
+  margin:0 0 14px;
+  font-size:17px;
+  letter-spacing:-.2px;
+}
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:14px;
+}
+.kpi{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+}
+.kpi-icon{
+  width:66px;height:66px;border-radius:50%;
+  background:var(--green-200);
+  color:var(--green-800);
+  display:grid;place-items:center;
+  flex:0 0 auto;
+}
+.kpi-icon.warning{background:#fff0d2;color:#cb7800}
+.kpi-icon.danger{background:#ffe3df;color:#dc2626}
+.kpi-label{color:#2e3c34;font-weight:700}
+.kpi-value{font-size:28px;font-weight:900;letter-spacing:-.7px;margin:6px 0}
+.delta{font-size:13px;color:var(--muted)}
+.delta.up b{color:#159447}
+.delta.down b{color:var(--red)}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.badge.green{background:#e7f7e6;color:#0a7b42}
+.badge.orange{background:#fff2dd;color:#b76a00}
+.badge.red{background:#ffe7e5;color:#d33232}
+.badge.blue{background:#e8f1ff;color:#2868d9}
+.badge.gray{background:#f0f2f1;color:#606d66}
+.mini-select{
+  border:1px solid var(--line);
+  background:white;
+  border-radius:10px;
+  padding:8px 10px;
+  color:#455049;
+  font-size:13px
+}
+.chart{
+  position:relative;
+  height:260px;
+  background:linear-gradient(180deg,#fbfffb,#fff);
+  border-radius:14px;
+  overflow:hidden;
+}
+.chart svg{width:100%;height:100%;display:block}
+.legend{
+  display:grid;
+  gap:11px;
+  font-size:13px;
+  color:#4b5a52;
+}
+.legend-row{display:flex;align-items:center;gap:8px}
+.dot{
+  width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 auto
+}
+.donut{
+  width:210px;height:210px;
+  border-radius:50%;
+  background:conic-gradient(var(--green-400) 0 45%, var(--green-800) 45% 74%, var(--blue) 74% 90%, var(--yellow) 90% 100%);
+  margin:auto;
+  position:relative;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.02);
+}
+.donut:after{
+  content:"Tổng\A128.540";
+  white-space:pre;
+  position:absolute;inset:54px;
+  background:white;
+  border-radius:50%;
+  display:grid;place-items:center;
+  text-align:center;
+  font-weight:900;
+  line-height:1.3;
+  box-shadow:0 0 0 1px rgba(0,0,0,.04)
+}
+.access-box{
+  display:grid;
+  gap:14px;
+}
+.access-item{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  background:#fff;
+}
+.access-item .round{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--green-200);
+  display:grid;place-items:center;
+  color:var(--green-800);
+  font-weight:900;
+  flex:0 0 auto
+}
+.access-item strong{font-size:23px;display:block;margin-top:4px}
+.bar-row{
+  display:grid;
+  grid-template-columns:210px 1fr auto;
+  gap:12px;
+  align-items:center;
+  margin:14px 0;
+}
+.track{
+  height:14px;border-radius:999px;
+  background:#eef3ef;
+  overflow:hidden;
+}
+.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#76c93e,#006b3f)}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:13px;
+  min-width:760px;
+}
+th,td{
+  padding:13px 14px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+  vertical-align:middle;
+}
+th{
+  background:#fbfdfb;
+  color:#53625a;
+  font-size:12px;
+  font-weight:850;
+}
+tr:last-child td{border-bottom:0}
+tr.selected{background:linear-gradient(90deg,#edf9ec,rgba(237,249,236,.25))}
+.footer{
+  margin-top:20px;
+  color:#66746c;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:13px;
+}
+.row-status{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:8px}
+.row-status.green{background:#1dae54}.row-status.orange{background:#f59e0b}.row-status.red{background:#ef4444}
+.monitor-layout{
+  display:grid;
+  grid-template-columns:1.45fr .78fr;
+  gap:16px;
+}
+.tabs{
+  display:flex;gap:22px;border-bottom:1px solid var(--line);margin:12px 0;
+}
+.tab{
+  padding:10px 0;
+  font-weight:800;
+  color:#66746c;
+  border-bottom:3px solid transparent;
+}
+.tab.active{color:var(--green-800);border-bottom-color:var(--green-800)}
+.chat-box{
+  height:390px;
+  overflow:auto;
+  border-right:1px solid #eef3ef;
+  padding-right:8px;
+}
+.msg{
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  gap:10px;
+  align-items:start;
+  margin:14px 0;
+}
+.msg .bubble{
+  background:#f7f9f8;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  line-height:1.45;
+}
+.msg.agent .bubble{background:#f0faee}
+.msg small{display:block;font-weight:800;color:#38443d;margin-bottom:5px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.small-panel{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  background:#fff;
+}
+.progress{
+  height:8px;background:#edf3ef;border-radius:999px;overflow:hidden;margin-top:10px
+}
+.progress span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#76c93e,#006b3f)}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px
+}
+.btn{
+  border:1px solid var(--line);
+  background:white;
+  border-radius:12px;
+  padding:11px 12px;
+  font-weight:850;
+  color:#294235;
+  cursor:pointer;
+  transition:.15s;
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.06)}
+.btn.primary{background:linear-gradient(90deg,#70c839,#006b3f);border-color:transparent;color:white}
+.btn.blue{border-color:#b8d2ff;color:#2368dc}
+.btn.red{border-color:#ffc6c6;color:#d53434}
+.btn.orange{background:#fff6e8;color:#b56b00;border-color:#ffdba8}
+.ticket-layout{display:grid;grid-template-columns:1.45fr .78fr;gap:16px}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.chip{
+  border:1px solid var(--line);
+  background:white;
+  border-radius:11px;
+  padding:10px 14px;
+  font-weight:800;
+  cursor:pointer;
+}
+.chip.active{background:#edfaec;border-color:#bee5b5;color:var(--green-800)}
+.bottom-widgets{display:grid;grid-template-columns:.72fr .72fr 1fr;gap:16px;margin-top:16px}
+.donut-small{
+  width:150px;height:150px;border-radius:50%;
+  background:conic-gradient(var(--green-800) 0 50%, var(--blue) 50% 75%, #f59e0b 75% 87%, #7dd3fc 87% 95%, #d946ef 95% 100%);
+  position:relative;margin:auto
+}
+.donut-small:after{
+  content:"256\ATổng";white-space:pre;
+  position:absolute;inset:39px;background:white;border-radius:50%;
+  display:grid;place-items:center;text-align:center;font-weight:900
+}
+.sla-donut{
+  background:conic-gradient(var(--green-800) 0 92%, #f59e0b 92% 96%, #ef4444 96% 100%);
+}
+.report-grid{display:grid;grid-template-columns:1fr .78fr;gap:16px}
+.heatmap{min-width:720px}
+.heatmap td:not(:first-child){
+  background:#e7f7e3;
+  text-align:center;
+  font-weight:800;
+}
+.heatmap tr:nth-child(1) td:not(:first-child){background:#52b34d;color:white}
+.heatmap tr:nth-child(2) td:not(:first-child){background:#73c66b;color:white}
+.heatmap tr:nth-child(3) td:not(:first-child){background:#9ddc8c}
+.spark{
+  width:100px;height:30px
+}
+.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.insight{
+  display:flex;gap:14px;align-items:flex-start;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  background:#fff;
+}
+.insight-icon{
+  width:54px;height:54px;border-radius:50%;
+  background:var(--green-200);
+  display:grid;place-items:center;
+  color:var(--green-800);
+  font-weight:900;
+  flex:0 0 auto;
+}
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  background:#123c25;
+  color:white;
+  border-radius:14px;
+  padding:13px 16px;
+  box-shadow:var(--shadow-strong);
+  opacity:0;
+  transform:translateY(14px);
+  pointer-events:none;
+  transition:.22s;
+  z-index:999
+}
+.toast.show{opacity:1;transform:translateY(0)}
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,35,18,.38);
+  display:none;align-items:center;justify-content:center;
+  padding:24px;
+  z-index:998;
+}
+.modal.show{display:flex}
+.modal-card{
+  width:min(500px,100%);
+  background:white;
+  border-radius:22px;
+  box-shadow:var(--shadow-strong);
+  padding:24px;
+}
+.modal-card h3{margin:0 0 8px;font-size:23px}
+.modal-card p{color:var(--muted);line-height:1.55}
+@media (max-width:1280px){
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .grid3,.grid2,.grid-bottom,.monitor-layout,.ticket-layout,.bottom-widgets,.report-grid,.insights{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:relative;height:auto;min-height:0}
+  .sidebar-art,.user-card{display:none}
+  .main{padding:18px}
+  .grid4{grid-template-columns:1fr}
+  .topbar{display:block}
+  .tools{margin-top:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"></div>
+      <div>
+        <div class="brand-title">VCB Admin Console</div>
+        <div class="brand-sub">VoiceBank Inclusive</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="active" data-page="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+        Tổng quan
+      </button>
+      <button data-page="monitor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M18 19a3 3 0 0 0 3-3v-3h-4v6z"/><path d="M6 19a3 3 0 0 1-3-3v-3h4v6z"/></svg>
+        Giám sát hội thoại
+      </button>
+      <button data-page="tickets">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 3h6l1 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3z"/><path d="M8 11h8M8 15h6"/></svg>
+        Ticket hỗ trợ
+      </button>
+      <button data-page="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19V5"/><path d="M8 17v-7"/><path d="M13 17V7"/><path d="M18 17v-4"/><path d="M4 19h17"/></svg>
+        Báo cáo
+      </button>
+      <button data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21a2 2 0 0 1-4 0v-.09a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3a2 2 0 0 1 0-4h.09A1.8 1.8 0 0 0 4.75 8.8a1.8 1.8 0 0 0-.36-1.98l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.8 1.8 0 0 0 9.2 4.6a1.8 1.8 0 0 0 1.1-1.66V3a2 2 0 0 1 4 0v.09a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H21a2 2 0 0 1 0 4h-.09A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+        Cài đặt
+      </button>
+    </nav>
+
+    <div class="sidebar-art">
+      <div class="plane">🛸</div>
+      <div class="skyline"></div>
+      <div class="water"></div>
+    </div>
+
+    <div class="user-card">
+      <div class="avatar">A</div>
+      <div>
+        <div style="font-weight:850">Admin VCB</div>
+        <div style="font-size:12px;opacity:.8">Quản trị viên</div>
+      </div>
+      <div style="margin-left:auto">⌄</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- OVERVIEW -->
+    <section class="page active" id="overview">
+      <div class="topbar">
+        <div class="title">
+          <h1>Tổng quan</h1>
+          <p>Dashboard vận hành tổng thể của VoiceBank Inclusive.</p>
+        </div>
+        <div class="tools">
+          <div class="control search">🔎 <input placeholder="Tìm kiếm..." /><span class="kbd">⌘ K</span></div>
+          <button class="control">📅 26/05/2025 - 01/06/2025</button>
+          <div class="notif">🔔</div>
+          <div class="control admin"><div class="avatar" style="width:34px;height:34px">A</div><div><b>Admin VCB</b><br><small>Quản trị viên</small></div>⌄</div>
+        </div>
+      </div>
+
+      <div class="grid4">
+        <div class="card kpi"><div><div class="kpi-label">Tổng phiên hôm nay</div><div class="kpi-value">18.452</div><div class="delta up"><b>↑ 12,6%</b> so với hôm qua</div></div><div class="kpi-icon">🎧</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Tỷ lệ tự phục vụ</div><div class="kpi-value">78,4%</div><div class="delta up"><b>↑ 5,2%</b> so với tuần trước</div></div><div class="kpi-icon">🤖</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Tỷ lệ chuyển tổng đài</div><div class="kpi-value">21,6%</div><div class="delta down"><b>↓ 2,8%</b> so với tuần trước</div></div><div class="kpi-icon">👥</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Mức hài lòng CSAT</div><div class="kpi-value">4,6/5</div><div class="delta up"><b>↑ 0,3</b> điểm so với tuần trước</div></div><div class="kpi-icon">😊</div></div>
+      </div>
+
+      <div class="grid3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Lưu lượng phiên 7 ngày ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="chart">
+            <svg viewBox="0 0 620 280" preserveAspectRatio="none">
+              <defs><linearGradient id="areaGreen" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#83ca55" stop-opacity=".30"/><stop offset="100%" stop-color="#83ca55" stop-opacity=".03"/></linearGradient></defs>
+              <g stroke="#e4ebe5" stroke-width="1">
+                <line x1="50" y1="230" x2="590" y2="230"/><line x1="50" y1="180" x2="590" y2="180"/><line x1="50" y1="130" x2="590" y2="130"/><line x1="50" y1="80" x2="590" y2="80"/><line x1="50" y1="30" x2="590" y2="30"/>
+              </g>
+              <path d="M50 178 L140 150 L230 116 L320 92 L410 112 L500 133 L590 88 L590 230 L50 230 Z" fill="url(#areaGreen)"/>
+              <polyline points="50,178 140,150 230,116 320,92 410,112 500,133 590,88" fill="none" stroke="#006b3f" stroke-width="4"/>
+              <g fill="#006b3f" stroke="white" stroke-width="3">
+                <circle cx="50" cy="178" r="6"/><circle cx="140" cy="150" r="6"/><circle cx="230" cy="116" r="6"/><circle cx="320" cy="92" r="6"/><circle cx="410" cy="112" r="6"/><circle cx="500" cy="133" r="6"/><circle cx="590" cy="88" r="6"/>
+              </g>
+              <g font-size="13" fill="#63746b">
+                <text x="36" y="234">0</text><text x="28" y="184">5K</text><text x="23" y="134">10K</text><text x="23" y="84">15K</text><text x="23" y="34">20K</text>
+                <text x="40" y="260">26/05</text><text x="130" y="260">27/05</text><text x="220" y="260">28/05</text><text x="310" y="260">29/05</text><text x="400" y="260">30/05</text><text x="490" y="260">31/05</text><text x="580" y="260">01/06</text>
+              </g>
+              <g font-size="13" font-weight="800" fill="#1c2a22">
+                <text x="34" y="162">12.1K</text><text x="124" y="134">14.3K</text><text x="214" y="100">16.7K</text><text x="304" y="76">18.2K</text><text x="394" y="96">17.1K</text><text x="484" y="117">15.6K</text><text x="574" y="72">18.5K</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Phân loại yêu cầu ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:center">
+            <div class="donut"></div>
+            <div class="legend">
+              <div class="legend-row"><span class="dot" style="background:var(--green-400)"></span><span>Tra cứu</span><b style="margin-left:auto">45,2%</b></div>
+              <div class="legend-row"><span class="dot" style="background:var(--green-800)"></span><span>Chuyển tiền</span><b style="margin-left:auto">28,7%</b></div>
+              <div class="legend-row"><span class="dot" style="background:var(--blue)"></span><span>Tiết kiệm</span><b style="margin-left:auto">15,6%</b></div>
+              <div class="legend-row"><span class="dot" style="background:var(--yellow)"></span><span>Hỗ trợ</span><b style="margin-left:auto">10,5%</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Người dùng cần hỗ trợ trợ năng ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="access-box">
+            <div class="access-item"><div class="round">AA</div><div><span>Chữ lớn</span><strong>12,4%</strong></div><div class="delta up"><b>↑ 2,1%</b></div></div>
+            <div class="access-item"><div class="round">🔊</div><div><span>Đọc màn hình</span><strong>8,7%</strong></div><div class="delta up"><b>↑ 1,3%</b></div></div>
+            <div class="access-item"><div class="round">▥</div><div><span>Giọng nói</span><strong>23,6%</strong></div><div class="delta up"><b>↑ 3,4%</b></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-bottom" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Top lý do chuyển nhân viên ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="bar-row"><span>Yêu cầu nghiệp vụ phức tạp</span><div class="track"><div class="fill" style="width:78%"></div></div><b>7.842</b></div>
+          <div class="bar-row"><span>Xác minh thông tin</span><div class="track"><div class="fill" style="width:51%"></div></div><b>5.112</b></div>
+          <div class="bar-row"><span>Khiếu nại / Tố cáo</span><div class="track"><div class="fill" style="width:32%"></div></div><b>3.245</b></div>
+          <div class="bar-row"><span>Trục trặc kỹ thuật</span><div class="track"><div class="fill" style="width:22%"></div></div><b>2.184</b></div>
+          <div class="bar-row"><span>Khác</span><div class="track"><div class="fill" style="width:19%"></div></div><b>1.938</b></div>
+        </div>
+        <div class="card">
+          <h2>Cảnh báo gần đây ⓘ</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Thời gian</th><th>Mức độ</th><th>Loại cảnh báo</th><th>Nội dung</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                <tr><td>01/06/2025 09:21</td><td><span class="badge red">Cao</span></td><td>Bất thường hội thoại</td><td>Tăng đột biến từ khóa rủi ro: “lừa đảo”, “mất tiền”</td><td><span class="badge orange">Đang xử lý</span></td></tr>
+                <tr><td>01/06/2025 08:47</td><td><span class="badge orange">Trung bình</span></td><td>Lỗi tích hợp</td><td>Kết nối API Core Banking chậm</td><td><span class="badge orange">Đang theo dõi</span></td></tr>
+                <tr><td>01/06/2025 07:58</td><td><span class="badge blue">Thấp</span></td><td>Hiệu suất bot</td><td>Tỷ lệ không hiểu ý tăng nhẹ</td><td><span class="badge green">Đã xử lý</span></td></tr>
+                <tr><td>31/05/2025 23:11</td><td><span class="badge red">Cao</span></td><td>An toàn & bảo mật</td><td>Phát hiện truy cập bất thường</td><td><span class="badge green">Đã xử lý</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer"><span>🛡 Ngân hàng TMCP Ngoại thương Việt Nam (VCB) · VoiceBank Inclusive Operations</span><span>Phiên bản 1.0.0 · 🟢 Hệ thống hoạt động ổn định</span></div>
+    </section>
+
+    <!-- MONITOR -->
+    <section class="page" id="monitor">
+      <div class="topbar">
+        <div class="title">
+          <h1>Giám sát hội thoại</h1>
+          <p>Theo dõi và can thiệp các phiên hội thoại theo thời gian thực</p>
+        </div>
+        <div class="tools">
+          <button class="control">🟢 Thời gian thực</button>
+          <button class="control">⚑ Mức độ ưu tiên: Tất cả⌄</button>
+          <button class="control">👤 Kênh: Tất cả⌄</button>
+          <div class="notif">🔔</div>
+          <button class="control">26/05/2025 10:42:18</button>
+        </div>
+      </div>
+
+      <div class="grid4">
+        <div class="card kpi"><div><div class="kpi-label">Đang hoạt động</div><div class="kpi-value">186</div><div class="delta up"><b>↑ 14,2%</b> so với 10 phút trước</div></div><div class="kpi-icon">▥</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Tỷ lệ bot hiểu đúng</div><div class="kpi-value">92,7%</div><div class="delta up"><b>↑ 3,6%</b> so với 1 giờ trước</div></div><div class="kpi-icon">🎯</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Phiên cần can thiệp</div><div class="kpi-value">18</div><div class="delta down"><b>↓ 2</b> so với 10 phút trước</div></div><div class="kpi-icon warning">⚠</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Thời gian phản hồi TB</div><div class="kpi-value">3,2 giây</div><div class="delta up"><b>↓ 0,4 giây</b> so với 1 giờ trước</div></div><div class="kpi-icon">◷</div></div>
+      </div>
+
+      <div class="monitor-layout" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Danh sách phiên hội thoại đang diễn ra <span class="badge green">186 phiên</span></h2>
+            <div class="control search" style="min-width:280px">🔎 <input placeholder="Tìm mã phiên, SĐT, khách hàng..." /></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mã phiên</th><th>Khách hàng</th><th>Kênh</th><th>Ý định</th><th>Trạng thái</th><th>Mức rủi ro</th><th>Hành động</th></tr></thead>
+              <tbody>
+                <tr class="selected" onclick="selectConversation('C250526-104215','Tra cứu số dư','Tích cực')"><td><span class="row-status green"></span>C250526-104215<br><small>10:42:15</small></td><td>Nguyễn Minh Anh<br><small>0912 345 678</small></td><td>🟢 Chat</td><td>Tra cứu số dư</td><td><span class="badge green">Bot xử lý</span></td><td><span class="badge green">Thấp</span></td><td>👁 ⋯</td></tr>
+                <tr onclick="selectConversation('C250526-104198','Khóa thẻ khẩn cấp','Trung tính')"><td><span class="row-status orange"></span>C250526-104198<br><small>10:41:58</small></td><td>Trần Văn Nam<br><small>0909 876 543</small></td><td>☎ Call</td><td>Khóa thẻ khẩn cấp</td><td><span class="badge orange">Chờ xác minh</span></td><td><span class="badge orange">Trung bình</span></td><td>👁 ⋯</td></tr>
+                <tr onclick="selectConversation('C250526-104167','Khiếu nại giao dịch','Tiêu cực')"><td><span class="row-status red"></span>C250526-104167<br><small>10:41:27</small></td><td>Lê Thị Hương<br><small>0933 111 222</small></td><td>🔵 Zalo</td><td>Khiếu nại giao dịch</td><td><span class="badge blue">Chuyển nhân viên</span></td><td><span class="badge red">Cao</span></td><td>👁 ⋯</td></tr>
+                <tr onclick="selectConversation('C250526-104154','Thông tin lãi suất','Tích cực')"><td><span class="row-status green"></span>C250526-104154<br><small>10:41:14</small></td><td>Phạm Quốc Bảo<br><small>0707 222 333</small></td><td>🟢 Chat</td><td>Thông tin lãi suất</td><td><span class="badge green">Bot xử lý</span></td><td><span class="badge green">Thấp</span></td><td>👁 ⋯</td></tr>
+                <tr onclick="selectConversation('C250526-104129','Mở tài khoản','Trung tính')"><td><span class="row-status orange"></span>C250526-104129<br><small>10:40:49</small></td><td>Hoàng Thu Trang<br><small>0988 765 432</small></td><td>☎ Call</td><td>Mở tài khoản</td><td><span class="badge orange">Chờ xác minh</span></td><td><span class="badge orange">Trung bình</span></td><td>👁 ⋯</td></tr>
+                <tr onclick="selectConversation('C250526-104105','Hạn mức thẻ','Tiêu cực')"><td><span class="row-status red"></span>C250526-104105<br><small>10:40:25</small></td><td>Đỗ Việt Dũng<br><small>0911 654 321</small></td><td>🟣 Messenger</td><td>Hạn mức thẻ</td><td><span class="badge blue">Chuyển nhân viên</span></td><td><span class="badge red">Cao</span></td><td>👁 ⋯</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="footer"><span>Hiển thị 1-6 / 186 phiên</span><span>‹ <b style="color:var(--green-800)">1</b> 2 3 ... 24 ›</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Chi tiết hội thoại · <span class="badge green">Đang hoạt động</span></h2><span>−</span></div>
+          <div style="display:flex;justify-content:space-between;gap:10px">
+            <div><b id="convId">C250526-104215</b> ⧉<br><small style="color:var(--muted)">Kênh: Chat · Bắt đầu: 10:42:15 · Thời lượng: 02:18</small></div>
+            <span class="badge green">Bot xử lý</span>
+          </div>
+          <div class="tabs"><div class="tab active">Hội thoại</div><div class="tab">Thông tin</div><div class="tab">Lịch sử</div><div class="tab">Ghi chú</div></div>
+
+          <div class="chat-box">
+            <div class="msg"><div class="avatar" style="width:34px;height:34px">KH</div><div class="bubble"><small>Khách hàng · 10:42:15</small>Cho mình hỏi số dư tài khoản thanh toán của mình hiện tại là bao nhiêu?</div><span class="badge green">Tích cực</span></div>
+            <div class="msg agent"><div class="avatar" style="width:34px;height:34px">An</div><div class="bubble"><small>An · 10:42:16</small>Dạ An có thể giúp bạn kiểm tra số dư tài khoản. Bạn vui lòng xác nhận số tài khoản hoặc số điện thoại đã đăng ký với VCB được không ạ?</div><span class="badge gray">Trung tính</span></div>
+            <div class="msg"><div class="avatar" style="width:34px;height:34px">KH</div><div class="bubble"><small>Khách hàng · 10:42:28</small>Số điện thoại 0912 345 678</div><span class="badge green">Tích cực</span></div>
+            <div class="msg agent"><div class="avatar" style="width:34px;height:34px">An</div><div class="bubble"><small>An · 10:42:31</small>Dạ vâng ạ. Số dư tài khoản thanh toán của bạn ***6789 hiện tại là 25.680.000 VND tại thời điểm 10:42 ngày 26/05/2025.</div><span class="badge green">Tích cực</span></div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="small-panel"><b>Ý định được phát hiện</b><br><span id="convIntent">Tra cứu số dư</span><br><small>Độ tin cậy: 98%</small><div class="progress"><span style="width:98%"></span></div></div>
+            <div class="small-panel"><b>Cảm xúc khách hàng</b><br><span id="convMood">Tích cực</span><br><small>Điểm cảm xúc: +0.72</small><div class="progress"><span style="width:88%"></span></div></div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="toast('Đang phát bản ghi hội thoại')">▶ Nghe bản ghi</button>
+            <button class="btn" onclick="toast('Đã tiếp quản hội thoại')">👤 Tiếp quản</button>
+            <button class="btn blue" onclick="toast('Đã tạo ticket từ hội thoại')">▣ Tạo ticket</button>
+            <button class="btn red" onclick="toast('Đã đánh dấu rủi ro')">⚑ Đánh dấu rủi ro</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKETS -->
+    <section class="page" id="tickets">
+      <div class="topbar">
+        <div class="title">
+          <h1>Ticket hỗ trợ</h1>
+          <p>Quản lý và xử lý các yêu cầu hỗ trợ từ khách hàng trên mọi kênh.</p>
+        </div>
+        <div class="tools">
+          <div class="control search">🔎 <input placeholder="Tìm kiếm ticket, SĐT, email..." /><span class="kbd">⌘ K</span></div>
+          <button class="control">📅 26/05/2025 - 01/06/2025</button>
+          <div class="notif">🔔</div>
+          <div class="control admin"><div class="avatar" style="width:34px;height:34px">A</div><div><b>Admin VCB</b><br><small>Quản trị viên</small></div>⌄</div>
+        </div>
+      </div>
+
+      <div class="grid4">
+        <div class="card kpi"><div><div class="kpi-label">Ticket mở</div><div class="kpi-value">256</div><div class="delta up"><b>↑ 18,2%</b> so với tuần trước</div></div><div class="kpi-icon">👥</div></div>
+        <div class="card kpi"><div><div class="kpi-label">SLA đúng hạn</div><div class="kpi-value">92,6%</div><div class="delta up"><b>↑ 3,8%</b> so với tuần trước</div></div><div class="kpi-icon">🛡</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Ticket ưu tiên cao</div><div class="kpi-value">38</div><div class="delta up"><b>↑ 5,3%</b> so với tuần trước</div></div><div class="kpi-icon danger">⚑</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Thời gian xử lý trung bình</div><div class="kpi-value">1h 42m</div><div class="delta down"><b>↓ 8m</b> so với tuần trước</div></div><div class="kpi-icon warning">◷</div></div>
+      </div>
+
+      <div class="filter-row">
+        <button class="chip active" onclick="setChip(this)">Tất cả <b>256</b></button>
+        <button class="chip" onclick="setChip(this)">Mới <b>36</b></button>
+        <button class="chip" onclick="setChip(this)">Đang xử lý <b>102</b></button>
+        <button class="chip" onclick="setChip(this)">Chờ phản hồi <b>58</b></button>
+        <button class="chip" onclick="setChip(this)">Đã đóng <b>60</b></button>
+        <button class="chip" style="margin-left:auto">☰ Bộ lọc</button>
+        <button class="chip">Mới nhất⌄</button>
+      </div>
+
+      <div class="ticket-layout">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>□</th><th>Mã ticket</th><th>Chủ đề</th><th>Khách hàng</th><th>Kênh</th><th>Mức ưu tiên</th><th>SLA</th><th>Người phụ trách</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                <tr class="selected" onclick="selectTicket('TK-2025-06125','ATM nuốt thẻ','Nguyễn Minh Tuấn')"><td>□</td><td>TK-2025-06125</td><td>ATM nuốt thẻ</td><td>Nguyễn Minh Tuấn<br><small>0987 654 321</small></td><td>Ứng dụng</td><td><span class="badge red">Cao</span></td><td>1h 12m<br><span style="color:var(--red)">Quá hạn</span></td><td>Trần Thị Mai</td><td><span class="badge orange">Đang xử lý</span></td></tr>
+                <tr onclick="selectTicket('TK-2025-06124','Không chuyển tiền được','Lê Hồng Phúc')"><td>□</td><td>TK-2025-06124</td><td>Không chuyển tiền được</td><td>Lê Hồng Phúc<br><small>0976 543 210</small></td><td>Ứng dụng</td><td><span class="badge red">Cao</span></td><td>2h 05m<br><span style="color:var(--red)">Quá hạn</span></td><td>Phạm Hoàng Nam</td><td><span class="badge orange">Đang xử lý</span></td></tr>
+                <tr onclick="selectTicket('TK-2025-06123','Cần gọi lại','Trần Văn An')"><td>□</td><td>TK-2025-06123</td><td>Cần gọi lại</td><td>Trần Văn An<br><small>0901 234 567</small></td><td>Call Center</td><td><span class="badge orange">Trung bình</span></td><td>15m<br><span style="color:var(--green-800)">Còn 1h15m</span></td><td>Vũ Thanh Hằng</td><td><span class="badge blue">Chờ phản hồi</span></td></tr>
+                <tr onclick="selectTicket('TK-2025-06122','Xác minh giao dịch bất thường','Phạm Thị Lan')"><td>□</td><td>TK-2025-06122</td><td>Xác minh giao dịch bất thường</td><td>Phạm Thị Lan<br><small>0932 111 222</small></td><td>Email</td><td><span class="badge red">Cao</span></td><td>35m<br><span style="color:var(--orange)">Còn 25m</span></td><td>Đặng Quốc Bảo</td><td><span class="badge green">Mới</span></td></tr>
+                <tr><td>□</td><td>TK-2025-06121</td><td>Quên mật khẩu</td><td>Hoàng Đức Long</td><td>Chatbot</td><td><span class="badge green">Thấp</span></td><td>5m</td><td>Nguyễn Thùy Linh</td><td><span class="badge orange">Đang xử lý</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="footer"><span>Hiển thị 1-5 trong tổng số 256 ticket</span><span>‹ <b style="color:var(--green-800)">1</b> 2 3 4 5 ... 32 ›</span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h2 id="ticketId">TK-2025-06125 <span class="badge red">Cao</span></h2><h3 id="ticketTitle" style="margin:6px 0 0">ATM nuốt thẻ</h3></div><span class="badge orange">Đang xử lý⌄</span></div>
+          <div style="color:var(--muted);margin-bottom:12px"><span id="ticketCustomer">Nguyễn Minh Tuấn</span> · 0987 654 321 · Ứng dụng<br>Tạo lúc 01/06/2025 08:42</div>
+          <div class="tabs"><div class="tab active">Tóm tắt</div><div class="tab">Trao đổi 5</div><div class="tab">Thông tin khách hàng</div><div class="tab">Lịch sử</div></div>
+          <div class="small-panel">
+            <b>✧ Tóm tắt AI</b>
+            <p style="line-height:1.55;margin:10px 0 0">Khách hàng báo cáo ATM VCB tại 25 Lý Thường Kiệt, Hà Nội nuốt thẻ debit vào lúc 07:15 ngày 01/06/2025. Giao dịch gần nhất: rút tiền 2.000.000 VND. Khách hàng đã khóa thẻ và yêu cầu hỗ trợ lấy lại thẻ.</p>
+            <small style="color:var(--muted)">Độ tin cậy: 95%</small>
+          </div>
+          <div class="small-panel" style="margin-top:12px">
+            <b>SLA</b>
+            <div style="display:flex;justify-content:space-between;margin-top:8px"><span style="color:var(--red);font-weight:800">Quá hạn 12 phút</span><span>1h 00m</span></div>
+            <div class="progress"><span style="width:88%;background:linear-gradient(90deg,#f59e0b,#ef4444)"></span></div>
+            <small style="color:var(--muted)">Hạn SLA: 01/06/2025 09:42</small>
+          </div>
+          <div class="small-panel" style="margin-top:12px">
+            <b>Đề xuất hành động</b>
+            <p>✓ Xác minh thông tin và địa điểm ATM<br>✓ Kiểm tra trạng thái thẻ và giao dịch liên quan<br>✓ Hướng dẫn khách hàng khóa thẻ tạm thời<br>✓ Tạo yêu cầu hoàn thẻ và hẹn trả thẻ</p>
+          </div>
+          <div class="actions">
+            <button class="btn primary" onclick="toast('Đang gọi lại khách hàng')">☎ Gọi lại</button>
+            <button class="btn" onclick="toast('Đã giao cho nhân viên')">👤 Giao cho nhân viên</button>
+            <button class="btn" onclick="toast('Đã gửi email')">✉ Gửi email</button>
+            <button class="btn red" onclick="toast('Đã đóng ticket')">Đóng ticket</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-widgets">
+        <div class="card"><h2>Phân bổ theo kênh</h2><div class="donut-small"></div></div>
+        <div class="card"><h2>Hiệu suất SLA</h2><div class="donut-small sla-donut"></div></div>
+        <div class="card"><h2>Top chủ đề phổ biến</h2>
+          <div class="bar-row" style="grid-template-columns:170px 1fr auto"><span>Không chuyển tiền được</span><div class="track"><div class="fill" style="width:85%"></div></div><b>62</b></div>
+          <div class="bar-row" style="grid-template-columns:170px 1fr auto"><span>ATM nuốt thẻ</span><div class="track"><div class="fill" style="width:66%"></div></div><b>48</b></div>
+          <div class="bar-row" style="grid-template-columns:170px 1fr auto"><span>Cần gọi lại</span><div class="track"><div class="fill" style="width:50%"></div></div><b>36</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="page" id="reports">
+      <div class="topbar">
+        <div class="title">
+          <h1>Báo cáo & phân tích</h1>
+          <p>Tổng hợp hiệu quả hoạt động và hành vi người dùng trên VCB VoiceBank Inclusive</p>
+        </div>
+        <div class="tools">
+          <button class="control">📅 26/05/2025 - 01/06/2025⌄</button>
+          <button class="control" onclick="toast('Đã xuất file PDF')">📄 Xuất PDF</button>
+          <button class="control" onclick="toast('Đã xuất file Excel')">📗 Xuất Excel</button>
+          <button class="control" onclick="toast('Đã tạo liên kết chia sẻ báo cáo')">🔗 Chia sẻ báo cáo</button>
+        </div>
+      </div>
+
+      <div class="grid4">
+        <div class="card kpi"><div><div class="kpi-label">Tổng người dùng tương tác</div><div class="kpi-value">128.540</div><div class="delta up"><b>↑ 14,2%</b> so với tuần trước</div></div><div class="kpi-icon">👥</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Tỷ lệ giữ chân 30 ngày</div><div class="kpi-value">42,8%</div><div class="delta up"><b>↑ 5,3%</b> so với tuần trước</div></div><div class="kpi-icon">🔁</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Tỷ lệ sử dụng trợ năng</div><div class="kpi-value">31,6%</div><div class="delta up"><b>↑ 3,8%</b> so với tuần trước</div></div><div class="kpi-icon">♿</div></div>
+        <div class="card kpi"><div><div class="kpi-label">Điểm hài lòng theo kênh</div><div class="kpi-value">4,6/5</div><div class="delta up"><b>↑ 0,3</b> điểm so với tuần trước</div></div><div class="kpi-icon">😊</div></div>
+      </div>
+
+      <div class="report-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Người dùng & phiên tương tác theo thời gian ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="legend" style="display:flex;margin-bottom:8px"><span><span class="dot" style="background:var(--green-800)"></span>Người dùng</span><span><span class="dot" style="background:var(--blue)"></span>Phiên tương tác</span></div>
+          <div class="chart">
+            <svg viewBox="0 0 620 280" preserveAspectRatio="none">
+              <g stroke="#e4ebe5"><line x1="50" y1="230" x2="590" y2="230"/><line x1="50" y1="170" x2="590" y2="170"/><line x1="50" y1="110" x2="590" y2="110"/><line x1="50" y1="50" x2="590" y2="50"/></g>
+              <polyline points="50,160 140,132 230,122 320,104 410,128 500,138 590,72" fill="none" stroke="#006b3f" stroke-width="4"/>
+              <polyline points="50,190 140,176 230,158 320,138 410,142 500,150 590,130" fill="none" stroke="#2f80ed" stroke-width="4"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Kênh sử dụng ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="legend" style="display:flex;margin-bottom:8px"><span><span class="dot" style="background:var(--green-700)"></span>App</span><span><span class="dot" style="background:var(--blue)"></span>Web</span><span><span class="dot" style="background:var(--yellow)"></span>Hotline</span><span><span class="dot" style="background:var(--purple)"></span>Chat</span></div>
+          <div class="chart">
+            <svg viewBox="0 0 460 280" preserveAspectRatio="none">
+              <g transform="translate(35,30)">
+                <g>
+                  <rect x="15" y="88" width="34" height="130" fill="#0b7a43"/><rect x="15" y="45" width="34" height="43" fill="#2f80ed"/><rect x="15" y="18" width="34" height="27" fill="#facc15"/><rect x="15" y="0" width="34" height="18" fill="#8b5cf6"/>
+                  <rect x="80" y="92" width="34" height="126" fill="#0b7a43"/><rect x="80" y="50" width="34" height="42" fill="#2f80ed"/><rect x="80" y="20" width="34" height="30" fill="#facc15"/><rect x="80" y="0" width="34" height="20" fill="#8b5cf6"/>
+                  <rect x="145" y="94" width="34" height="124" fill="#0b7a43"/><rect x="145" y="54" width="34" height="40" fill="#2f80ed"/><rect x="145" y="21" width="34" height="33" fill="#facc15"/><rect x="145" y="0" width="34" height="21" fill="#8b5cf6"/>
+                  <rect x="210" y="91" width="34" height="127" fill="#0b7a43"/><rect x="210" y="52" width="34" height="39" fill="#2f80ed"/><rect x="210" y="22" width="34" height="30" fill="#facc15"/><rect x="210" y="0" width="34" height="22" fill="#8b5cf6"/>
+                  <rect x="275" y="88" width="34" height="130" fill="#0b7a43"/><rect x="275" y="51" width="34" height="37" fill="#2f80ed"/><rect x="275" y="20" width="34" height="31" fill="#facc15"/><rect x="275" y="0" width="34" height="20" fill="#8b5cf6"/>
+                  <rect x="340" y="90" width="34" height="128" fill="#0b7a43"/><rect x="340" y="52" width="34" height="38" fill="#2f80ed"/><rect x="340" y="21" width="34" height="31" fill="#facc15"/><rect x="340" y="0" width="34" height="21" fill="#8b5cf6"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Phân bố ý định theo ngày (Top 8 intent) ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="table-wrap">
+            <table class="heatmap">
+              <thead><tr><th>Ý định</th><th>26/05</th><th>27/05</th><th>28/05</th><th>29/05</th><th>30/05</th><th>31/05</th><th>Tổng</th></tr></thead>
+              <tbody>
+                <tr><td>Tra cứu số dư</td><td>6.842</td><td>7.125</td><td>7.302</td><td>7.891</td><td>7.563</td><td>7.215</td><td>52.081</td></tr>
+                <tr><td>Chuyển tiền</td><td>5.243</td><td>5.421</td><td>5.812</td><td>6.110</td><td>5.985</td><td>5.531</td><td>40.125</td></tr>
+                <tr><td>Thanh toán hóa đơn</td><td>3.842</td><td>3.654</td><td>3.985</td><td>4.201</td><td>4.156</td><td>4.002</td><td>28.161</td></tr>
+                <tr><td>Mở/khóa thẻ</td><td>2.154</td><td>2.312</td><td>2.401</td><td>2.784</td><td>2.618</td><td>2.453</td><td>17.523</td></tr>
+                <tr><td>Đổi mật khẩu</td><td>1.842</td><td>1.925</td><td>1.998</td><td>2.154</td><td>2.103</td><td>1.874</td><td>13.911</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Hiệu quả trợ năng ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="table-wrap">
+            <table style="min-width:520px">
+              <thead><tr><th>Tính năng trợ năng</th><th>Người dùng</th><th>Tỷ lệ sử dụng</th><th>Hài lòng</th><th>Xu hướng</th></tr></thead>
+              <tbody>
+                <tr><td>AA Chữ lớn</td><td>22.540</td><td>17,5%</td><td>4,7/5</td><td><svg class="spark" viewBox="0 0 100 30"><polyline points="0,22 15,15 28,18 40,11 55,13 70,8 85,10 100,4" fill="none" stroke="#16823e" stroke-width="3"/></svg></td></tr>
+                <tr><td>🔊 Đọc màn hình</td><td>16.782</td><td>13,0%</td><td>4,6/5</td><td><svg class="spark" viewBox="0 0 100 30"><polyline points="0,20 15,19 28,13 40,15 55,10 70,12 85,7 100,5" fill="none" stroke="#16823e" stroke-width="3"/></svg></td></tr>
+                <tr><td>▥ Điều khiển giọng nói</td><td>12.153</td><td>9,4%</td><td>4,5/5</td><td><svg class="spark" viewBox="0 0 100 30"><polyline points="0,13 15,19 28,16 40,20 55,14 70,17 85,11 100,9" fill="none" stroke="#16823e" stroke-width="3"/></svg></td></tr>
+                <tr><td>◐ Tương phản cao</td><td>6.321</td><td>4,9%</td><td>4,6/5</td><td><svg class="spark" viewBox="0 0 100 30"><polyline points="0,24 15,20 28,16 40,18 55,12 70,15 85,10 100,6" fill="none" stroke="#16823e" stroke-width="3"/></svg></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Insight cho quản lý ⓘ</h2>
+        <div class="insights">
+          <div class="insight"><div class="insight-icon">↗</div><div><b>Tăng trưởng người dùng tích cực</b><p>Tổng người dùng tăng 14,2% so với tuần trước, tập trung ở các ý định tra cứu và chuyển tiền.</p></div></div>
+          <div class="insight"><div class="insight-icon">♿</div><div><b>Trợ năng ngày càng được quan tâm</b><p>Tỷ lệ sử dụng trợ năng tăng 3,8%, đặc biệt chức năng Chữ lớn và Đọc màn hình tăng ổn định.</p></div></div>
+          <div class="insight"><div class="insight-icon">✓</div><div><b>Hiệu quả hỗ trợ cải thiện</b><p>Điểm hài lòng trung bình đạt 4,6/5, duy trì xu hướng tăng ở tất cả các kênh.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="settings">
+      <div class="topbar">
+        <div class="title">
+          <h1>Cài đặt vận hành</h1>
+          <p>Cấu hình phân quyền, bảo mật, luồng cảnh báo và tích hợp hệ thống.</p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h2>Phân quyền RBAC</h2>
+          <div class="access-box">
+            <div class="access-item"><div><b>Admin</b><br><small>Toàn quyền cấu hình, báo cáo, audit log</small></div><span class="badge green">Đang bật</span></div>
+            <div class="access-item"><div><b>Operator</b><br><small>Giám sát hội thoại, tiếp quản, tạo ticket</small></div><span class="badge green">Đang bật</span></div>
+            <div class="access-item"><div><b>Analyst</b><br><small>Xem báo cáo, không can thiệp dữ liệu khách</small></div><span class="badge gray">Chỉ đọc</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Cảnh báo & bảo mật</h2>
+          <div class="access-box">
+            <div class="access-item"><div><b>Che PII</b><br><small>Ẩn số CCCD, số điện thoại, số tài khoản khi không cần thiết</small></div><span class="badge green">Bật</span></div>
+            <div class="access-item"><div><b>Audit log</b><br><small>Ghi nhận mọi thao tác của nhân viên</small></div><span class="badge green">Bật</span></div>
+            <div class="access-item"><div><b>Escalation tự động</b><br><small>Chuyển nhân viên nếu rủi ro cao hoặc bot không hiểu</small></div><span class="badge green">Bật</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <h3 id="modalTitle">Thông tin</h3>
+    <p id="modalText"></p>
+    <button class="btn primary" onclick="closeModal()">Đóng</button>
+  </div>
+</div>
+
+<script>
+const navButtons=[...document.querySelectorAll('.nav button')];
+const pages=[...document.querySelectorAll('.page')];
+
+navButtons.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    navButtons.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    pages.forEach(p=>p.classList.remove('active'));
+    document.getElementById(btn.dataset.page).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(window.__toast);
+  window.__toast=setTimeout(()=>el.classList.remove('show'),1800);
+}
+function openModal(title,text){
+  document.getElementById('modalTitle').textContent=title;
+  document.getElementById('modalText').textContent=text;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('show');
+}
+function setChip(el){
+  el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  toast('Đã áp dụng bộ lọc: '+el.textContent.trim());
+}
+function selectConversation(id,intent,mood){
+  document.getElementById('convId').textContent=id;
+  document.getElementById('convIntent').textContent=intent;
+  document.getElementById('convMood').textContent=mood;
+  toast('Đã chọn phiên '+id);
+}
+function selectTicket(id,title,customer){
+  document.getElementById('ticketId').innerHTML=id+' <span class="badge red">Cao</span>';
+  document.getElementById('ticketTitle').textContent=title;
+  document.getElementById('ticketCustomer').textContent=customer;
+  toast('Đã chọn ticket '+id);
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeModal();
+});
+</script>
+</body>
+</html>

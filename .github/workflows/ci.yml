@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - name: Install deps
+        run: |
+          uv venv --python 3.11
+          uv pip install -r requirements.txt
+          uv pip install pytest==8.3.0 pytest-asyncio==0.23.0 ruff
+      - name: Lint
+        run: .venv/bin/ruff check voice2text mockapi
+      - name: Test
+        run: .venv/bin/python -m pytest voice2text/tests mockapi/tests -p no:asyncio
+
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate compose files
+        run: |
+          cp .env.example .env
+          docker compose -f docker/docker-compose.infra.yml --env-file .env config -q
+          docker compose -f docker/docker-compose.yml --env-file .env config -q

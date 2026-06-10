@@ -1,0 +1,112 @@
+{
+  "byPeriod": {
+    "today": {
+      "kpis": [
+        { "label": "Người dùng tương tác hôm nay", "value": "16.280", "delta": "↑ 6,1%", "sub": "so với hôm qua", "dir": "up", "icon": "👥" },
+        { "label": "Tỷ lệ quay lại trong ngày", "value": "38,2%", "delta": "↑ 2,1%", "sub": "so với hôm qua", "dir": "up", "icon": "🔁" },
+        { "label": "Tỷ lệ sử dụng trợ năng", "value": "30,8%", "delta": "↑ 1,2%", "sub": "so với hôm qua", "dir": "up", "icon": "♿" },
+        { "label": "Điểm hài lòng theo kênh", "value": "4,6/5", "delta": "↑ 0,1", "sub": "điểm so với hôm qua", "dir": "up", "icon": "😊" }
+      ],
+      "userSession": {
+        "labels": ["08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h"],
+        "users": [42, 78, 120, 138, 96, 110, 150, 142],
+        "sessions": [30, 62, 100, 120, 88, 96, 132, 128],
+        "max": 170
+      },
+      "channelUsage": {
+        "labels": ["08h", "10h", "12h", "14h"],
+        "series": [[130, 40, 25, 18], [128, 42, 30, 20], [120, 38, 28, 19], [132, 41, 31, 22]],
+        "colors": ["#0b7a43", "#2f80ed", "#facc15", "#8b5cf6"],
+        "legend": ["App", "Web", "Hotline", "Chat"]
+      }
+    },
+    "7d": {
+      "kpis": [
+        { "label": "Tổng người dùng tương tác", "value": "128.540", "delta": "↑ 14,2%", "sub": "so với tuần trước", "dir": "up", "icon": "👥" },
+        { "label": "Tỷ lệ giữ chân 30 ngày", "value": "42,8%", "delta": "↑ 5,3%", "sub": "so với tuần trước", "dir": "up", "icon": "🔁" },
+        { "label": "Tỷ lệ sử dụng trợ năng", "value": "31,6%", "delta": "↑ 3,8%", "sub": "so với tuần trước", "dir": "up", "icon": "♿" },
+        { "label": "Điểm hài lòng theo kênh", "value": "4,6/5", "delta": "↑ 0,3", "sub": "điểm so với tuần trước", "dir": "up", "icon": "😊" }
+      ],
+      "userSession": {
+        "labels": ["26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "01/06"],
+        "users": [98, 112, 120, 138, 118, 110, 162],
+        "sessions": [78, 92, 108, 128, 124, 116, 138],
+        "max": 180
+      },
+      "channelUsage": {
+        "labels": ["26/05", "27/05", "28/05", "29/05", "30/05", "31/05"],
+        "series": [[130, 43, 27, 18], [126, 42, 30, 20], [124, 40, 33, 21], [127, 39, 30, 22], [130, 37, 31, 20], [128, 38, 31, 21]],
+        "colors": ["#0b7a43", "#2f80ed", "#facc15", "#8b5cf6"],
+        "legend": ["App", "Web", "Hotline", "Chat"]
+      }
+    },
+    "30d": {
+      "kpis": [
+        { "label": "Tổng người dùng tương tác", "value": "542.310", "delta": "↑ 18,7%", "sub": "so với tháng trước", "dir": "up", "icon": "👥" },
+        { "label": "Tỷ lệ giữ chân 30 ngày", "value": "44,1%", "delta": "↑ 6,9%", "sub": "so với tháng trước", "dir": "up", "icon": "🔁" },
+        { "label": "Tỷ lệ sử dụng trợ năng", "value": "32,4%", "delta": "↑ 4,5%", "sub": "so với tháng trước", "dir": "up", "icon": "♿" },
+        { "label": "Điểm hài lòng theo kênh", "value": "4,5/5", "delta": "↑ 0,4", "sub": "điểm so với tháng trước", "dir": "up", "icon": "😊" }
+      ],
+      "userSession": {
+        "labels": ["03/05", "08/05", "13/05", "18/05", "23/05", "28/05"],
+        "users": [88, 102, 118, 132, 121, 158],
+        "sessions": [70, 88, 104, 120, 128, 142],
+        "max": 180
+      },
+      "channelUsage": {
+        "labels": ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4"],
+        "series": [[128, 41, 29, 19], [126, 40, 31, 21], [129, 39, 30, 22], [131, 38, 32, 23]],
+        "colors": ["#0b7a43", "#2f80ed", "#facc15", "#8b5cf6"],
+        "legend": ["App", "Web", "Hotline", "Chat"]
+      }
+    },
+    "quarter": {
+      "kpis": [
+        { "label": "Tổng người dùng tương tác", "value": "1.486.200", "delta": "↑ 26,3%", "sub": "so với quý trước", "dir": "up", "icon": "👥" },
+        { "label": "Tỷ lệ giữ chân 30 ngày", "value": "45,6%", "delta": "↑ 8,2%", "sub": "so với quý trước", "dir": "up", "icon": "🔁" },
+        { "label": "Tỷ lệ sử dụng trợ năng", "value": "33,9%", "delta": "↑ 6,1%", "sub": "so với quý trước", "dir": "up", "icon": "♿" },
+        { "label": "Điểm hài lòng theo kênh", "value": "4,5/5", "delta": "↑ 0,5", "sub": "điểm so với quý trước", "dir": "up", "icon": "😊" }
+      ],
+      "userSession": {
+        "labels": ["Tháng 4", "Tháng 5", "Tháng 6"],
+        "users": [108, 132, 162],
+        "sessions": [96, 118, 150],
+        "max": 180
+      },
+      "channelUsage": {
+        "labels": ["Tháng 4", "Tháng 5", "Tháng 6"],
+        "series": [[125, 42, 30, 20], [129, 40, 31, 22], [132, 38, 33, 24]],
+        "colors": ["#0b7a43", "#2f80ed", "#facc15", "#8b5cf6"],
+        "legend": ["App", "Web", "Hotline", "Chat"]
+      }
+    }
+  },
+  "intentHeatmap": {
+    "cols": ["26/05", "27/05", "28/05", "29/05", "30/05", "31/05", "Tổng"],
+    "rows": [
+      { "name": "Tra cứu số dư", "values": [6842, 7125, 7302, 7891, 7563, 7215], "total": 52081 },
+      { "name": "Chuyển tiền", "values": [5243, 5421, 5812, 6110, 5985, 5531], "total": 40125 },
+      { "name": "Thanh toán hóa đơn", "values": [3842, 3654, 3985, 4201, 4156, 4002], "total": 28161 },
+      { "name": "Mở/khóa thẻ", "values": [2154, 2312, 2401, 2784, 2618, 2453], "total": 17523 },
+      { "name": "Đổi mật khẩu", "values": [1842, 1925, 1998, 2154, 2103, 1874], "total": 13911 }
+    ]
+  },
+  "accessEffect": [
+    { "feature": "AA Chữ lớn", "users": "22.540", "rate": "17,5%", "csat": "4,7/5", "spark": [22, 15, 18, 11, 13, 8, 10, 4] },
+    { "feature": "🔊 Đọc màn hình", "users": "16.782", "rate": "13,0%", "csat": "4,6/5", "spark": [20, 19, 13, 15, 10, 12, 7, 5] },
+    { "feature": "▥ Điều khiển giọng nói", "users": "12.153", "rate": "9,4%", "csat": "4,5/5", "spark": [13, 19, 16, 20, 14, 17, 11, 9] },
+    { "feature": "◐ Tương phản cao", "users": "6.321", "rate": "4,9%", "csat": "4,6/5", "spark": [24, 20, 16, 18, 12, 15, 10, 6] }
+  ],
+  "insights": [
+    { "icon": "↗", "title": "Tăng trưởng người dùng tích cực", "text": "Tổng người dùng tăng so với kỳ trước, tập trung ở các ý định tra cứu và chuyển tiền." },
+    { "icon": "♿", "title": "Trợ năng ngày càng được quan tâm", "text": "Tỷ lệ sử dụng trợ năng tăng, đặc biệt chức năng Chữ lớn và Đọc màn hình tăng ổn định." },
+    { "icon": "✓", "title": "Hiệu quả hỗ trợ cải thiện", "text": "Điểm hài lòng trung bình đạt 4,6/5, duy trì xu hướng tăng ở tất cả các kênh." }
+  ],
+  "targetKpis": [
+    { "metric": "Tỷ lệ xử lý trọn (containment)", "target": "≥ 60%", "actual": "87%", "ok": true },
+    { "metric": "Hoàn tất tác vụ", "target": "≥ 85%", "actual": "88,4%", "ok": true },
+    { "metric": "CSAT", "target": "≥ 4,2 / 5", "actual": "4,6 / 5", "ok": true },
+    { "metric": "WER (lỗi nhận dạng)", "target": "≤ 12%", "actual": "9,8%", "ok": true },
+    { "metric": "Giảm tải tổng đài", "target": "20–40%", "actual": "34%", "ok": true }
+  ]
+}

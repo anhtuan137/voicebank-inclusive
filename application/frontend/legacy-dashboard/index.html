@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VCB Admin Console · VoiceBank Inclusive</title>
+<link rel="icon" type="image/png" href="assets/img/vcb-logo.png" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo"><img src="assets/img/vcb-logo.png" alt="Vietcombank" /></div>
+      <div>
+        <div class="brand-title">VCB Admin Console</div>
+        <div class="brand-sub">VoiceBank Inclusive</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="active" data-page="overview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+        Tổng quan
+      </button>
+      <button data-page="monitor">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M18 19a3 3 0 0 0 3-3v-3h-4v6z"/><path d="M6 19a3 3 0 0 1-3-3v-3h4v6z"/></svg>
+        Giám sát hội thoại
+      </button>
+      <button data-page="tickets">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 3h6l1 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3z"/><path d="M8 11h8M8 15h6"/></svg>
+        Ticket hỗ trợ
+      </button>
+      <button data-page="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19V5"/><path d="M8 17v-7"/><path d="M13 17V7"/><path d="M18 17v-4"/><path d="M4 19h17"/></svg>
+        Báo cáo
+      </button>
+      <button data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V21a2 2 0 0 1-4 0v-.09a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.66-1.1H3a2 2 0 0 1 0-4h.09A1.8 1.8 0 0 0 4.75 8.8a1.8 1.8 0 0 0-.36-1.98l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.8 1.8 0 0 0 9.2 4.6a1.8 1.8 0 0 0 1.1-1.66V3a2 2 0 0 1 4 0v.09a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H21a2 2 0 0 1 0 4h-.09A1.8 1.8 0 0 0 19.4 15Z"/></svg>
+        Cài đặt
+      </button>
+    </nav>
+
+    <div class="sidebar-art">
+      <div class="plane">🛸</div>
+      <div class="skyline"></div>
+      <div class="water"></div>
+    </div>
+
+    <div class="user-card">
+      <div class="avatar">A</div>
+      <div>
+        <div style="font-weight:850">Admin VCB</div>
+        <div style="font-size:12px;opacity:.8">Quản trị viên</div>
+      </div>
+      <div style="margin-left:auto">⌄</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- OVERVIEW -->
+    <section class="page active" id="overview">
+      <div class="topbar">
+        <div class="title">
+          <h1>Tổng quan</h1>
+          <p>Dashboard vận hành tổng thể của VoiceBank Inclusive.</p>
+        </div>
+        <div class="tools">
+          <div class="control search">🔎 <input id="ov-search" placeholder="Tìm cảnh báo..." /><span class="kbd">⌘ K</span></div>
+          <button class="control js-daterange">📅 26/05/2025 - 01/06/2025⌄</button>
+          <div class="notif" data-notif>🔔</div>
+          <div class="control admin"><div class="avatar" style="width:34px;height:34px">A</div><div><b>Admin VCB</b><br><small>Quản trị viên</small></div>⌄</div>
+        </div>
+      </div>
+
+      <div class="grid4" id="ov-kpis"></div>
+
+      <div class="grid3" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Lưu lượng phiên 7 ngày ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="chart" id="ov-traffic"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Phân loại yêu cầu ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div style="display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:center">
+            <div class="donut" id="ov-donut"></div>
+            <div class="legend" id="ov-legend"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Người dùng cần hỗ trợ trợ năng ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="access-box" id="ov-access"></div>
+        </div>
+      </div>
+
+      <div class="grid-bottom" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Top lý do chuyển nhân viên ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div id="ov-reasons"></div>
+        </div>
+        <div class="card">
+          <h2>Cảnh báo gần đây ⓘ</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Thời gian</th><th>Mức độ</th><th>Loại cảnh báo</th><th>Nội dung</th><th>Trạng thái</th></tr></thead>
+              <tbody id="ov-alerts"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer"><span>🛡 Ngân hàng TMCP Ngoại thương Việt Nam (VCB) · VoiceBank Inclusive Operations</span><span>Phiên bản 1.0.0 · 🟢 Hệ thống hoạt động ổn định</span></div>
+    </section>
+
+    <!-- MONITOR -->
+    <section class="page" id="monitor">
+      <div class="topbar">
+        <div class="title">
+          <h1>Giám sát hội thoại</h1>
+          <p>Theo dõi và can thiệp các phiên hội thoại theo thời gian thực</p>
+        </div>
+        <div class="tools">
+          <button class="control">🟢 Thời gian thực</button>
+          <button class="control" id="mon-priority">⚑ Ưu tiên: Tất cả⌄</button>
+          <button class="control" id="mon-channel">👤 Kênh: Tất cả⌄</button>
+          <div class="notif" data-notif>🔔</div>
+          <button class="control" id="mon-clock">26/05/2025 10:42:18</button>
+        </div>
+      </div>
+
+      <div class="grid4" id="mon-kpis"></div>
+
+      <div class="monitor-layout" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head">
+            <h2>Danh sách phiên hội thoại đang diễn ra <span class="badge green" id="mon-count">186 phiên</span></h2>
+            <div class="control search" style="min-width:280px">🔎 <input id="mon-search" placeholder="Tìm mã phiên, SĐT, khách hàng..." /></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mã phiên</th><th>Khách hàng</th><th>Kênh</th><th>Ý định</th><th>Trạng thái</th><th>Mức rủi ro</th><th>Hành động</th></tr></thead>
+              <tbody id="mon-tbody"></tbody>
+            </table>
+          </div>
+          <div class="footer"><span id="mon-shown">Hiển thị 1-6 / 186 phiên</span><span class="pager" id="mon-pager"></span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Chi tiết hội thoại · <span class="badge green">Đang hoạt động</span></h2><button class="collapse-btn" id="conv-collapse" title="Thu gọn / mở rộng">−</button></div>
+          <div class="collapsible" id="conv-collapsible">
+          <div style="display:flex;justify-content:space-between;gap:10px" id="conv-head"></div>
+          <div class="tabs" id="conv-tabs">
+            <div class="tab active" data-tab="chat">Hội thoại</div>
+            <div class="tab" data-tab="info">Thông tin</div>
+            <div class="tab" data-tab="history">Lịch sử</div>
+            <div class="tab" data-tab="notes">Ghi chú</div>
+          </div>
+          <div id="conv-body"></div>
+          <div class="actions">
+            <button class="btn" id="conv-act-play">▶ Nghe bản ghi</button>
+            <button class="btn" id="conv-act-takeover">👤 Tiếp quản</button>
+            <button class="btn blue" id="conv-act-ticket">▣ Tạo ticket</button>
+            <button class="btn red" id="conv-act-flag">⚑ Đánh dấu rủi ro</button>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Hàng đợi chuyển nhân viên (Escalations) & phản hồi gần đây</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Mã</th><th>Khách hàng</th><th>Nghiệp vụ · lý do</th><th>Ưu tiên</th><th>Trạng thái</th><th>Chờ</th></tr></thead>
+            <tbody id="mon-esc"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKETS -->
+    <section class="page" id="tickets">
+      <div class="topbar">
+        <div class="title">
+          <h1>Ticket hỗ trợ</h1>
+          <p>Quản lý và xử lý các yêu cầu hỗ trợ từ khách hàng trên mọi kênh.</p>
+        </div>
+        <div class="tools">
+          <div class="control search">🔎 <input id="tk-search" placeholder="Tìm kiếm ticket, SĐT, chủ đề..." /><span class="kbd">⌘ K</span></div>
+          <button class="control js-daterange">📅 26/05/2025 - 01/06/2025⌄</button>
+          <div class="notif" data-notif>🔔</div>
+          <div class="control admin"><div class="avatar" style="width:34px;height:34px">A</div><div><b>Admin VCB</b><br><small>Quản trị viên</small></div>⌄</div>
+        </div>
+      </div>
+
+      <div class="grid4" id="tk-kpis"></div>
+      <div class="filter-row" id="tk-filters"></div>
+
+      <div class="ticket-layout">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th><span class="cbox" id="tk-selectall" title="Chọn tất cả">□</span></th><th>Mã ticket</th><th>Chủ đề</th><th>Khách hàng</th><th>Kênh</th><th>Mức ưu tiên</th><th>SLA</th><th>Người phụ trách</th><th>Trạng thái</th></tr></thead>
+              <tbody id="tk-tbody"></tbody>
+            </table>
+          </div>
+          <div class="footer"><span id="tk-shown">Hiển thị 1-5 trong tổng số 256 ticket</span><span class="pager" id="tk-pager"></span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head" id="tk-detail-head"></div>
+          <div style="color:var(--muted);margin-bottom:12px" id="tk-detail-meta"></div>
+          <div class="tabs" id="tk-tabs">
+            <div class="tab active" data-tab="summary">Tóm tắt</div>
+            <div class="tab" data-tab="thread">Trao đổi</div>
+            <div class="tab" data-tab="customer">Thông tin khách hàng</div>
+            <div class="tab" data-tab="history">Lịch sử</div>
+          </div>
+          <div id="tk-body"></div>
+          <div class="actions">
+            <button class="btn primary" id="tk-act-call">☎ Gọi lại</button>
+            <button class="btn" id="tk-act-assign">👤 Giao cho nhân viên</button>
+            <button class="btn" id="tk-act-email">✉ Gửi email</button>
+            <button class="btn red" id="tk-act-close">Đóng ticket</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-widgets">
+        <div class="card"><h2>Phân bổ theo kênh</h2><div class="donut-small" id="tk-donut-channel"></div></div>
+        <div class="card"><h2>Hiệu suất SLA</h2><div class="donut-small sla-donut" id="tk-donut-sla"></div></div>
+        <div class="card"><h2>Top chủ đề phổ biến</h2><div id="tk-topics"></div></div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="page" id="reports">
+      <div class="topbar">
+        <div class="title">
+          <h1>Báo cáo & phân tích</h1>
+          <p>Tổng hợp hiệu quả hoạt động và hành vi người dùng trên VCB VoiceBank Inclusive</p>
+        </div>
+        <div class="tools">
+          <button class="control js-daterange">📅 26/05/2025 - 01/06/2025⌄</button>
+          <button class="control" data-toast="📄 Đã xuất file PDF">📄 Xuất PDF</button>
+          <button class="control" data-toast="📗 Đã xuất file Excel">📗 Xuất Excel</button>
+          <button class="control" data-toast="🔗 Đã tạo liên kết chia sẻ báo cáo">🔗 Chia sẻ báo cáo</button>
+        </div>
+      </div>
+
+      <div class="grid4" id="rp-kpis"></div>
+
+      <div class="report-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Người dùng & phiên tương tác theo thời gian ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="legend" style="display:flex;margin-bottom:8px"><span><span class="dot" style="background:var(--green-800)"></span>Người dùng</span><span><span class="dot" style="background:var(--blue)"></span>Phiên tương tác</span></div>
+          <div class="chart" id="rp-usersession"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Kênh sử dụng ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="legend" style="display:flex;margin-bottom:8px" id="rp-channel-legend"></div>
+          <div class="chart" id="rp-channel"></div>
+        </div>
+      </div>
+
+      <div class="report-grid" style="margin-top:16px">
+        <div class="card">
+          <div class="card-head"><h2>Phân bố ý định theo ngày (Top 5 intent) ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="table-wrap"><table class="heatmap" id="rp-heatmap"></table></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Hiệu quả trợ năng ⓘ</h2><button class="mini-select">7 ngày qua⌄</button></div>
+          <div class="table-wrap"><table style="min-width:520px" id="rp-access"></table></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Bộ chỉ số mục tiêu (KPI Pilot) ⓘ</h2>
+        <div id="rp-targets" class="targets"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Insight cho quản lý ⓘ</h2>
+        <div class="insights" id="rp-insights"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" id="settings">
+      <div class="topbar">
+        <div class="title">
+          <h1>Cài đặt vận hành</h1>
+          <p>Cấu hình phân quyền, bảo mật, luồng cảnh báo và tích hợp hệ thống.</p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h2>Phân quyền RBAC</h2>
+          <div class="access-box" id="st-roles"></div>
+        </div>
+        <div class="card">
+          <h2>Cảnh báo & bảo mật</h2>
+          <div class="access-box" id="st-security"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

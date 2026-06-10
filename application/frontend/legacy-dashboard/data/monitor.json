@@ -1,0 +1,111 @@
+{
+  "monitorKpis": [
+    { "label": "Đang hoạt động", "value": "186", "delta": "↑ 14,2%", "sub": "so với 10 phút trước", "dir": "up", "icon": "▥", "iconCls": "" },
+    { "label": "Tỷ lệ bot hiểu đúng", "value": "92,7%", "delta": "↑ 3,6%", "sub": "so với 1 giờ trước", "dir": "up", "icon": "🎯", "iconCls": "" },
+    { "label": "Phiên cần can thiệp", "value": "18", "delta": "↓ 2", "sub": "so với 10 phút trước", "dir": "down", "icon": "⚠", "iconCls": "warning" },
+    { "label": "Thời gian phản hồi TB", "value": "3,2 giây", "delta": "↓ 0,4 giây", "sub": "so với 1 giờ trước", "dir": "up", "icon": "◷", "iconCls": "" }
+  ],
+  "conversations": [
+    {
+      "id": "C250526-104215", "time": "10:42:15", "duration": "02:18",
+      "customer": "Nguyễn Minh Anh", "phone": "0912 345 678",
+      "channel": "chat", "status": "bot", "risk": "low",
+      "intent": "Tra cứu số dư", "intentConf": 98,
+      "mood": "Tích cực", "moodScore": "+0.72", "moodPct": 88,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:42:15", "text": "Cho mình hỏi số dư tài khoản thanh toán của mình hiện tại là bao nhiêu?", "mood": "Tích cực", "moodCls": "green" },
+        { "who": "an", "name": "An", "time": "10:42:16", "text": "Dạ An có thể giúp bạn kiểm tra số dư tài khoản. Bạn vui lòng xác nhận số tài khoản hoặc số điện thoại đã đăng ký với VCB được không ạ?", "mood": "Trung tính", "moodCls": "gray" },
+        { "who": "kh", "name": "Khách hàng", "time": "10:42:28", "text": "Số điện thoại 0912 345 678", "mood": "Tích cực", "moodCls": "green" },
+        { "who": "an", "name": "An", "time": "10:42:31", "text": "Dạ vâng ạ. Số dư tài khoản thanh toán của bạn ***6789 hiện tại là 25.680.000 VND tại thời điểm 10:42 ngày 26/05/2025.", "mood": "Tích cực", "moodCls": "green" }
+      ]
+    },
+    {
+      "id": "C250526-104198", "time": "10:41:58", "duration": "01:05",
+      "customer": "Trần Văn Nam", "phone": "0909 876 543",
+      "channel": "call", "status": "verify", "risk": "medium",
+      "intent": "Khóa thẻ khẩn cấp", "intentConf": 95,
+      "mood": "Trung tính", "moodScore": "+0.10", "moodPct": 55,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:41:58", "text": "An ơi, mình vừa làm mất ví, khóa giúp mình cái thẻ ngay với!", "mood": "Tiêu cực", "moodCls": "red" },
+        { "who": "an", "name": "An", "time": "10:42:00", "text": "Dạ An hiểu, để bảo vệ tài khoản An sẽ khóa thẻ ngay. Bạn vui lòng xác thực bằng mã PIN để An thực hiện khóa khẩn cấp nhé.", "mood": "Trung tính", "moodCls": "gray" },
+        { "who": "kh", "name": "Khách hàng", "time": "10:42:20", "text": "Ừ mình đang nhập PIN đây.", "mood": "Trung tính", "moodCls": "gray" }
+      ]
+    },
+    {
+      "id": "C250526-104167", "time": "10:41:27", "duration": "03:42",
+      "customer": "Lê Thị Hương", "phone": "0933 111 222",
+      "channel": "zalo", "status": "escalated", "risk": "high",
+      "intent": "Khiếu nại giao dịch", "intentConf": 74,
+      "mood": "Tiêu cực", "moodScore": "-0.61", "moodPct": 30,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:41:27", "text": "Tài khoản tôi bị trừ 5 triệu mà tôi không hề chuyển! Đây là lừa đảo à?", "mood": "Tiêu cực", "moodCls": "red" },
+        { "who": "an", "name": "An", "time": "10:41:29", "text": "Dạ An rất tiếc về sự việc này. An sẽ ưu tiên kiểm tra ngay giao dịch bạn nói. Bạn cho An biết giao dịch xảy ra khoảng thời gian nào ạ?", "mood": "Trung tính", "moodCls": "gray" },
+        { "who": "kh", "name": "Khách hàng", "time": "10:41:50", "text": "Khoảng 9 giờ sáng nay, tôi đang rất lo lắng.", "mood": "Tiêu cực", "moodCls": "red" },
+        { "who": "an", "name": "An", "time": "10:41:54", "text": "Dạ An đã đánh dấu cảnh báo rủi ro và đang chuyển bạn tới chuyên viên xử lý khiếu nại để hỗ trợ nhanh nhất. Vui lòng giữ máy giúp An ạ.", "mood": "Trung tính", "moodCls": "gray" }
+      ]
+    },
+    {
+      "id": "C250526-104154", "time": "10:41:14", "duration": "01:30",
+      "customer": "Phạm Quốc Bảo", "phone": "0707 222 333",
+      "channel": "chat", "status": "bot", "risk": "low",
+      "intent": "Thông tin lãi suất", "intentConf": 96,
+      "mood": "Tích cực", "moodScore": "+0.55", "moodPct": 80,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:41:14", "text": "Lãi suất gửi tiết kiệm 6 tháng hiện tại bao nhiêu vậy An?", "mood": "Tích cực", "moodCls": "green" },
+        { "who": "an", "name": "An", "time": "10:41:16", "text": "Dạ lãi suất tiết kiệm online kỳ hạn 6 tháng hiện là 4,3%/năm ạ. Bạn có muốn An mô phỏng số tiền lãi nhận được không?", "mood": "Tích cực", "moodCls": "green" },
+        { "who": "kh", "name": "Khách hàng", "time": "10:41:35", "text": "Có, mình gửi 50 triệu nhé.", "mood": "Tích cực", "moodCls": "green" }
+      ]
+    },
+    {
+      "id": "C250526-104129", "time": "10:40:49", "duration": "04:12",
+      "customer": "Hoàng Thu Trang", "phone": "0988 765 432",
+      "channel": "call", "status": "verify", "risk": "medium",
+      "intent": "Mở tài khoản", "intentConf": 89,
+      "mood": "Trung tính", "moodScore": "+0.05", "moodPct": 52,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:40:49", "text": "Mình muốn mở thêm một tài khoản thanh toán mới.", "mood": "Trung tính", "moodCls": "gray" },
+        { "who": "an", "name": "An", "time": "10:40:51", "text": "Dạ An hỗ trợ bạn mở tài khoản thanh toán online. Trước tiên mình cần xác thực định danh bằng CCCD và khuôn mặt nhé.", "mood": "Trung tính", "moodCls": "gray" }
+      ]
+    },
+    {
+      "id": "C250526-104105", "time": "10:40:25", "duration": "05:01",
+      "customer": "Đỗ Việt Dũng", "phone": "0911 654 321",
+      "channel": "messenger", "status": "escalated", "risk": "high",
+      "intent": "Hạn mức thẻ", "intentConf": 71,
+      "mood": "Tiêu cực", "moodScore": "-0.42", "moodPct": 35,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:40:25", "text": "Sao thẻ tôi không thanh toán được dù còn hạn mức? Bực mình quá!", "mood": "Tiêu cực", "moodCls": "red" },
+        { "who": "an", "name": "An", "time": "10:40:27", "text": "Dạ An xin lỗi vì sự bất tiện. An đang kiểm tra trạng thái thẻ và hạn mức của bạn ngay đây ạ.", "mood": "Trung tính", "moodCls": "gray" },
+        { "who": "an", "name": "An", "time": "10:40:48", "text": "Trường hợp này cần chuyên viên thẻ hỗ trợ chi tiết, An xin phép chuyển bạn tới nhân viên phụ trách nhé.", "mood": "Trung tính", "moodCls": "gray" }
+      ]
+    },
+    {
+      "id": "C250526-104090", "time": "10:40:02", "duration": "00:58",
+      "customer": "Vũ Hải Yến", "phone": "0945 222 888",
+      "channel": "chat", "status": "bot", "risk": "low",
+      "intent": "Lịch sử giao dịch", "intentConf": 97,
+      "mood": "Tích cực", "moodScore": "+0.48", "moodPct": 76,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:40:02", "text": "Cho mình xem 5 giao dịch gần nhất.", "mood": "Trung tính", "moodCls": "gray" },
+        { "who": "an", "name": "An", "time": "10:40:04", "text": "Dạ đây là 5 giao dịch gần nhất của bạn, An đã hiển thị dạng thẻ trực quan bên dưới ạ.", "mood": "Tích cực", "moodCls": "green" }
+      ]
+    },
+    {
+      "id": "C250526-104071", "time": "10:39:40", "duration": "02:47",
+      "customer": "Bùi Thanh Sơn", "phone": "0902 555 111",
+      "channel": "call", "status": "bot", "risk": "low",
+      "intent": "Chuyển tiền", "intentConf": 93,
+      "mood": "Tích cực", "moodScore": "+0.33", "moodPct": 70,
+      "transcript": [
+        { "who": "kh", "name": "Khách hàng", "time": "10:39:40", "text": "Chuyển cho mẹ tôi 2 triệu nhé An.", "mood": "Tích cực", "moodCls": "green" },
+        { "who": "an", "name": "An", "time": "10:39:42", "text": "Dạ An đã tìm thấy người nhận “Mẹ — Nguyễn Thị Lan, VCB”. Xác nhận chuyển 2.000.000đ giúp An nhé, sau đó mình xác thực PIN ạ.", "mood": "Trung tính", "moodCls": "gray" }
+      ]
+    }
+  ],
+  "escalations": [
+    { "code": "ESC-2041", "customer": "Nguyễn V. A", "reason": "Chuyển tiền · khách yêu cầu", "priority": "Cao", "priorityCls": "red", "status": "Đang xử lý", "statusCls": "orange", "wait": "2:14" },
+    { "code": "ESC-2040", "customer": "Trần T. B", "reason": "Khóa thẻ khẩn cấp", "priority": "Cao", "priorityCls": "red", "status": "Chờ tiếp nhận", "statusCls": "blue", "wait": "0:48" },
+    { "code": "ESC-2039", "customer": "Lê H. C", "reason": "Bot không hiểu yêu cầu", "priority": "Trung bình", "priorityCls": "orange", "status": "Hoàn tất", "statusCls": "green", "wait": "—" },
+    { "code": "ESC-2038", "customer": "Phạm M. D", "reason": "Tra cứu lịch sử GD", "priority": "Thấp", "priorityCls": "gray", "status": "Hoàn tất", "statusCls": "green", "wait": "—" }
+  ]
+}

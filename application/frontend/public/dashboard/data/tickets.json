@@ -1,0 +1,144 @@
+{
+  "ticketFilters": [
+    { "key": "all", "label": "Tất cả", "count": 256 },
+    { "key": "new", "label": "Mới", "count": 36 },
+    { "key": "processing", "label": "Đang xử lý", "count": 102 },
+    { "key": "waiting", "label": "Chờ phản hồi", "count": 58 },
+    { "key": "closed", "label": "Đã đóng", "count": 60 }
+  ],
+  "tickets": [
+    {
+      "id": "TK-2025-06125", "subject": "ATM nuốt thẻ", "status": "processing",
+      "customer": "Nguyễn Minh Tuấn", "phone": "0987 654 321", "channel": "Ứng dụng",
+      "priority": "Cao", "priorityCls": "red",
+      "sla": "1h 12m", "slaNote": "Quá hạn", "slaCls": "red",
+      "assignee": "Trần Thị Mai", "createdAt": "01/06/2025 08:42",
+      "aiSummary": "Khách hàng báo cáo ATM VCB tại 25 Lý Thường Kiệt, Hà Nội nuốt thẻ debit vào lúc 07:15 ngày 01/06/2025. Giao dịch gần nhất: rút tiền 2.000.000 VND. Khách hàng đã khóa thẻ và yêu cầu hỗ trợ lấy lại thẻ.",
+      "aiConf": 95,
+      "slaDetail": { "state": "Quá hạn 12 phút", "total": "1h 00m", "pct": 88, "deadline": "01/06/2025 09:42" },
+      "actions": [
+        "Xác minh thông tin và địa điểm ATM",
+        "Kiểm tra trạng thái thẻ và giao dịch liên quan",
+        "Hướng dẫn khách hàng khóa thẻ tạm thời",
+        "Tạo yêu cầu hoàn thẻ và hẹn trả thẻ"
+      ]
+    },
+    {
+      "id": "TK-2025-06124", "subject": "Không chuyển tiền được", "status": "processing",
+      "customer": "Lê Hồng Phúc", "phone": "0976 543 210", "channel": "Ứng dụng",
+      "priority": "Cao", "priorityCls": "red",
+      "sla": "2h 05m", "slaNote": "Quá hạn", "slaCls": "red",
+      "assignee": "Phạm Hoàng Nam", "createdAt": "01/06/2025 07:30",
+      "aiSummary": "Khách hàng không thực hiện được giao dịch chuyển tiền liên ngân hàng từ 06:50 ngày 01/06. Hệ thống báo lỗi “timeout” phía ngân hàng đối tác. Số dư khả dụng đủ điều kiện.",
+      "aiConf": 91,
+      "slaDetail": { "state": "Quá hạn 65 phút", "total": "1h 00m", "pct": 100, "deadline": "01/06/2025 08:30" },
+      "actions": [
+        "Kiểm tra log giao dịch và mã lỗi cổng thanh toán",
+        "Xác nhận trạng thái ngân hàng đối tác",
+        "Hoàn phí (nếu có) và hướng dẫn thử lại",
+        "Theo dõi đến khi giao dịch thành công"
+      ]
+    },
+    {
+      "id": "TK-2025-06123", "subject": "Cần gọi lại", "status": "waiting",
+      "customer": "Trần Văn An", "phone": "0901 234 567", "channel": "Call Center",
+      "priority": "Trung bình", "priorityCls": "orange",
+      "sla": "15m", "slaNote": "Còn 1h15m", "slaCls": "green",
+      "assignee": "Vũ Thanh Hằng", "createdAt": "01/06/2025 09:55",
+      "aiSummary": "Khách yêu cầu được gọi lại trong giờ hành chính để tư vấn mở sổ tiết kiệm online kỳ hạn 12 tháng. Khách bận, hẹn khung 14:00–15:00.",
+      "aiConf": 88,
+      "slaDetail": { "state": "Còn 1h 15m", "total": "1h 30m", "pct": 16, "deadline": "01/06/2025 11:25" },
+      "actions": [
+        "Đặt lịch gọi lại khung 14:00–15:00",
+        "Chuẩn bị thông tin lãi suất tiết kiệm 12 tháng",
+        "Gửi SMS xác nhận lịch hẹn"
+      ]
+    },
+    {
+      "id": "TK-2025-06122", "subject": "Xác minh giao dịch bất thường", "status": "new",
+      "customer": "Phạm Thị Lan", "phone": "0932 111 222", "channel": "Email",
+      "priority": "Cao", "priorityCls": "red",
+      "sla": "35m", "slaNote": "Còn 25m", "slaCls": "orange",
+      "assignee": "Đặng Quốc Bảo", "createdAt": "01/06/2025 10:05",
+      "aiSummary": "Engine dự báo phát hiện giao dịch chuyển 8.500.000đ tới tài khoản lạ, lệch hành vi chi tiêu thường ngày. Khách xác nhận không thực hiện. Nghi ngờ gian lận.",
+      "aiConf": 93,
+      "slaDetail": { "state": "Còn 25 phút", "total": "1h 00m", "pct": 58, "deadline": "01/06/2025 11:05" },
+      "actions": [
+        "Tạm khóa giao dịch nghi vấn",
+        "Xác thực sinh trắc với khách hàng",
+        "Đối chiếu tín hiệu xu hướng lừa đảo (vnSocial)",
+        "Mở yêu cầu tra soát giao dịch"
+      ]
+    },
+    {
+      "id": "TK-2025-06121", "subject": "Quên mật khẩu", "status": "processing",
+      "customer": "Hoàng Đức Long", "phone": "0913 777 666", "channel": "Chatbot",
+      "priority": "Thấp", "priorityCls": "green",
+      "sla": "5m", "slaNote": "", "slaCls": "green",
+      "assignee": "Nguyễn Thùy Linh", "createdAt": "01/06/2025 10:18",
+      "aiSummary": "Khách quên mật khẩu đăng nhập VCB Digibank, đã xác thực OTP thành công. Cần hỗ trợ đặt lại mật khẩu.",
+      "aiConf": 90,
+      "slaDetail": { "state": "Còn 55 phút", "total": "1h 00m", "pct": 8, "deadline": "01/06/2025 11:18" },
+      "actions": [
+        "Xác thực OTP / sinh trắc",
+        "Gửi liên kết đặt lại mật khẩu",
+        "Hướng dẫn bảo mật tài khoản"
+      ]
+    },
+    {
+      "id": "TK-2025-06120", "subject": "Tư vấn mở sổ tiết kiệm", "status": "closed",
+      "customer": "Mai Thị Hoa", "phone": "0978 333 444", "channel": "Chatbot",
+      "priority": "Thấp", "priorityCls": "green",
+      "sla": "—", "slaNote": "Đúng hạn", "slaCls": "green",
+      "assignee": "Vũ Thanh Hằng", "createdAt": "31/05/2025 16:20",
+      "aiSummary": "Khách đã được tư vấn và mở sổ tiết kiệm online 6 tháng, 30.000.000đ. Ticket hoàn tất, CSAT 5/5.",
+      "aiConf": 97,
+      "slaDetail": { "state": "Hoàn tất đúng hạn", "total": "1h 00m", "pct": 40, "deadline": "31/05/2025 17:20" },
+      "actions": [
+        "Đã mở sổ tiết kiệm thành công",
+        "Đã gửi xác nhận và hợp đồng điện tử",
+        "Đã ghi nhận đánh giá 5 sao"
+      ]
+    }
+  ],
+  "ticketWidgets": {
+    "byChannel": { "donut": "conic-gradient(var(--green-800) 0 50%, var(--blue) 50% 75%, #f59e0b 75% 87%, #7dd3fc 87% 95%, #d946ef 95% 100%)", "total": "256" },
+    "slaPerf": { "donut": "conic-gradient(var(--green-800) 0 92%, #f59e0b 92% 96%, #ef4444 96% 100%)", "total": "92,6%" },
+    "topTopics": [
+      { "label": "Không chuyển tiền được", "value": 62, "pct": 85 },
+      { "label": "ATM nuốt thẻ", "value": 48, "pct": 66 },
+      { "label": "Cần gọi lại", "value": 36, "pct": 50 }
+    ]
+  },
+  "ticketThreads": {
+    "TK-2025-06125": [
+      { "who": "kh", "name": "Nguyễn Minh Tuấn", "time": "08:42", "text": "ATM ở 25 Lý Thường Kiệt vừa nuốt thẻ của tôi, giúp tôi với!" },
+      { "who": "nv", "name": "An (Bot)", "time": "08:42", "text": "Dạ An đã khóa tạm thời thẻ của bạn để đảm bảo an toàn. An đang tạo yêu cầu hỗ trợ lấy lại thẻ ạ." },
+      { "who": "nv", "name": "Trần Thị Mai", "time": "09:05", "text": "Chào anh Tuấn, em là Mai phụ trách xử lý. Em đã xác minh ATM và sẽ hẹn anh nhận lại thẻ trong 2 ngày làm việc ạ." },
+      { "who": "kh", "name": "Nguyễn Minh Tuấn", "time": "09:10", "text": "Cảm ơn em, vậy tôi cần mang theo giấy tờ gì?" },
+      { "who": "nv", "name": "Trần Thị Mai", "time": "09:12", "text": "Anh mang CCCD bản gốc tới chi nhánh là được ạ." }
+    ],
+    "TK-2025-06124": [
+      { "who": "kh", "name": "Lê Hồng Phúc", "time": "07:30", "text": "Tôi chuyển tiền mãi không được, cứ báo lỗi." },
+      { "who": "nv", "name": "An (Bot)", "time": "07:31", "text": "Dạ An kiểm tra thấy lỗi timeout từ ngân hàng đối tác. An chuyển bạn tới chuyên viên xử lý ạ." },
+      { "who": "nv", "name": "Phạm Hoàng Nam", "time": "07:50", "text": "Chào anh, em đang phối hợp kiểm tra với ngân hàng đối tác, mong anh thử lại sau 30 phút giúp em." }
+    ],
+    "TK-2025-06123": [
+      { "who": "kh", "name": "Trần Văn An", "time": "09:55", "text": "Nhờ gọi lại tư vấn mở sổ tiết kiệm giúp tôi, giờ tôi đang bận." },
+      { "who": "nv", "name": "An (Bot)", "time": "09:55", "text": "Dạ An đã đặt lịch gọi lại khung 14:00–15:00 và gửi SMS xác nhận cho bạn ạ." }
+    ],
+    "TK-2025-06122": [
+      { "who": "nv", "name": "Engine Dự báo", "time": "10:05", "text": "Phát hiện giao dịch 8.500.000đ tới tài khoản lạ, lệch hành vi thường ngày." },
+      { "who": "kh", "name": "Phạm Thị Lan", "time": "10:06", "text": "Tôi không hề thực hiện giao dịch này!" },
+      { "who": "nv", "name": "Đặng Quốc Bảo", "time": "10:07", "text": "Chị yên tâm, em đã tạm khóa giao dịch nghi vấn và mở tra soát ngay ạ." }
+    ],
+    "TK-2025-06121": [
+      { "who": "kh", "name": "Hoàng Đức Long", "time": "10:18", "text": "Mình quên mật khẩu đăng nhập Digibank." },
+      { "who": "nv", "name": "An (Bot)", "time": "10:18", "text": "Dạ An đã gửi liên kết đặt lại mật khẩu sau khi xác thực OTP thành công ạ." }
+    ],
+    "TK-2025-06120": [
+      { "who": "kh", "name": "Mai Thị Hoa", "time": "16:20", "text": "Mình muốn mở sổ tiết kiệm 6 tháng 30 triệu." },
+      { "who": "nv", "name": "An (Bot)", "time": "16:21", "text": "Dạ An đã mở sổ tiết kiệm online thành công và gửi hợp đồng điện tử cho bạn. Cảm ơn bạn đã đánh giá 5 sao ạ!" }
+    ]
+  }
+}
