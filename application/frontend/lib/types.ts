@@ -10,6 +10,8 @@ export type Screen =
   | "goal"
   | "forecast"
   | "transfer"
+  | "billpay"
+  | "family"
   | "accessibility";
 
 export interface Txn {

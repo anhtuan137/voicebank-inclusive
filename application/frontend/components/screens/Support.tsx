@@ -2,7 +2,6 @@
 // Hỗ trợ tổng đài — escalation_flow (§14)  (Sample 03_50_03_6)
 import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { supportTicket } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -65,7 +64,6 @@ export function Support({ go }: { go: (s: Screen) => void }) {
           </button>
         </div>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

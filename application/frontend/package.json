@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 18891",
+    "dev:mobile": "next dev --experimental-https --experimental-https-key certificates/dev-key.pem --experimental-https-cert certificates/dev-cert.pem -H 0.0.0.0 -p 18891",
     "build": "next build",
     "start": "next start -p 18891",
     "lint": "next lint",

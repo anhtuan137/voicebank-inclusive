@@ -18,10 +18,10 @@ const WELCOME: Msg[] = [
 ];
 
 const SUGGESTIONS: { label: string; to: Screen }[] = [
-  { label: "Tra cứu giao dịch", to: "history"  },
-  { label: "Chuyển tiền",       to: "transfer" },
-  { label: "Dự báo cuối tháng", to: "forecast" },
-  { label: "Mở tiết kiệm",      to: "savings"  },
+  { label: "Thanh toán hóa đơn", to: "billpay"  },
+  { label: "Chuyển tiền",        to: "transfer" },
+  { label: "Dự báo cuối tháng",  to: "forecast" },
+  { label: "Mở tiết kiệm",       to: "savings"  },
 ];
 
 export function Assistant({ go }: { go: (s: Screen) => void }) {
@@ -56,8 +56,8 @@ export function Assistant({ go }: { go: (s: Screen) => void }) {
 
   return (
     <div className="fade" style={{
-      display: "flex", flexDirection: "column", height: "100%",
-      background: "linear-gradient(180deg, #e8f8f0 0%, #f5fbf7 40%, #ffffff 100%)",
+      display: "flex", flexDirection: "column", flex: 1, minHeight: 0,
+      background: "linear-gradient(180deg, #edf2ee 0%, #f5fbf7 40%, #ffffff 100%)",
     }}>
       <AppBar title="Trợ lý An" onBack={() => go("home")} />
 

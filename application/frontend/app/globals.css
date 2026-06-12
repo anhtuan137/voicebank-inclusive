@@ -119,23 +119,53 @@ a {
 }
 
 .phone {
+  /* iPhone 14 Pro Max logical viewport: 430 × 932 pt.
+     Height-driven so the whole frame scales to fit without cropping. */
   position: relative;
-  width: 390px;
+  aspect-ratio: 430 / 932;
+  height: min(932px, calc(100vh - 24px));
+  width: auto;
   max-width: 100vw;
-  height: 844px;
-  max-height: calc(100vh - 30px);
-  border-radius: 50px;
+  border-radius: 55px;
   overflow: hidden;
   box-shadow:
-    0 0 0 10px #0d1a11,
-    0 0 0 12px #1e2e24,
-    0 40px 80px rgba(4, 40, 18, 0.55);
+    0 0 0 12px #0d1a11,
+    0 0 0 14px #20312a,
+    0 40px 90px rgba(4, 40, 18, 0.55);
   background: #07200e; /* dark green — hides behind transparent statusbar */
   display: flex;
   flex-direction: column;
 }
 
-@media (max-width: 430px) {
+/* Dynamic Island — centered pill, floats above all screens incl. assistant */
+.dynamic-island {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 33px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 200;
+  pointer-events: none;
+}
+
+/* Front camera dot inside the island (right side) */
+.dynamic-island::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #0a1410;
+  box-shadow: inset 0 0 2px 1px rgba(40, 60, 80, 0.5);
+}
+
+@media (max-width: 460px) {
   .stage {
     padding: 0;
   }
@@ -144,6 +174,7 @@ a {
     width: 100vw;
     height: 100dvh;
     max-height: 100dvh;
+    aspect-ratio: auto;
     border-radius: 0;
     box-shadow: none;
   }
@@ -172,6 +203,12 @@ a {
   background: linear-gradient(180deg, rgba(0,0,0,0.38) 0%, transparent 100%);
 }
 
+/* Feature screens (no .light): solid bar so the dark time/battery stay legible
+   and scrolling content never bleeds behind it. */
+.statusbar:not(.light) {
+  background: var(--bg);
+}
+
 .statusbar .sb-r {
   display: flex;
   align-items: center;
@@ -186,8 +223,15 @@ a {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   position: relative;
+  /* clear the bottom nav (84px) + the sticky action-chips bar (~52px) */
+  padding-bottom: 136px;
+  background: var(--bg); /* feature screens: light surface, not the dark frame */
+}
+
+/* Home keeps the dark frame showing behind its transparent status bar / hero */
+.screen-home {
   padding-bottom: 84px;
-  /* keep content above the absolute-positioned bottom nav */
+  background: transparent;
 }
 
 .screen::-webkit-scrollbar {
@@ -196,7 +240,74 @@ a {
 
 /* ── inner padding helper ── */
 .pad {
-  padding: 0 16px 100px;
+  padding: 0 16px 8px;
+}
+
+/* ── eKYC camera scan (BillPay face step) ── */
+.cam-frame {
+  position: relative;
+  width: 232px;
+  height: 286px;
+  margin: 0 auto;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #0b1f14;
+  box-shadow: 0 12px 32px rgba(4, 40, 18, 0.28), inset 0 0 0 3px var(--g200);
+  transition: box-shadow 0.3s;
+}
+.cam-frame.ok {
+  box-shadow: 0 12px 32px rgba(4, 40, 18, 0.28), inset 0 0 0 3px var(--g500);
+}
+.cam-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror like a selfie */
+  display: block;
+}
+.cam-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+.cam-oval {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.cam-oval::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  border: 3px dashed rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+}
+.cam-scanline {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, var(--g400), transparent);
+  box-shadow: 0 0 14px 3px rgba(48, 192, 116, 0.85);
+  animation: scanmove 1.9s ease-in-out infinite;
+}
+@keyframes scanmove {
+  0%, 100% { top: 13%; }
+  50% { top: 85%; }
+}
+.cam-check {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(13, 120, 64, 0.55);
+  animation: fade 0.25s ease;
 }
 
 /* ══════════════════════════════════════════════════
@@ -204,7 +315,7 @@ a {
 ══════════════════════════════════════════════════ */
 .appbar {
   position: sticky;
-  top: 0;
+  top: 44px; /* pin just below the 44px status bar, not behind it */
   z-index: 22;
   display: flex;
   align-items: center;
@@ -1374,6 +1485,17 @@ a {
 /* ══════════════════════════════════════════════════
    ACTION CHIPS (bottom of feature screens)
 ══════════════════════════════════════════════════ */
+/* Sticky bar that holds the accessibility chips above the bottom nav */
+.achips-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 84px; /* directly above the 84px bottom nav */
+  z-index: 23;
+  background: linear-gradient(to top, var(--bg) 78%, transparent);
+  pointer-events: auto;
+}
+
 .achips {
   display: flex;
   gap: 8px;

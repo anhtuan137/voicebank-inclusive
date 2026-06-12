@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { savingsOffer, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -68,7 +67,6 @@ export function Savings({ go }: { go: (s: Screen) => void }) {
           <Icon.pencil size={16} /> Điều chỉnh số tiền
         </button>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

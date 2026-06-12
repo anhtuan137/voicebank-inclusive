@@ -2,7 +2,6 @@
 // Cảnh báo an toàn — fraud_alert_flow (detect_fraud §12)  (Sample 03_50_03_3)
 import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { fraudAlert, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -71,7 +70,6 @@ export function Fraud({ go }: { go: (s: Screen) => void }) {
           ))}
         </div>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

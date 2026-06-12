@@ -84,6 +84,57 @@ make help                     # liệt kê toàn bộ target
 | `infra-up` / `infra-down` | Stack Docker hạ tầng |
 | `compose-config` | Validate compose |
 
+## Frontend — chạy & test giao diện (Phase 6)
+
+Giao diện khách hàng nằm ở [application/frontend/](application/frontend/) (Next.js 15). Demo gồm
+các luồng: Trợ lý An (giọng nói/chat), thanh toán hóa đơn có xác thực PIN → OTP → eKYC khuôn mặt,
+An tâm Gia đình, dự báo dòng tiền, mục tiêu tiết kiệm…
+
+```bash
+cd application/frontend
+npm install                   # lần đầu
+npm run dev                   # → http://localhost:18891/user
+```
+
+| Lệnh | Mô tả |
+|---|---|
+| `npm run dev` | Dev server (HTTP) cho máy tính — http://localhost:18891/user |
+| `npm run dev:mobile` | Dev server **HTTPS** + bind LAN để test trên điện thoại (cần cho camera) |
+| `npm run build` | Build production |
+| `npm run typecheck` | Kiểm tra TypeScript |
+
+### Test trên điện thoại (camera eKYC)
+
+Bước quét khuôn mặt dùng camera thật (`getUserMedia`) — trình duyệt **chỉ cho camera chạy ở
+secure context** (`localhost` hoặc `https`). Vì vậy test trên điện thoại phải dùng HTTPS:
+
+```bash
+cd application/frontend
+npm run dev:mobile            # chạy HTTPS với cert self-signed ở certificates/
+```
+
+Trên điện thoại (**cùng WiFi** với máy tính, không dùng 4G/5G):
+
+1. Mở `https://<IP-máy-tính>:18891/user` (vd `https://192.168.1.18:18891/user`).
+   Lấy IP máy: `ipconfig getifaddr en0`.
+2. Bỏ qua cảnh báo chứng chỉ self-signed: Safari → *Show Details → visit this website*;
+   Chrome → *Advanced → Proceed*.
+3. Tới bước quét mặt → cho phép quyền **Camera**.
+
+**Lưu ý**
+- Đổi WiFi/IP khác `192.168.1.18` thì: tạo lại cert kèm IP mới và cập nhật `allowedDevOrigins`
+  trong [application/frontend/next.config.ts](application/frontend/next.config.ts):
+  ```bash
+  cd application/frontend && openssl req -x509 -newkey rsa:2048 -nodes \
+    -keyout certificates/dev-key.pem -out certificates/dev-cert.pem -days 365 \
+    -subj "/CN=voicebank-dev" \
+    -addext "subjectAltName=DNS:localhost,IP:127.0.0.1,IP:<IP-mới>"
+  ```
+- macOS lần đầu có thể hỏi *"Allow incoming connections"* → chọn **Allow**.
+- Nếu mở `http://<IP>` (không HTTPS): UI vẫn xem được nhưng camera sẽ bị chặn (có fallback mô phỏng).
+- WiFi quán/công ty bật *AP isolation* sẽ chặn điện thoại thấy máy tính → dùng tunnel HTTPS
+  (`cloudflared tunnel --url https://localhost:18891` hoặc `ngrok http https://localhost:18891`).
+
 ## Dashboard quản trị (legacy)
 
 Dashboard giám sát Operator/Admin đã xây trước đó được giữ tại

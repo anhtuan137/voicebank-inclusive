@@ -15,6 +15,9 @@ import { Support } from "@/components/screens/Support";
 import { Goal } from "@/components/screens/Goal";
 import { Forecast } from "@/components/screens/Forecast";
 import { Transfer } from "@/components/screens/Transfer";
+import { BillPay } from "@/components/screens/BillPay";
+import { Family } from "@/components/screens/Family";
+import { ActionChips } from "@/components/AssistantBits";
 import { Accessibility, type A11y } from "@/components/screens/Accessibility";
 import type { Screen } from "@/lib/types";
 
@@ -43,6 +46,8 @@ export default function UserPage() {
     goal: <Goal go={go} />,
     forecast: <Forecast go={go} />,
     transfer: <Transfer go={go} />,
+    billpay: <BillPay go={go} />,
+    family: <Family go={go} />,
     accessibility: (
       <Accessibility go={go} a11y={a11y} setA11y={setA11y} />
     ),
@@ -86,10 +91,23 @@ export default function UserPage() {
       </Link>
 
       <div className={`phone ${cls}`}>
-        <main className="screen" key={screen === "assistant" ? "home" : screen}>
+        {/* iPhone 14 Pro Max Dynamic Island */}
+        <div className="dynamic-island" aria-hidden />
+
+        <main
+          className={`screen${screen === "home" ? " screen-home" : ""}`}
+          key={screen === "assistant" ? "home" : screen}
+        >
           <StatusBar light={darkStatus} />
           {screen === "assistant" ? screens["home"] : screens[screen]}
         </main>
+        {/* Sticky accessibility shortcuts — pinned just above the bottom nav so
+            they never scroll away (only on inner feature screens). */}
+        {!["home", "assistant", "accessibility"].includes(screen) && (
+          <div className="achips-bar">
+            <ActionChips onSettings={go} />
+          </div>
+        )}
         {screen !== "assistant" && <BottomNav active={screen} onNav={go} />}
         {screen === "assistant" && (
           <div style={{
@@ -100,6 +118,7 @@ export default function UserPage() {
             flexDirection: "column",
             overflow: "hidden",
           }}>
+            <StatusBar />
             <Assistant go={go} />
           </div>
         )}

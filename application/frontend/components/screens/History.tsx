@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { transactions, spendThisMonth, incomeThisMonth, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -94,7 +93,6 @@ export function History({ go }: { go: (s: Screen) => void }) {
           </button>
         </div>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

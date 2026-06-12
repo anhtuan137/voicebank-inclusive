@@ -2,7 +2,6 @@
 // Dự báo dòng tiền — cashflow_forecast_flow → ui_card{forecast}  (Sample 03_50_03_8)
 import { AppBar } from "../chrome";
 import { AnBlock, Sparkline, Donut } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { forecast, spendCategories, spendTotal, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -88,7 +87,6 @@ export function Forecast({ go }: { go: (s: Screen) => void }) {
           <Icon.piggy size={17} /> Gửi tiết kiệm để tối ưu
         </button>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

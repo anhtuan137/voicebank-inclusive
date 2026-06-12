@@ -370,6 +370,13 @@ export const Icon = {
       <path d="M18.5 2.5a2 2 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
     </svg>
   ),
+  users: (p: P) => (
+    <svg {...base(p)}>
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M3.5 20a5.5 5.5 0 0111 0" />
+      <path d="M16 5.3a3.2 3.2 0 010 5.9M17 15.4a5.5 5.5 0 013.5 4.6" />
+    </svg>
+  ),
 };
 
 export type IconName = keyof typeof Icon;

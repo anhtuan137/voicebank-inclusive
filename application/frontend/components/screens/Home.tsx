@@ -7,7 +7,7 @@ import { user, favorites, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
 
 const QUICK: { label: string; to: Screen; icon: keyof typeof Icon }[] = [
-  { label: "Lịch sử giao dịch", to: "history",  icon: "history"   },
+  { label: "An tâm Gia đình",   to: "family",    icon: "users"     },
   { label: "Chuyển tiền",       to: "transfer",  icon: "transfer"  },
   { label: "Dự báo cháy túi",   to: "forecast",  icon: "trendDown" },
   { label: "Mở tiết kiệm",      to: "savings",   icon: "piggy"     },
@@ -161,6 +161,8 @@ export function Home({ go }: { go: (s: Screen) => void }) {
                   onClick={() => {
                     if (f.label === "Mở tiết kiệm") go("savings");
                     else if (f.label.includes("Chuyển")) go("transfer");
+                    else if (f.label.includes("Gia đình")) go("family");
+                    else if (f.label.includes("xem phim") || f.label.includes("điện thoại")) go("billpay");
                   }}
                 >
                   <span className="fav-ico"><I size={26} /></span>

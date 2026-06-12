@@ -181,8 +181,86 @@ export const supportTicket = {
   ],
 };
 
+// Hằng số nghiệp vụ xác thực (khớp §7 & §16) — dùng cho luồng thanh toán/chuyển tiền
+export const KYC_THRESHOLD = 10_000_000; // >10tr/giao dịch → bắt buộc eKYC (BR-TRF-07)
+export const MAX_AUTH_ATTEMPTS = 5; // sai >5 lần → khóa (BR-AUTH-03/04/08)
+export const LOCK_MINUTES = 15; // thời gian khóa (BR-AUTH-05)
+export const OTP_TTL_SECONDS = 300; // OTP hết hạn sau 5 phút (BR-AUTH-02)
+
+// Thanh toán hóa đơn / dịch vụ bằng giọng nói (bill_payment_flow → action_required)
+// Số tiền là int VND. Hóa đơn >10tr sẽ kích hoạt thêm bước eKYC khuôn mặt.
+export type Biller = {
+  id: string;
+  category: string;
+  provider: string;
+  icon:
+    | "ticket" | "bolt" | "droplet" | "wifi" | "phone" | "doc" | "store";
+  color: string;
+  amount: number;
+  detail: string;
+  code: string; // mã hóa đơn / mã khách hàng (không phải PII nhạy cảm)
+};
+
+export const billers: Biller[] = [
+  { id: "mv", category: "Vé xem phim", provider: "CGV Vincom Center", icon: "ticket", color: "#e11d48", amount: 240_000, detail: "2 vé · Suất 18:30 · Phòng 4", code: "CGV-250526-0042" },
+  { id: "ev", category: "Điện", provider: "EVN HCMC", icon: "bolt", color: "#2f80ed", amount: 1_250_000, detail: "Kỳ 05/2025 · 412 kWh", code: "PE0400123456" },
+  { id: "wt", category: "Nước", provider: "Sawaco", icon: "droplet", color: "#14b8a6", amount: 230_000, detail: "Kỳ 05/2025 · 18 m³", code: "DN0700456789" },
+  { id: "in", category: "Internet", provider: "FPT Telecom", icon: "wifi", color: "#ff6b35", amount: 385_000, detail: "Gói Super 150 · Tháng 06", code: "FPT-HCM-778899" },
+  { id: "ph", category: "Nạp điện thoại", provider: "Viettel", icon: "phone", color: "#16955a", amount: 100_000, detail: "Số ••••3079 · Trả trước", code: "TOPUP-3079" },
+  { id: "tu", category: "Học phí", provider: "ĐH Bách Khoa", icon: "doc", color: "#8b5cf6", amount: 12_000_000, detail: "Học kỳ I · 2025-2026", code: "HP-BK-1052678" },
+];
+
+// An tâm Gia đình (family_link_flow → ui_card{family}) — §3.5 / §4.6c
+// "Nguyên tắc một trục": người trẻ chỉ NHẬN cảnh báo & kết quả, không bao giờ
+// thao tác được tiền của người thân. Người thân đồng ý bằng giọng nói + eKYC và
+// có thể thu hồi liên kết bất kỳ lúc nào (NĐ 13/2023).
+export type FamilyStatus = "active" | "pending" | "revoked";
+
+export const familyMembers: {
+  id: string;
+  relation: string;
+  name: string;
+  phone4: string; // chỉ lưu 4 số cuối (BR-SEC-02)
+  status: FamilyStatus;
+  consent: string | null; // mã/ngày đồng ý NĐ 13/2023
+  alerts: boolean;
+}[] = [
+  { id: "f1", relation: "Mẹ", name: "Trần Thị Hoa", phone4: "4567", status: "active", consent: "Đồng ý 02/2026", alerts: true },
+  { id: "f2", relation: "Bố", name: "Đỗ Văn Minh", phone4: "8901", status: "pending", consent: null, alerts: true },
+];
+
+export const familyAlerts: {
+  id: string;
+  kind: "result" | "fraud" | "summary";
+  who: string;
+  time: string;
+  text: string;
+}[] = [
+  {
+    id: "fa1",
+    kind: "result",
+    who: "Mẹ",
+    time: "10 phút trước",
+    text: "Mẹ vừa tự khóa thẻ thành công bằng giọng nói – tài khoản an toàn.",
+  },
+  {
+    id: "fa2",
+    kind: "fraud",
+    who: "Bố",
+    time: "1 giờ trước",
+    text: "Giao dịch bất thường 8.500.000đ trên tài khoản của bố – khớp xu hướng lừa đảo (vnSocial). Đã cảnh báo đồng thời cho cả hai.",
+  },
+  {
+    id: "fa3",
+    kind: "summary",
+    who: "Mẹ",
+    time: "Hôm nay",
+    text: "Mẹ đã chi 3.200.000đ tháng này, chủ yếu cho hóa đơn & thuốc men.",
+  },
+];
+
 export const favorites = [
-  { icon: "store", label: "Digishop" },
+  { icon: "users", label: "An tâm Gia đình" },
   { icon: "transfer", label: "Chuyển tiền trong nước" },
   { icon: "sim", label: "Nạp Data 4G/5G" },
   { icon: "piggy", label: "Mở tiết kiệm" },

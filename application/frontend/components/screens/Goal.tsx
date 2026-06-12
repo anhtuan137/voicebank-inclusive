@@ -2,7 +2,6 @@
 // Mục tiêu tài chính — savings_goal_flow → ui_card{goal}  (Sample 03_50_03_5)
 import { AppBar } from "../chrome";
 import { AnBlock, Ring } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { goal, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -82,7 +81,6 @@ export function Goal({ go }: { go: (s: Screen) => void }) {
           </button>
         </div>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

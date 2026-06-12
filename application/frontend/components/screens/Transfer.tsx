@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { transferDraft, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -98,7 +97,6 @@ export function Transfer({ go }: { go: (s: Screen) => void }) {
           </div>
         )}
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );

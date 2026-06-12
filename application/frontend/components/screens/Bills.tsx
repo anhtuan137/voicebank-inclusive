@@ -2,7 +2,6 @@
 // Nhắc hóa đơn — generate_nudges (§12)  (Sample 03_50_03_2)
 import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
-import { ActionChips } from "../AssistantBits";
 import { Icon } from "../Icon";
 import { bills, billsTotal, vnd } from "@/lib/mock";
 import type { Screen } from "@/lib/types";
@@ -25,7 +24,7 @@ export function Bills({ go }: { go: (s: Screen) => void }) {
             const I = Icon[b.icon];
             const p = STATUS_PILL[b.status];
             return (
-              <div key={b.id} className="lrow">
+              <div key={b.id} className="lrow" style={{ cursor: "pointer" }} onClick={() => go("billpay")}>
                 <span className="lrow-ico" style={{ background: b.color }}>
                   <I size={22} />
                 </span>
@@ -72,8 +71,8 @@ export function Bills({ go }: { go: (s: Screen) => void }) {
           </span>
         </div>
 
-        <button className="btn btn-primary mt16">
-          <Icon.checkCircle size={19} /> Thanh toán tất cả
+        <button className="btn btn-primary mt16" onClick={() => go("billpay")}>
+          <Icon.checkCircle size={19} /> Thanh toán ngay
         </button>
 
         <div className="btn-row mt12">
@@ -85,7 +84,6 @@ export function Bills({ go }: { go: (s: Screen) => void }) {
           </button>
         </div>
       </div>
-      <ActionChips onSettings={go} />
       <div style={{ height: 16 }} />
     </div>
   );
