@@ -13,7 +13,7 @@ vnFace, SmartReader, vnSocial, SmartUX).
 | Phase | Nội dung | Trạng thái |
 |---|---|---|
 | **0** | Scaffold: cấu trúc repo, Docker Compose, `.env.example`, Makefile, CI, health endpoints | ✅ Done |
-| 1 | Mock Bank Core (`mockapi`) + quy tắc §7 | ⏳ |
+| 1 | Mock Bank Core (`mockapi`) + quy tắc §7 | ✅ Done (39 route §9.3 + §7 + 40 unit test) |
 | 2 | Orchestrator skeleton + WebSocket + verification | ⏳ |
 | 3 | Adapter VNPT + audio profiles | ⏳ |
 | 4 | FlowManager + 11 luồng lõi | ⏳ |
@@ -53,7 +53,10 @@ cp .env.example .env          # điền khóa VNPT, hoặc để smoke
 make install                  # tạo .venv + cài deps Python
 make test                     # chạy test suite
 
-# Chạy services cục bộ
+# Demo nhanh: chạy mockapi + frontend cùng lúc (1 lệnh, Ctrl+C tắt cả hai)
+make demo                     # mockapi :18890 + frontend :18891
+
+# Hoặc chạy từng service riêng
 make run-mockapi              # :18890
 make run-voice2text           # :18889
 
@@ -78,9 +81,10 @@ make help                     # liệt kê toàn bộ target
 | Target | Mô tả |
 |---|---|
 | `install` | Tạo `.venv` + cài deps Python (uv) |
+| `demo` | **Chạy mockapi + frontend cùng lúc** (1 lệnh, Ctrl+C tắt cả hai) |
 | `test` | Chạy pytest (`-p no:asyncio`) |
 | `lint` | Ruff |
-| `run-voice2text` / `run-mockapi` | Chạy từng service |
+| `run-voice2text` / `run-mockapi` / `run-web` | Chạy từng service riêng |
 | `infra-up` / `infra-down` | Stack Docker hạ tầng |
 | `compose-config` | Validate compose |
 
@@ -144,3 +148,14 @@ Next.js (`/user-management`, `/admin`) ở Phase 6. Xem README trong thư mục 
 ---
 
 *Mọi số liệu hiện là dữ liệu mô phỏng phục vụ demo, không phải dữ liệu khách hàng thật.*
+
+## Demo bằng 1 lệnh
+
+Thay vì mở 2 terminal cho mockapi và frontend, chỉ cần chạy ở thư mục gốc repo:
+
+```bash
+make demo            # mockapi :18890 + frontend :18891 cùng lúc · Ctrl+C tắt cả hai
+```
+
+Sau đó mở http://localhost:18891/dashboard (console quản trị, cần mockapi) hoặc
+http://localhost:18891/user (giao diện khách hàng).

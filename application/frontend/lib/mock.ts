@@ -158,13 +158,15 @@ export const transferDraft = {
 };
 
 // Fraud alert (fraud_alert_flow → ui_card)
+// Kịch bản: bot CHỦ ĐỘNG phát hiện giao dịch RÚT TIỀN bất thường (vị trí/giờ lạ) →
+// đẩy thông báo cho người dùng → xác nhận "không phải tôi" → xác thực khuôn mặt → khoá thẻ.
 export const fraudAlert = {
-  merchant: "Thanh toán online",
-  amount: 4_800_000,
-  time: "14:18 hôm nay",
-  place: "TP. Hồ Chí Minh",
-  device: "Thiết bị chưa từng dùng",
-  risks: ["Thiết bị mới", "Giá trị lớn", "Bất thường"],
+  merchant: "Rút tiền tại ATM",
+  amount: 5_000_000,
+  time: "02:47 sáng nay",
+  place: "ATM Biên Hoà, Đồng Nai · cách bạn ~78 km",
+  device: "Thẻ vật lý · vị trí chưa từng dùng",
+  risks: ["Vị trí bất thường", "Giờ bất thường (02:47)", "Giá trị lớn"],
 };
 
 // Support / escalation summary (transfer flow → tổng đài viên, §14)
@@ -207,7 +209,7 @@ export const billers: Biller[] = [
   { id: "wt", category: "Nước", provider: "Sawaco", icon: "droplet", color: "#14b8a6", amount: 230_000, detail: "Kỳ 05/2025 · 18 m³", code: "DN0700456789" },
   { id: "in", category: "Internet", provider: "FPT Telecom", icon: "wifi", color: "#ff6b35", amount: 385_000, detail: "Gói Super 150 · Tháng 06", code: "FPT-HCM-778899" },
   { id: "ph", category: "Nạp điện thoại", provider: "Viettel", icon: "phone", color: "#16955a", amount: 100_000, detail: "Số ••••3079 · Trả trước", code: "TOPUP-3079" },
-  { id: "tu", category: "Học phí", provider: "ĐH Bách Khoa", icon: "doc", color: "#8b5cf6", amount: 12_000_000, detail: "Học kỳ I · 2025-2026", code: "HP-BK-1052678" },
+  { id: "tu", category: "Học phí", provider: "ĐH Kinh tế Quốc dân", icon: "doc", color: "#8b5cf6", amount: 12_000_000, detail: "Học kỳ I · 2025-2026", code: "HP-KTQD-1052678" },
 ];
 
 // An tâm Gia đình (family_link_flow → ui_card{family}) — §3.5 / §4.6c

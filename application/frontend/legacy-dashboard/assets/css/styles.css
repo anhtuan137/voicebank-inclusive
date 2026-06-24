@@ -92,23 +92,30 @@ button,input,select{font:inherit}
 .nav .nav-badge{margin-left:auto;background:rgba(255,255,255,.22);border-radius:999px;padding:2px 9px;font-size:12px;font-weight:800}
 .sidebar-art{
   position:absolute;
-  left:0;right:0;bottom:78px;height:300px;
-  opacity:.95;
+  left:0;right:0;bottom:84px;height:280px;
+  opacity:.9;
   pointer-events:none;
+  overflow:hidden;
 }
+/* Bỏ hình cánh diều/đĩa bay cũ cho gọn */
+.sidebar-art .plane{display:none}
+/* Quầng sáng mềm nổi lên từ đáy (thay dải núi răng cưa nhiều màu) */
+.sidebar-art .skyline{
+  position:absolute;left:0;right:0;bottom:0;height:100%;
+  background:
+    radial-gradient(48% 42% at 18% 98%,rgba(150,226,128,.55),transparent 70%),
+    radial-gradient(46% 38% at 64% 100%,rgba(92,201,176,.46),transparent 72%),
+    radial-gradient(42% 34% at 100% 82%,rgba(118,202,234,.32),transparent 72%);
+  filter:blur(10px);
+  clip-path:none;
+}
+/* Dải "mặt nước" dịu, cong nhẹ ở đáy */
 .sidebar-art .water{
-  position:absolute;left:0;right:0;bottom:0;height:86px;
-  background:linear-gradient(180deg,rgba(177,230,210,.25),rgba(206,240,220,.72));
+  position:absolute;left:-14%;right:-14%;bottom:0;height:104px;
+  background:linear-gradient(180deg,rgba(220,248,233,0),rgba(220,248,233,.42));
+  border-radius:50% 50% 0 0 / 64px 64px 0 0;
   backdrop-filter:blur(2px);
 }
-.sidebar-art .skyline{
-  position:absolute;left:-12px;right:-12px;bottom:48px;height:230px;
-  background:
-    linear-gradient(90deg,#5bbddb 0 6%,#64d483 6% 12%,#2f8dc0 12% 17%,#73d05c 17% 22%,#55b9df 22% 29%,#2e9c79 29% 35%,#87d45f 35% 42%,#3b92c8 42% 49%,#62d678 49% 55%,#79c4e5 55% 61%,#46a76c 61% 70%,#84d866 70% 77%,#3a8cbd 77% 86%,#92d48a 86% 100%);
-  clip-path:polygon(0 91%,4% 74%,8% 84%,12% 56%,15% 90%,18% 42%,23% 86%,26% 28%,30% 90%,35% 8%,41% 88%,45% 32%,50% 91%,55% 20%,59% 88%,64% 42%,69% 92%,73% 58%,77% 91%,82% 30%,89% 86%,94% 51%,100% 77%,100% 100%,0 100%);
-  filter:drop-shadow(0 12px 16px rgba(0,0,0,.22));
-}
-.sidebar-art .plane{position:absolute;left:8px;bottom:116px;font-size:34px;transform:rotate(-8deg)}
 .user-card{
   position:absolute;
   left:18px;right:18px;bottom:18px;

@@ -5,14 +5,49 @@ import { AppBar } from "../chrome";
 import { AnBlock } from "../primitives";
 import { Icon } from "../Icon";
 import { transactions, spendThisMonth, incomeThisMonth, vnd } from "@/lib/mock";
+import { useLiveData } from "@/lib/LiveData";
+import type { Txn } from "@/lib/types";
+import type { BankTxn } from "@/lib/api";
 import type { Screen } from "@/lib/types";
 
 const FILTERS = ["Tất cả", "Chi tiêu", "Thu nhập", "Tuần này"] as const;
 
+// Màu theo nhóm chi tiêu để hiển thị icon dòng giao dịch (dữ liệu backend không có màu).
+const CAT_COLOR: Record<string, string> = {
+  "Chuyển khoản": "#2f80ed",
+  "Ăn uống": "#e11d48",
+  "Di chuyển": "#0f9d58",
+  "Thu nhập": "#16955a",
+  "Hoá đơn": "#f59e0b",
+  "Hóa đơn": "#f59e0b",
+  "Mua sắm": "#f97316",
+};
+
+/** Map giao dịch backend → kiểu hiển thị của UI (Txn). */
+function toDisplay(t: BankTxn): Txn {
+  const [y, m, d] = t.date.split("-");
+  return {
+    id: t.id,
+    merchant: t.desc,
+    category: t.category || "Khác",
+    date: d && m && y ? `${d}/${m}/${y}` : t.date,
+    amount: t.amount,
+    icon: (t.desc?.trim()?.[0] ?? "₫").toUpperCase(),
+    color: CAT_COLOR[t.category] ?? "#64748b",
+  };
+}
+
 export function History({ go }: { go: (s: Screen) => void }) {
   const [active, setActive] = useState<typeof FILTERS[number]>("Tất cả");
 
-  const list = transactions.filter((t) =>
+  // Nối Mock Bank Core: nếu lấy được giao dịch thật thì hiển thị chúng + tính tổng
+  // chi/thu từ đó; offline → dùng mock.
+  const { transactions: live } = useLiveData();
+  const rows: Txn[] = live ? live.map(toDisplay) : transactions;
+  const chi = live ? live.filter((t) => t.amount < 0).reduce((s, t) => s - t.amount, 0) : spendThisMonth;
+  const thu = live ? live.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0) : incomeThisMonth;
+
+  const list = rows.filter((t) =>
     active === "Chi tiêu" ? t.amount < 0
     : active === "Thu nhập" ? t.amount > 0
     : true
@@ -35,11 +70,11 @@ export function History({ go }: { go: (s: Screen) => void }) {
           <div className="stat-2">
             <div className="stat">
               <div className="lbl"><Icon.trendDown size={13} /> Chi tiêu</div>
-              <div className="val amt-out">{vnd(spendThisMonth)}</div>
+              <div className="val amt-out">{vnd(chi)}</div>
             </div>
             <div className="stat">
               <div className="lbl"><Icon.trendUp size={13} /> Thu vào</div>
-              <div className="val amt-in">+{vnd(incomeThisMonth)}</div>
+              <div className="val amt-in">+{vnd(thu)}</div>
             </div>
           </div>
         </div>

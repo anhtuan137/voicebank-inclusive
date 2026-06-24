@@ -157,7 +157,7 @@ def seed(conn: psycopg.Connection) -> None:
     print(f"  ✓ settings: {len(settings.get('security',[]))} security, {len(settings.get('roles',[]))} roles")
 
     # ── Analytics snapshots (lưu nguyên JSON để trả về nhanh) ────────────
-    for section in ["overview", "reports", "monitor"]:
+    for section in ["overview", "reports", "monitor", "family"]:
         data = load(section)
         cur.execute("""
             INSERT INTO analytics_snapshots (section, data, updated_at)
@@ -173,7 +173,7 @@ def seed(conn: psycopg.Connection) -> None:
             ON CONFLICT (section) DO UPDATE
               SET data = EXCLUDED.data, updated_at = NOW()
         """, (section, json.dumps(data, ensure_ascii=False)))
-    print("  ✓ analytics_snapshots: overview, reports, monitor, config")
+    print("  ✓ analytics_snapshots: overview, reports, monitor, family, config")
 
     conn.commit()
     print("\n✅ Seed hoàn tất!")

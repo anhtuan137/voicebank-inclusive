@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/styles.css?v=20260615-art" />
 </head>
 <body>
 <div class="app">
@@ -34,6 +34,10 @@
       <button data-page="monitor">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Giám sát hội thoại
+      </button>
+      <button data-page="family">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.7-7.5-10A4 4 0 0 1 12 7a4 4 0 0 1 7.5 4c0 5.3-7.5 10-7.5 10Z"/><path d="M9 11h6"/></svg>
+        An tâm Gia đình
       </button>
       <button data-page="tickets">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -97,6 +101,11 @@
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </div>
+      </div>
+
+      <div id="ov-live-wrap" style="margin-bottom:16px;display:none">
+        <div style="font-weight:700;font-size:13px;color:var(--muted);margin-bottom:8px">⚡ Trực tiếp — đồng bộ từ ứng dụng khách hàng</div>
+        <div class="grid4" id="ov-live" style="grid-template-columns:repeat(3,1fr)"></div>
       </div>
 
       <div class="grid4" id="ov-kpis"></div>
@@ -238,6 +247,69 @@
           <table>
             <thead><tr><th>Mã</th><th>Khách hàng</th><th>Nghiệp vụ · lý do</th><th>Ưu tiên</th><th>Trạng thái</th><th>Chờ</th></tr></thead>
             <tbody id="mon-esc"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAMILY (An tâm Gia đình) -->
+    <section class="page" id="family">
+      <div class="topbar">
+        <div class="title">
+          <h1>An tâm Gia đình</h1>
+          <p>Quản lý liên kết giám hộ &amp; cảnh báo gia đình — "nhận cảnh báo, không nhận quyền".</p>
+        </div>
+        <div class="tools">
+          <div class="control search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="fam-search" placeholder="Tìm theo tên, SĐT, mã liên kết..." />
+            <span class="kbd">⌘ K</span>
+          </div>
+          <button class="control js-daterange" id="fam-daterange">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            7 ngày qua
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="notif" data-notif>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div class="control admin">
+            <div class="avatar" style="width:34px;height:34px">A</div>
+            <div><b>Admin VCB</b><br><small>Quản trị viên</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid4" id="fam-kpis"></div>
+
+      <div class="filter-row" id="fam-filters" style="margin-top:16px"></div>
+
+      <div class="ticket-layout">
+        <div class="card">
+          <div class="card-head"><h2>Liên kết gia đình <span class="badge green" id="fam-count"></span></h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mã liên kết</th><th>Người trẻ (guardian)</th><th>Cha mẹ (dependent)</th><th>Đồng thuận</th><th>Số dư</th><th>Trạng thái</th></tr></thead>
+              <tbody id="fam-tbody"></tbody>
+            </table>
+          </div>
+          <div class="footer"><span id="fam-shown"></span></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head" id="fam-detail-head"></div>
+          <div style="color:var(--muted);margin-bottom:12px" id="fam-detail-meta"></div>
+          <div id="fam-body"></div>
+          <div class="actions" id="fam-actions"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Cảnh báo gia đình gần đây ⓘ <small style="color:var(--muted);font-weight:600">(đẩy đồng thời cho cha mẹ &amp; người trẻ — BR-FAM-07)</small></h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Thời gian</th><th>Tài khoản cha mẹ</th><th>Loại cảnh báo</th><th>Mức độ</th><th>Đẩy tới</th><th>Độ trễ</th><th>Trạng thái đọc</th></tr></thead>
+            <tbody id="fam-alerts"></tbody>
           </table>
         </div>
       </div>
@@ -442,6 +514,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="assets/js/app.js"></script>
+<script src="assets/js/app.js?v=20260619-live"></script>
 </body>
 </html>

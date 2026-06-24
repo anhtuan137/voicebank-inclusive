@@ -9,14 +9,49 @@ import type { Screen } from "@/lib/types";
 
 const TABS = ["Biometric", "OTP", "PIN"] as const;
 
-export function Transfer({ go }: { go: (s: Screen) => void }) {
+export function Transfer({ go, rate }: { go: (s: Screen) => void; rate?: (ctx: string) => void }) {
   const [tab, setTab] = useState<typeof TABS[number]>("Biometric");
   const [pin, setPin] = useState("");
+  const [done, setDone] = useState(false);
+
+  const confirm = () => setDone(true); // xác thực xong → màn "Chuyển tiền thành công"
+  // Chỉ khi đóng màn thành công mới mời đánh giá phiên (CSAT, §14).
+  const finish = () => (rate ? rate("Chuyển tiền") : go("home"));
 
   const handleKey = (k: string) => {
     if (k === "⌫") setPin((p) => p.slice(0, -1));
     else if (pin.length < 6) setPin((p) => p + k);
   };
+
+  if (done) {
+    return (
+      <div className="fade">
+        <AppBar title="Chuyển tiền thành công" onClose={finish} />
+        <div className="pad">
+          <div style={{ textAlign: "center", paddingTop: 12 }}>
+            <span style={{ width: 76, height: 76, borderRadius: "50%", background: "var(--g100)", color: "var(--g700)", display: "grid", placeItems: "center", margin: "0 auto 14px" }}>
+              <Icon.checkCircle size={42} />
+            </span>
+            <div style={{ fontWeight: 900, fontSize: 20 }}>Chuyển tiền thành công</div>
+            <div style={{ fontWeight: 900, fontSize: 28, color: "var(--g700)", marginTop: 6 }}>{vnd(transferDraft.amount)}</div>
+            <div className="muted tiny" style={{ marginTop: 2 }}>đến {transferDraft.beneficiary}</div>
+
+            <div className="card mt16" style={{ textAlign: "left" }}>
+              <div className="kv"><span className="kv-k"><Icon.user size={13} /> Người nhận</span><span className="kv-v">{transferDraft.beneficiary}</span></div>
+              <div className="kv"><span className="kv-k"><Icon.bank size={13} /> Ngân hàng</span><span className="kv-v">{transferDraft.bank}</span></div>
+              <div className="kv"><span className="kv-k"><Icon.card size={13} /> Số tài khoản</span><span className="kv-v">{transferDraft.account}</span></div>
+              <div className="kv"><span className="kv-k"><Icon.clock size={13} /> Thời gian</span><span className="kv-v">14:20 · 26/05/2025</span></div>
+            </div>
+
+            <button className="btn btn-primary mt16" style={{ width: "100%" }} onClick={finish}>
+              <Icon.home size={18} /> Về trang chủ
+            </button>
+          </div>
+        </div>
+        <div style={{ height: 16 }} />
+      </div>
+    );
+  }
 
   return (
     <div className="fade">
@@ -57,7 +92,7 @@ export function Transfer({ go }: { go: (s: Screen) => void }) {
               <Icon.face size={52} style={{ color: "var(--g600)" }} />
             </div>
             <div style={{ fontSize: 13, color: "var(--muted)", fontWeight: 600 }}>Xác thực khuôn mặt để xác nhận</div>
-            <button className="btn btn-primary mt16" style={{ width: "100%" }}>
+            <button className="btn btn-primary mt16" style={{ width: "100%" }} onClick={confirm}>
               <Icon.face size={18} /> Quét khuôn mặt
             </button>
           </div>
@@ -78,7 +113,7 @@ export function Transfer({ go }: { go: (s: Screen) => void }) {
               ))}
             </div>
             {pin.length === 6 && (
-              <button className="btn btn-primary mt16" style={{ width: "100%" }} onClick={() => go("home")}>
+              <button className="btn btn-primary mt16" style={{ width: "100%" }} onClick={confirm}>
                 <Icon.checkCircle size={18} /> Xác nhận
               </button>
             )}
@@ -91,7 +126,7 @@ export function Transfer({ go }: { go: (s: Screen) => void }) {
               OTP đã gửi đến SĐT kết thúc <b>••97</b>
             </div>
             <input className="otp-input" type="tel" maxLength={6} placeholder="_ _ _ _ _ _" />
-            <button className="btn btn-primary mt16" style={{ width: "100%" }} onClick={() => go("home")}>
+            <button className="btn btn-primary mt16" style={{ width: "100%" }} onClick={confirm}>
               <Icon.checkCircle size={18} /> Xác nhận OTP
             </button>
           </div>

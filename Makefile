@@ -1,6 +1,6 @@
 # VoiceBank Inclusive — developer entrypoints (§17 BUILD_SPEC)
 .DEFAULT_GOAL := help
-.PHONY: help install install-web run-voice2text run-mockapi run-web \
+.PHONY: help install install-web run-voice2text run-mockapi run-web demo \
         infra-up infra-down test lint compose-config
 
 help: ## Show this help
@@ -23,6 +23,13 @@ run-mockapi: ## Run mock bank core on :18890
 
 run-web: ## Run Next.js frontend on :18891 (Phase 6)
 	cd application/frontend && npm run dev
+
+demo: ## Chạy mockapi (:18890) + frontend (:18891) cùng lúc — Ctrl+C tắt cả hai
+	@echo "▶ mockapi :18890  +  frontend :18891 — nhấn Ctrl+C để dừng cả hai"
+	@trap 'kill 0' EXIT INT TERM; \
+	.venv/bin/python -m mockapi.server & \
+	( cd application/frontend && npm run dev ) & \
+	wait
 
 infra-up: ## Start postgres + minio + mockapi via Docker
 	docker compose -f docker/docker-compose.infra.yml --env-file .env up -d

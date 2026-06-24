@@ -2390,3 +2390,234 @@ a {
   color: var(--g300);
   box-shadow: none;
 }
+/* ============================================================
+   Đánh giá phiên (1–5 sao) — SessionRating overlay (§14 CSAT)
+   ============================================================ */
+
+/* Nút "Kết thúc phiên & đánh giá" trong khu chat */
+.end-session-row {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 6px;
+}
+.end-session-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--g050);
+  border: 1.5px solid var(--g200);
+  color: var(--g700);
+  font-size: 13px;
+  font-weight: 700;
+}
+.end-session-btn:active {
+  transform: scale(0.97);
+}
+
+/* Overlay nền mờ — phủ trong khung điện thoại (Assistant là absolute inset-0) */
+.sr-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  background: rgba(8, 40, 24, 0.42);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-end;
+  animation: fade 0.2s ease;
+}
+
+/* Thẻ trượt từ đáy */
+.sr-card {
+  width: 100%;
+  background: var(--card);
+  border-top-left-radius: var(--r-xl);
+  border-top-right-radius: var(--r-xl);
+  box-shadow: 0 -10px 44px rgba(8, 40, 24, 0.28);
+  padding: 10px 22px 24px;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sr-handle {
+  width: 42px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line);
+  margin: 0 auto 14px;
+}
+
+.sr-title {
+  margin: 4px 0 2px;
+  font-size: 18px;
+  font-weight: 850;
+  color: var(--ink);
+  text-align: center;
+}
+.sr-sub {
+  margin: 0 0 14px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.sr-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.sr-star {
+  padding: 4px;
+  line-height: 0;
+  transition: transform 0.12s ease;
+}
+.sr-star:hover {
+  transform: scale(1.18);
+}
+.sr-star:active {
+  transform: scale(0.92);
+}
+.sr-stars-sm {
+  gap: 4px;
+  margin: 10px 0 4px;
+}
+
+.sr-label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--g700);
+  margin: 8px 0 4px;
+  min-height: 20px;
+}
+
+.sr-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+.sr-tag {
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  color: var(--ink2);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.sr-tag.on {
+  background: var(--g050);
+  border-color: var(--g400);
+  color: var(--g800);
+}
+
+.sr-note {
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  font: inherit;
+  font-size: 13.5px;
+  resize: none;
+  outline: none;
+  color: var(--ink);
+  background: var(--g050);
+}
+.sr-note:focus {
+  border-color: var(--g400);
+  background: #fff;
+}
+
+.sr-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+.sr-btn {
+  flex: 1;
+  padding: 13px;
+  border-radius: var(--r-md);
+  font-size: 14.5px;
+  font-weight: 800;
+}
+.sr-btn-ghost {
+  background: var(--g050);
+  color: var(--ink2);
+}
+.sr-btn-primary {
+  background: linear-gradient(135deg, var(--g500), var(--g700));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(13, 120, 64, 0.3);
+}
+.sr-btn-primary:disabled {
+  background: var(--g100);
+  color: var(--g300);
+  box-shadow: none;
+}
+
+/* Trạng thái cảm ơn sau khi gửi */
+.sr-thanks {
+  text-align: center;
+  padding: 10px 0 4px;
+  animation: fade 0.25s ease;
+}
+.sr-check {
+  display: inline-flex;
+}
+.sr-thanks h3 {
+  margin: 8px 0 4px;
+  font-size: 18px;
+  font-weight: 850;
+}
+.sr-thanks p {
+  margin: 0;
+  font-size: 13px;
+}
+.sr-thanks .sr-btn {
+  margin-top: 14px;
+}
+
+/* ============================================================
+   Trợ lý An — thẻ thao tác trong chat & trả lời nhanh (§13 flow)
+   ============================================================ */
+.msg-card {
+  width: 100%;
+  margin: 6px 0 12px;
+  animation: bubbleFadeIn 0.25s ease;
+}
+.msg-card-cap {
+  font-size: 13.5px;
+  color: var(--ink2);
+  font-weight: 600;
+  margin: 0 0 8px 4px;
+}
+.chat-card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.chat-card-actions .btn {
+  flex: 1;
+}
+
+/* hàng gợi ý trả lời nhanh, ngay trên thanh nhập */
+.qreplies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 14px 8px;
+}
+.qchip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--g200);
+  background: var(--g050);
+  color: var(--g700);
+  font-size: 13px;
+  font-weight: 600;
+}
+.qchip:active {
+  transform: scale(0.96);
+}

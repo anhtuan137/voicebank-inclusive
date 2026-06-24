@@ -275,6 +275,12 @@ export const Icon = {
       <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" />
     </svg>
   ),
+  // Star — pass fill="currentColor" để vẽ sao đặc (đã chọn); mặc định viền rỗng.
+  star: (p: P) => (
+    <svg {...base(p)}>
+      <path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9L12 2.6z" />
+    </svg>
+  ),
   target: (p: P) => (
     <svg {...base(p)}>
       <circle cx="12" cy="12" r="8" />

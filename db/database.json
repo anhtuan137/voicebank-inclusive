@@ -1,0 +1,78 @@
+{
+  "_comment": "Seed cho Mock Bank Core (mockapi) — Phase 1. Tiền tệ luôn là int VND (§6). PIN/otp_secret chỉ dùng cho demo offline; thực tế không lưu plaintext.",
+  "banks": [
+    { "bank_code": "VCB", "short_name": "Vietcombank", "name": "Ngân hàng TMCP Ngoại thương Việt Nam", "bin": "970436", "pronunciation": "vietcombank" },
+    { "bank_code": "TCB", "short_name": "Techcombank", "name": "Ngân hàng TMCP Kỹ thương Việt Nam", "bin": "970407", "pronunciation": "techcombank" },
+    { "bank_code": "BIDV", "short_name": "BIDV", "name": "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam", "bin": "970418", "pronunciation": "bi-ai-di-vi" },
+    { "bank_code": "MB", "short_name": "MB Bank", "name": "Ngân hàng TMCP Quân đội", "bin": "970422", "pronunciation": "em-bi-bank" },
+    { "bank_code": "ACB", "short_name": "ACB", "name": "Ngân hàng TMCP Á Châu", "bin": "970416", "pronunciation": "a-xe-be" }
+  ],
+  "customers": [
+    {
+      "registered_phone": "0790123456",
+      "phone_last4": "3456",
+      "name": "Đỗ Anh Tuấn",
+      "cccd_verified": true,
+      "account_number": "1036350085",
+      "card_last4": "6789",
+      "card_status": "active",
+      "pin": "123456",
+      "otp_secret": "111111",
+      "account_balance": 14650000,
+      "vcb_pay_balance": 1250000,
+      "sms_banking_active": true,
+      "internet_banking_active": true,
+      "age": 24,
+      "personality": "genz"
+    },
+    {
+      "registered_phone": "0904567890",
+      "phone_last4": "7890",
+      "name": "Trần Thị Hoa",
+      "cccd_verified": true,
+      "account_number": "0011000457890",
+      "card_last4": "4567",
+      "card_status": "active",
+      "pin": "654321",
+      "otp_secret": "222222",
+      "account_balance": 15200000,
+      "vcb_pay_balance": 320000,
+      "sms_banking_active": true,
+      "internet_banking_active": false,
+      "age": 52,
+      "personality": "senior"
+    },
+    {
+      "registered_phone": "0912888999",
+      "phone_last4": "8999",
+      "name": "Đỗ Văn Minh",
+      "cccd_verified": true,
+      "account_number": "0011000888999",
+      "card_last4": "8901",
+      "card_status": "locked",
+      "pin": "246810",
+      "otp_secret": "333333",
+      "account_balance": 4200000,
+      "vcb_pay_balance": 0,
+      "sms_banking_active": false,
+      "internet_banking_active": true,
+      "age": 58,
+      "personality": "senior"
+    }
+  ],
+  "transactions": [
+    { "id": "t1001", "card_last4": "6789", "date": "2026-06-22", "amount": -120000, "desc": "Highlands Coffee", "transaction_type": "purchase", "category": "Ăn uống" },
+    { "id": "t1002", "card_last4": "6789", "date": "2026-06-21", "amount": -350000, "desc": "Grab", "transaction_type": "purchase", "category": "Di chuyển" },
+    { "id": "t1003", "card_last4": "6789", "date": "2026-06-20", "amount": 12000000, "desc": "Lương tháng 6", "transaction_type": "credit", "category": "Thu nhập" },
+    { "id": "t1004", "card_last4": "6789", "date": "2026-06-19", "amount": -2000000, "desc": "Chuyen tien Nguyen Van Binh", "transaction_type": "transfer", "category": "Chuyển khoản" },
+    { "id": "t1005", "card_last4": "4567", "date": "2026-06-21", "amount": -480000, "desc": "Hoa don dien EVN", "transaction_type": "bill", "category": "Hoá đơn" }
+  ],
+  "beneficiaries": [
+    { "beneficiary_id": "b1", "phone": "0790123456", "bank_code": "VCB", "account_number": "0011000999888", "name": "Nguyễn Văn Bình", "nickname": "Bình" },
+    { "beneficiary_id": "b2", "phone": "0790123456", "bank_code": "TCB", "account_number": "19001234567", "name": "Trần Thị Lan", "nickname": "Lan" }
+  ],
+  "contacts": [
+    { "owner_phone": "0790123456", "name": "Nguyễn Văn Bình", "phone": "0988111222" },
+    { "owner_phone": "0790123456", "name": "Trần Thị Lan", "phone": "0977333444" }
+  ]
+}

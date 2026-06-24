@@ -8,6 +8,7 @@ GET /api/v1/dashboard/overview
 GET /api/v1/dashboard/monitor
 GET /api/v1/dashboard/tickets
 GET /api/v1/dashboard/reports
+GET /api/v1/dashboard/family
 GET /api/v1/dashboard/settings
 GET /api/v1/dashboard/notifications
 
@@ -18,7 +19,7 @@ POST /api/v1/dashboard/tickets/{id}/messages  — thêm tin nhắn vào thread
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
@@ -63,12 +64,37 @@ def get_config() -> Any:
 
 @router.get("/overview")
 def get_overview() -> Any:
-    return _snapshot("overview")
+    data = _snapshot("overview")
+    # Cộng dồn REALTIME từ DB: dải KPI "trực tiếp" phản ánh thao tác /user vừa đồng bộ.
+    if is_postgres() and isinstance(data, dict):
+        try:
+            with get_conn() as conn:
+                total = conn.execute("SELECT COUNT(*) AS n FROM conversations").fetchone()["n"]
+                esc = conn.execute(
+                    "SELECT COUNT(*) AS n FROM conversations WHERE status = 'escalated'"
+                ).fetchone()["n"]
+                open_tk = conn.execute(
+                    "SELECT COUNT(*) AS n FROM tickets WHERE status <> 'closed'"
+                ).fetchone()["n"]
+            data["liveKpis"] = [
+                {"label": "Tổng phiên hội thoại", "value": f"{total:,}".replace(",", ".")},
+                {"label": "Phiên chuyển tổng đài", "value": str(esc)},
+                {"label": "Ticket đang mở", "value": str(open_tk)},
+            ]
+        except Exception:
+            pass
+    return data
 
 
 @router.get("/reports")
 def get_reports() -> Any:
     return _snapshot("reports")
+
+
+@router.get("/family")
+def get_family() -> Any:
+    """An tâm Gia đình: liên kết giám hộ (FAMILY_LINK) + cảnh báo gia đình (§7.5/§14)."""
+    return _snapshot("family")
 
 
 # ── Monitor (live từ DB) ───────────────────────────────────────────────────────

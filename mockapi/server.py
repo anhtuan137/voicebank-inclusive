@@ -18,6 +18,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from mockapi.routers.dashboard import router as dashboard_router
+from mockapi.routers.activity import router as activity_router
+from mockapi.routers.auth import router as auth_router
+from mockapi.routers.accounts import router as accounts_router
+from mockapi.routers.transfer import router as transfer_router
+from mockapi.routers.savings import router as savings_router
+from mockapi.routers.misc import router as misc_router
 
 DB_SOURCE = os.getenv("DB_SOURCE", "json")
 FEATURE_DEMO = os.getenv("FEATURE_DEMO", "false").lower() in {"1", "true", "yes"}
@@ -48,6 +54,13 @@ app.add_middleware(
 )
 
 app.include_router(dashboard_router)
+app.include_router(activity_router)
+# Mock Bank Core — lõi nghiệp vụ (§7 / §9.3)
+app.include_router(auth_router)
+app.include_router(accounts_router)
+app.include_router(transfer_router)
+app.include_router(savings_router)
+app.include_router(misc_router)
 
 
 @app.get("/health")

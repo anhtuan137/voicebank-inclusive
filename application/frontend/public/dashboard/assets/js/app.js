@@ -68,7 +68,11 @@
       notes: {},
       monPage: 1,
       tkPage: 1,
-      selectedTickets: new Set()
+      selectedTickets: new Set(),
+      familyLinks: VB.familyLinks.map((l) => ({ ...l })),
+      familyFilter: "all",
+      familySearch: "",
+      activeFamilyLink: VB.familyLinks[0].id
     };
   }
 
@@ -96,7 +100,7 @@
       throw new Error("Không kết nối được mockapi tại localhost:18890.\nHãy chạy: .venv/bin/python -m mockapi.server");
     }
 
-    const files = ["config", "overview", "monitor", "tickets", "reports", "settings", "notifications"];
+    const files = ["config", "overview", "monitor", "tickets", "reports", "settings", "notifications", "family"];
     const parts = {};
     await Promise.all(files.map(async (f) => { parts[f] = await _fetchSection(f); }));
     return {
@@ -116,7 +120,11 @@
       ticketThreads: parts.tickets.ticketThreads,
       reports: parts.reports,
       settings: parts.settings,
-      notifications: parts.notifications.notifications
+      notifications: parts.notifications.notifications,
+      familyKpis: parts.family.kpis,
+      familyFilters: parts.family.filters,
+      familyLinks: parts.family.links,
+      familyAlerts: parts.family.alerts
     };
   }
 
@@ -283,6 +291,15 @@
     const d = PERIOD_DELTA_LABEL[state.period] || "kỳ trước";
 
     $("#ov-kpis").innerHTML = p.kpis.map(kpiCard).join("");
+
+    // Dải KPI "trực tiếp" (cộng dồn realtime từ DB qua mockapi) — đồng bộ thao tác /user
+    const live = o.liveKpis || [];
+    const liveWrap = $("#ov-live-wrap");
+    if (liveWrap) {
+      liveWrap.style.display = live.length ? "block" : "none";
+      $("#ov-live").innerHTML = live.map((k) =>
+        `<div class="card" style="padding:14px 16px"><div style="color:var(--muted);font-size:12.5px;font-weight:600">${esc(k.label)}</div><div style="font-size:24px;font-weight:800;margin-top:4px">${esc(k.value)}</div></div>`).join("");
+    }
 
     const maxK = p.traffic.values.map((v) => v.toLocaleString("vi-VN", { maximumFractionDigits: 1 }) + "K");
     $("#ov-traffic").innerHTML = lineChart(
@@ -918,6 +935,166 @@
   }
 
   /* =====================================================================
+   * TRANG: AN TÂM GIA ĐÌNH (Family)
+   * Quản lý liên kết giám hộ (FAMILY_LINK) + cảnh báo gia đình.
+   * Bất biến nghiệp vụ (§7.5): guardian chỉ NHẬN cảnh báo, KHÔNG có quyền
+   * giao dịch (BR-FAM-02); admin KHÔNG thể kích hoạt thay cha mẹ (BR-FAM-01);
+   * cha mẹ thu hồi bất kỳ lúc nào (BR-FAM-04); mặc định ẩn số dư (BR-FAM-05).
+   * ===================================================================== */
+  const FAMILY_MAX_GUARDIANS = 4; // BR-FAM-06
+
+  const familyStatusMeta = {
+    active: { label: "Đang hoạt động", cls: "green" },
+    pending: { label: "Chờ cha mẹ đồng ý", cls: "orange" },
+    revoked: { label: "Đã thu hồi", cls: "gray" }
+  };
+
+  function renderFamilyKpis() {
+    $("#fam-kpis").innerHTML = VB.familyKpis.map(kpiCard).join("");
+  }
+
+  function renderFamilyFilters() {
+    const counts = state.familyLinks.reduce((m, l) => { m[l.status] = (m[l.status] || 0) + 1; return m; }, {});
+    $("#fam-filters").innerHTML = VB.familyFilters.map((f) => {
+      const n = f.key === "all" ? state.familyLinks.length : (counts[f.key] || 0);
+      return `<button class="chip ${f.key === state.familyFilter ? "active" : ""}" data-famfilter="${f.key}">${esc(f.label)} <b>${n}</b></button>`;
+    }).join("");
+    $$("#fam-filters .chip[data-famfilter]").forEach((b) =>
+      b.addEventListener("click", () => { state.familyFilter = b.dataset.famfilter; renderFamilyFilters(); renderFamilyTable(); }));
+  }
+
+  function filteredFamilyLinks() {
+    const q = state.familySearch.trim().toLowerCase();
+    return state.familyLinks.filter((l) =>
+      (state.familyFilter === "all" || l.status === state.familyFilter) &&
+      (!q || l.id.toLowerCase().includes(q) || l.guardian.toLowerCase().includes(q) || l.dependent.toLowerCase().includes(q) ||
+        l.guardianPhone.replace(/\s/g, "").includes(q.replace(/\s/g, "")) || l.dependentPhone.replace(/\s/g, "").includes(q.replace(/\s/g, ""))));
+  }
+
+  function familyConsentBadge(l) {
+    if (l.status === "revoked") return `<span class="badge gray">Đã rút lại</span>`;
+    const voice = `<span class="badge ${l.voiceOk ? "green" : "gray"}">${l.voiceOk ? "✓" : "○"} Giọng nói</span>`;
+    const ekyc = `<span class="badge ${l.ekycOk ? "green" : "gray"}">${l.ekycOk ? "✓" : "○"} eKYC</span>`;
+    return `<div style="display:flex;gap:6px;flex-wrap:wrap">${voice}${ekyc}</div>`;
+  }
+
+  function renderFamilyTable() {
+    const all = filteredFamilyLinks();
+    $("#fam-tbody").innerHTML = all.length ? all.map((l) => {
+      const st = familyStatusMeta[l.status];
+      const bal = l.showBalance
+        ? `<span class="badge blue">Hiện (opt-in)</span>`
+        : `<span class="badge gray">Ẩn</span>`;
+      return `<tr class="${l.id === state.activeFamilyLink ? "selected" : ""}" data-fam="${l.id}">
+        <td>${esc(l.id)}<br><small>${esc(l.createdAt)}</small></td>
+        <td>${esc(l.guardian)}<br><small>${esc(l.guardianRel)} · ${esc(l.guardianPhone)}</small></td>
+        <td>${esc(l.dependent)}<br><small>${esc(l.dependentRel)} · ${esc(l.dependentPhone)}</small></td>
+        <td>${familyConsentBadge(l)}</td>
+        <td>${bal}</td>
+        <td><span class="badge ${st.cls}">${st.label}</span></td></tr>`;
+    }).join("") : `<tr><td colspan="6" class="empty">Không có liên kết phù hợp.</td></tr>`;
+    $("#fam-count").textContent = state.familyLinks.filter((l) => l.status === "active").length + " đang hoạt động";
+    $("#fam-shown").textContent = all.length ? `Hiển thị ${all.length} / ${state.familyLinks.length} liên kết` : "Không có liên kết phù hợp";
+    $$("#fam-tbody tr[data-fam]").forEach((tr) =>
+      tr.addEventListener("click", () => selectFamilyLink(tr.dataset.fam)));
+  }
+
+  function selectFamilyLink(id) {
+    state.activeFamilyLink = id;
+    const l = state.familyLinks.find((x) => x.id === id);
+    if (!l) return;
+    $$("#fam-tbody tr").forEach((tr) => tr.classList.toggle("selected", tr.dataset.fam === id));
+    const st = familyStatusMeta[l.status];
+    $("#fam-detail-head").innerHTML =
+      `<div><h2>${esc(l.id)} <span class="badge ${st.cls}">${st.label}</span></h2>
+        <h3 style="margin:6px 0 0">${esc(l.guardian)} → ${esc(l.dependent)}</h3></div>`;
+    $("#fam-detail-meta").innerHTML =
+      `Người trẻ: ${esc(l.guardianRel)} · ${esc(l.guardianPhone)}<br>Cha mẹ: ${esc(l.dependentRel)} · ${esc(l.dependentPhone)}`;
+
+    const consent = l.status === "active"
+      ? `<div class="info-row"><span>Bản ghi CONSENT</span><b>${esc(l.consentId)} · scope=family_link</b></div>
+         <div class="info-row"><span>Đồng ý lúc (granted_at)</span><b>${esc(l.grantedAt)}</b></div>`
+      : l.status === "revoked"
+        ? `<div class="info-row"><span>Bản ghi CONSENT</span><b>${esc(l.consentId)} · status=revoked</b></div>
+           <div class="info-row"><span>Thu hồi lúc</span><b>${esc(l.revokedAt || "—")}</b></div>`
+        : `<div class="info-row"><span>Bản ghi CONSENT</span><b style="color:var(--muted)">Chưa có — chờ cha mẹ đồng ý</b></div>`;
+
+    $("#fam-body").innerHTML =
+      `<div class="small-panel"><b>🔐 Đồng thuận hai phía (BR-FAM-01)</b>
+        <p style="line-height:1.55;margin:10px 0 0">Liên kết chỉ kích hoạt khi cha mẹ đồng ý <b>đồng thời</b> bằng
+        <b>giọng nói + eKYC</b> (liveness + so khớp). Admin không thể bỏ qua hoặc xác nhận thay cha mẹ.</p>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <span class="badge ${l.voiceOk ? "green" : "orange"}">${l.voiceOk ? "✓ Giọng nói đạt" : "○ Chờ giọng nói"}</span>
+          <span class="badge ${l.ekycOk ? "green" : "orange"}">${l.ekycOk ? "✓ eKYC đạt" : "○ Chờ eKYC"}</span>
+        </div></div>
+      <div class="info-grid" style="margin-top:12px">
+        ${consent}
+        <div class="info-row"><span>Guardian / dependent (BR-FAM-06)</span><b>${l.dependentGuardians}/${FAMILY_MAX_GUARDIANS} người trẻ</b></div>
+        <div class="info-row"><span>Cảnh báo 7 ngày</span><b>${l.alerts7d}</b></div>
+        <div class="info-row"><span>Quyền giao dịch của người trẻ</span><b style="color:var(--red)">Không (chỉ nhận cảnh báo — BR-FAM-02)</b></div>
+      </div>
+      <div class="access-item" style="margin-top:12px">
+        <div><b>Cho người trẻ xem số dư</b><br><small>Mặc định tắt; chỉ bật khi cha mẹ chủ động opt-in (BR-FAM-05)</small></div>
+        <button class="toggle ${l.showBalance ? "on" : ""}" id="fam-balance-toggle" ${l.status !== "active" ? "disabled" : ""} role="switch" aria-checked="${l.showBalance}"><span class="knob"></span></button>
+      </div>`;
+
+    const acts = $("#fam-actions");
+    if (l.status === "pending") {
+      acts.innerHTML =
+        `<button class="btn primary" data-famact="resend">🔁 Gửi lại yêu cầu đồng ý</button>
+         <button class="btn red" data-famact="cancel">✕ Hủy yêu cầu liên kết</button>`;
+    } else if (l.status === "active") {
+      acts.innerHTML =
+        `<button class="btn" data-famact="audit">📜 Xem nhật ký kiểm toán</button>
+         <button class="btn red" data-famact="revoke">⛔ Thu hồi liên kết (BR-FAM-04)</button>`;
+    } else {
+      acts.innerHTML = `<button class="btn" data-famact="audit">📜 Xem nhật ký kiểm toán</button>`;
+    }
+    $$("#fam-actions [data-famact]").forEach((b) =>
+      b.addEventListener("click", () => familyAction(b.dataset.famact)));
+    const bt = $("#fam-balance-toggle");
+    if (bt && !bt.disabled) bt.addEventListener("click", () => familyAction("balance"));
+  }
+
+  function familyAction(kind) {
+    const l = state.familyLinks.find((x) => x.id === state.activeFamilyLink);
+    if (!l) return;
+    if (kind === "resend") return toast("🔁 Đã gửi lại yêu cầu đồng ý sang máy cha mẹ " + l.dependent);
+    if (kind === "audit") return toast("📜 Mở nhật ký kiểm toán liên kết " + l.id);
+    if (kind === "balance") {
+      l.showBalance = !l.showBalance;
+      renderFamilyTable(); selectFamilyLink(l.id);
+      return toast(l.showBalance ? "Đã bật hiển thị số dư (opt-in cha mẹ)" : "Đã ẩn số dư với người trẻ");
+    }
+    if (kind === "cancel" || kind === "revoke") {
+      l.status = "revoked";
+      l.dependentGuardians = Math.max(0, l.dependentGuardians - 1);
+      l.showBalance = false;
+      if (l.revokedAt === undefined) l.revokedAt = "01/06/2025 10:45";
+      renderFamilyFilters(); renderFamilyTable(); selectFamilyLink(l.id);
+      return toast(kind === "cancel"
+        ? "✕ Đã hủy yêu cầu liên kết " + l.id
+        : "⛔ Đã thu hồi liên kết " + l.id + " · người trẻ ngừng nhận mọi thông báo");
+    }
+  }
+
+  function renderFamilyAlerts() {
+    $("#fam-alerts").innerHTML = VB.familyAlerts.map((a) =>
+      `<tr><td>${esc(a.time)}</td><td>${esc(a.dependent)}</td><td>${esc(a.type)}</td>
+       <td><span class="badge ${a.levelClass}">${esc(a.level)}</span></td>
+       <td>${esc(a.channels)}</td><td>${esc(a.latency)}</td>
+       <td><span class="badge ${a.readClass}">${esc(a.read)}</span></td></tr>`).join("");
+  }
+
+  function renderFamily() {
+    renderFamilyKpis();
+    renderFamilyFilters();
+    renderFamilyTable();
+    selectFamilyLink(state.activeFamilyLink);
+    renderFamilyAlerts();
+  }
+
+  /* =====================================================================
    * Navigation & wiring
    * ===================================================================== */
   function setupNav() {
@@ -955,6 +1132,8 @@
     });
     const ovs = $("#ov-search");
     if (ovs) ovs.addEventListener("input", (e) => { state.alertSearch = e.target.value; renderAlerts(); });
+    const fams = $("#fam-search");
+    if (fams) fams.addEventListener("input", (e) => { state.familySearch = e.target.value; renderFamilyTable(); });
 
     // data-toast buttons
     $$("[data-toast]").forEach((b) => b.addEventListener("click", () => toast(b.dataset.toast)));
@@ -1087,6 +1266,7 @@
     renderTicketWidgets();
     renderReports();
     renderSettings();
+    renderFamily();
     setupActions();
     simulateRealtime();
   }

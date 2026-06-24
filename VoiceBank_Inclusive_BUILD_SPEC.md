@@ -38,6 +38,7 @@
 2. **Tái định vị cho Gen Z** + bổ sung tính năng **dự báo & cá nhân hóa**, lớp **UI trực quan**.
 3. **Tích hợp VCB Digibank** (tái dùng định danh/SSO, đổi nhận diện thương hiệu, đổi lõi mock → adapter core Vietcombank).
 4. **Nâng cấp phân hệ quản trị** (dashboard giám sát hiệu suất trợ lý ảo).
+5. **Bổ sung lớp "An tâm Gia đình"** — tính năng mới cho phép **người trẻ liên kết tài khoản cha mẹ**, cha mẹ tự thao tác bằng giọng nói, người trẻ nhận **kết quả + cảnh báo thời gian thực**, theo **nguyên tắc một trục** ("con cái nhận cảnh báo, không nhận quyền"). Đây là điểm khác biệt cạnh tranh chính của sản phẩm.
 
 **Ràng buộc cuộc thi:** AI **phải** dùng API VNPT (SmartVoice, Smartbot, eKYC, vnFace, SmartReader, vnSocial, SmartUX). MVP phải demo được, repo cài đặt 1 lệnh, có test tự động.
 
@@ -49,6 +50,7 @@
 - Voice pipeline tiếng Việt qua **VNPT SmartVoice** (STT streaming + TTS), hiểu ý qua **VNPT Smartbot**.
 - Các luồng giao dịch lõi: **định danh, tra số dư/lịch sử, chuyển tiền (+QR, +eKYC khi >10 triệu), gửi tiết kiệm, khóa/mở thẻ & dịch vụ, báo ATM nuốt thẻ, đặt lịch gọi lại, chuyển tổng đài viên, hướng dẫn how-to**.
 - Tối thiểu **2–3 tính năng dự báo**: *insight chi tiêu, dự báo dòng tiền/cảnh báo cháy túi, mục tiêu tiết kiệm gamified*.
+- **Lớp "An tâm Gia đình" (MVP):** liên kết tài khoản cha mẹ (cha mẹ đồng ý qua giọng nói + eKYC), cha mẹ tự thao tác bằng giọng nói, đẩy **kết quả + cảnh báo bất thường real-time** về máy người trẻ. Tối thiểu demo 1 luồng: *liên kết → cha mẹ khóa thẻ bằng giọng nói → người trẻ nhận kết quả*, và *cảnh báo gia đình real-time*.
 - Xác thực đa kênh (PIN/OTP/xác nhận/khuôn mặt) đồng bộ giọng nói ↔ UI.
 - Lớp UI trực quan (thẻ insight, biểu đồ, nút hành động) trong app.
 - Phân hệ quản trị: dashboard hiệu suất + hàng đợi escalation + ghi âm/transcript/tóm tắt.
@@ -58,6 +60,7 @@
 - Tích hợp core/Open API thật của Vietcombank (chỉ làm adapter + mock ở MVP).
 - Voice biometric login production-grade; chống giả mạo nâng cao.
 - B2B2C licensing engine.
+- **Lớp gia đình nâng cao (sau MVP):** chia sẻ nhiều cấp (ông bà–con–cháu), mở tài khoản hộ, hạn mức chi tiêu do guardian đề xuất (cha mẹ vẫn phê duyệt), gom nhiều dependent vào một bảng điều khiển gia đình.
 
 ---
 
@@ -75,6 +78,7 @@
 10. **Thương hiệu:** thay mọi tham chiếu "SHB"/"SHB SAHA" của POC cũ thành **"VCB"/"VCB Digibank"**; mã ngân hàng nội bộ = `"VCB"`; ví điện tử = `vcb_pay`.
 11. **Ngôn ngữ:** giao diện & hội thoại tiếng Việt; code, định danh, commit message tiếng Anh.
 12. **Đa phương thức đồng bộ:** mọi câu trả lời thoại quan trọng phải kèm "UI event" để client hiển thị thẻ trực quan (xem `emit_ui_card` ở §9).
+13. **Nguyên tắc "một trục" cho lớp gia đình (BẤT BIẾN bảo mật).** (a) Liên kết gia đình chỉ kích hoạt khi **đồng thời** người trẻ khởi xướng **VÀ** cha mẹ đồng ý bằng **giọng nói + eKYC**; (b) người trẻ **chỉ nhận thông báo/cảnh báo, KHÔNG có quyền giao dịch** trên tài khoản cha mẹ — không có endpoint/flow nào cho phép người trẻ thao tác tiền của cha mẹ; (c) mọi luồng phía cha mẹ phải emit một **event kết quả** về máy người trẻ đã liên kết; (d) cha mẹ có thể **thu hồi liên kết bất kỳ lúc nào** (quyền rút lại — NĐ 13/2023); (e) giao dịch giá trị lớn của cha mẹ **vẫn** yêu cầu sinh trắc của chính cha mẹ (QĐ 2345) — lớp gia đình **không** làm yếu tuân thủ. Mỗi quy tắc BR-FAM ở §7.5 phải có unit test.
 
 ---
 
@@ -91,6 +95,7 @@ Bốn lớp, triển khai dưới dạng **module nhúng trong VCB Digibank**:
    - FlowManager (máy trạng thái hội thoại)
    - Verification Registry (PIN/OTP/confirm/face)
    - Engine Dự báo & Thấu hiểu
+   - Lớp "An tâm Gia đình" (liên kết · cảnh báo · vòng lặp một trục)
             │  httpx (REST)                         │ adapter
             ▼                                        ▼
 [ Mock Bank Core: mockapi :18890 ]        [ AI VNPT: SmartVoice, Smartbot, eKYC,
@@ -160,13 +165,15 @@ voicebank-inclusive/
 │   │   ├── banking_api.py      # httpx client → mockapi / core adapter
 │   │   ├── transfer_service.py
 │   │   ├── savings_service.py
-│   │   └── prediction_service.py  # NEW: engine Dự báo & Thấu hiểu
+│   │   ├── prediction_service.py  # NEW: engine Dự báo & Thấu hiểu
+│   │   └── family_service.py      # NEW: lớp An tâm Gia đình (liên kết, cảnh báo, vòng lặp một trục)
 │   ├── interactions/           # verification.py, tickets.py, recordings.py, db.py, otp.py
 │   └── processors/             # Frame processors Pipecat (sentiment, normalizer, guard, recorder…)
 ├── mockapi/                    # Mock lõi ngân hàng (FastAPI) — :18890
 │   ├── server.py               # ~47 routes (wiring mỏng)
 │   └── mock_api/               # auth, card, transaction, service, branch, callback, vcb_pay,
 │                               # savings, transfer, transfer_pending, kyc, contacts_store,
+│                               # family (NEW: links + family alerts),
 │                               # db.py, database.json, savings_data.json
 ├── application/frontend/       # Next.js 15 App Router — :18891
 │   └── app/{user,user-management,admin,components,lib,api}
@@ -233,6 +240,19 @@ voicebank-inclusive/
 | BR-SEC-02 | Ticket lưu **4 số cuối** điện thoại; căn cước chỉ lưu cờ "đã xác thực" | — |
 | BR-PIN-01 | Bot **tuyệt đối không tiết lộ PIN** | — |
 
+### 7.5 An tâm Gia đình (Family) — NEW
+| Mã | Quy tắc | Giá trị |
+|---|---|---|
+| BR-FAM-01 | Tạo liên kết gia đình cần **đồng thời**: người trẻ (guardian) khởi xướng **VÀ** cha mẹ (dependent) đồng ý bằng **giọng nói + eKYC** (liveness + compare). Thiếu một trong hai → liên kết ở trạng thái `pending`, **không** kích hoạt | — |
+| BR-FAM-02 | Người trẻ **chỉ nhận thông báo** (cảnh báo/kết quả/tóm tắt); **không bao giờ** có quyền giao dịch trên tài khoản cha mẹ ("nhận cảnh báo, không nhận quyền"). Không tồn tại endpoint/flow cho phép guardian thao tác tiền dependent | — |
+| BR-FAM-03 | Mọi luồng phía cha mẹ (khóa thẻ, chuyển tiền, …) phải emit **event kết quả** về tất cả guardian đã liên kết (vòng lặp đóng ở người trẻ) | — |
+| BR-FAM-04 | Cha mẹ có thể **thu hồi/hủy liên kết** bất kỳ lúc nào bằng giọng nói (quyền rút lại — NĐ 13/2023); thu hồi xong guardian ngừng nhận mọi thông báo | — |
+| BR-FAM-05 | Mặc định guardian **không thấy** PIN/OTP/số dư đầy đủ của dependent; chỉ thấy cảnh báo + trạng thái + tóm tắt. Hiển thị số dư chỉ khi dependent **chủ động bật** (opt-in) | mặc định tắt |
+| BR-FAM-06 | Tối đa số guardian / dependent trên mỗi tài khoản | 4 / 4 |
+| BR-FAM-07 | Cảnh báo bất thường/lừa đảo trên tài khoản cha mẹ (qua `detect_fraud` + vnSocial) đẩy **đồng thời** cho cả cha mẹ và guardian, real-time | — |
+| BR-FAM-08 | Giao dịch giá trị lớn của cha mẹ **vẫn** áp dụng BR-TRF-07 (eKYC khuôn mặt của **chính cha mẹ**); guardian không thể bỏ qua bước này | giữ §7.2 |
+| BR-FAM-09 | Liên kết phải có bản ghi **CONSENT** (`scope=family_link`) với `granted_at`, `status`; thu hồi cập nhật `status=revoked` | — |
+
 ---
 
 ## 8. Trạng thái & vòng đời
@@ -241,6 +261,7 @@ voicebank-inclusive/
 - **Sổ tiết kiệm:** `active → frozen` (chỉ sổ active) ; `frozen → active` (chỉ sổ frozen).
 - **Chuyển tiền giá trị cao:** `ready` (≤10tr) hoặc `pending_kyc` (>10tr, có `challenge_id`) → `pending_kyc → ready` (eKYC 2/2 đạt) → `ready → executed` (chạy **1 lần duy nhất**).
 - **Tài khoản bị khóa do sai PIN/OTP:** `normal → locked_15min` (sai >5 lần) → `locked_15min → normal` (tự mở sau 15 phút); voicebot chuyển tổng đài viên khi phát hiện khóa.
+- **Liên kết gia đình (FAMILY_LINK):** `pending` (người trẻ khởi xướng, chờ cha mẹ đồng ý) → `active` (cha mẹ đồng ý giọng nói + eKYC đạt — BR-FAM-01) → `revoked` (cha mẹ thu hồi — BR-FAM-04). Chỉ liên kết `active` mới đẩy thông báo/cảnh báo cho guardian.
 
 ---
 
@@ -252,7 +273,7 @@ voicebank-inclusive/
 { "type": "voice_config", "session_id": "...", "sample_rate": 24000 }
 { "type": "action_required", "step": { "kind": "pin|otp|confirm_action|display|face_recognition",
                                         "step_id": "...", "prompt": "...", "meta": {} } }
-{ "type": "ui_card", "card": { "kind": "balance|spending|forecast|goal|transfer_success|...", "data": {} } }
+{ "type": "ui_card", "card": { "kind": "balance|spending|forecast|goal|transfer_success|family_link|family_alert|parent_action_result", "data": {} } }
 ```
 **Client → Server:**
 - Binary frames: **PCM16 mono 16 kHz** (mic).
@@ -289,6 +310,7 @@ voicebank-inclusive/
 | Beneficiary/Contact | `GET/POST /beneficiaries`, `POST /beneficiaries/search`, `GET/POST/DELETE /contacts` |
 | Khác | `GET /branch/nearest`, `GET /vcb-pay/{wallet-balance,usage-guide}`, `POST /callback`, `GET /callbacks` |
 | **NEW** Insights | `GET /insights/spending`, `GET /insights/forecast`, `GET/POST /goals` |
+| **NEW** Family | `GET/POST /family/links`, `POST /family/links/{id}/consent`, `DELETE /family/links/{id}`, `GET /family/alerts`, `POST /family/alerts/{id}/ack` |
 
 ### 9.4 Thứ tự processor pipeline (tham chiếu — `bot_websocket.py`)
 `transport.input → action_result_listener → customer_context → text_input → STT → stt_normalizer → sentiment → pronoun → user_trace → ctx.user → ctx_pruner → transcript_window → LLM(Smartbot) → VN_sentence_aggregator* → tool_call_preamble → bot_trace → tts_normalizer → TTS → pre_notifier → transport.output → post_notifier → AudioRecorder → ctx.assistant`
@@ -308,6 +330,9 @@ CUSTOMER ||--o{ INSIGHT : owner_phone         # NEW
 CUSTOMER ||--o{ BENEFICIARY : phone
 CUSTOMER ||--o{ CONTACT : owner_phone
 CUSTOMER ||--o{ CONSENT : owner_phone         # NEW
+CUSTOMER ||--o{ FAMILY_LINK : guardian_phone   # NEW (người trẻ)
+CUSTOMER ||--o{ FAMILY_LINK : dependent_phone  # NEW (cha mẹ)
+FAMILY_LINK ||--o{ FAMILY_ALERT : link_id      # NEW
 BANK     ||--o{ TRANSACTION : source/dest
 SAVINGS_ACCOUNT }o--|| INTEREST_RATE : term_months
 ```
@@ -319,7 +344,9 @@ SAVINGS_ACCOUNT }o--|| INTEREST_RATE : term_months
 | **SAVINGS_ACCOUNT** | `id` (PK), `type` (flexible/goal), `principal` (int), `term_months`, `rate` (float), `maturity_date`, `status` (active/frozen), `auto_deposit` (obj) |
 | **GOAL** (NEW) | `id`, `owner_phone`, `name`, `target_amount`, `current_amount`, `auto_deposit`, `streak`, `created_at` |
 | **INSIGHT** (NEW) | `id`, `owner_phone`, `period`, `forecast_balance`, `alert_level`, `suggestions` (list) |
-| **CONSENT** (NEW) | `owner_phone`, `scope`, `granted_at`, `status` (phục vụ NĐ 13/2023) |
+| **CONSENT** (NEW) | `owner_phone`, `scope` (gồm `family_link`), `granted_at`, `status` (phục vụ NĐ 13/2023) |
+| **FAMILY_LINK** (NEW) | `id` (PK), `guardian_phone` (người trẻ), `dependent_phone` (cha mẹ), `status` (pending/active/revoked), `consent_id`, `alert_prefs` (obj), `show_balance` (bool, mặc định false — BR-FAM-05), `created_at` |
+| **FAMILY_ALERT** (NEW) | `id` (PK), `link_id`, `type` (fraud/abnormal/result), `severity`, `message`, `tx_ref`, `acked` (bool), `created_at` |
 | **BENEFICIARY** | `beneficiary_id` (PK), `phone`, `bank_code`, `account_number`, `name`, `nickname` |
 | **BANK** | `bank_code` (PK), `short_name`, `name`, `bin`, `pronunciation` |
 | **TICKET** | `id`, `phone_last4`, `summary` (AI), `issue`, `status`, `created_at` |
@@ -374,6 +401,8 @@ async def track(event: str, props: dict) -> None
 
 > **Quan trọng:** adapter `kyc.py` mock cũ chấp nhận mọi ảnh không rỗng — **chỉ dùng cho `FEATURE_DEMO`**. Production phải gọi eKYC thật.
 
+> **Lớp "An tâm Gia đình" KHÔNG cần adapter mới.** Tái dùng: `ekyc.verify_face` (cha mẹ đồng ý liên kết — BR-FAM-01; và giao dịch lớn — BR-FAM-08), `vnsocial.scam_trends`/`sentiment` + `prediction_service.detect_fraud` (cảnh báo gia đình — BR-FAM-07), `tts.synthesize`/`stt.stream_transcribe` (cha mẹ thao tác giọng nói), `smartux.track` (đo KPI lớp gia đình). Logic điều phối nằm ở `services/family_service.py`, không phải adapter.
+
 ---
 
 ## 12. Engine "Dự báo" & "Thấu hiểu" — `services/prediction_service.py`
@@ -405,6 +434,28 @@ def adjust_for_sentiment(reply: str, sentiment: float) -> str:
 
 **Privacy-by-design:** chỉ phân tích khi `CONSENT.status == granted`; tối thiểu hóa & ẩn danh; không log dữ liệu nhạy cảm.
 
+### 12.3 An tâm Gia đình — `services/family_service.py` (NEW)
+```python
+async def create_link(guardian_phone: str, dependent_phone: str) -> FamilyLink:
+    """Người trẻ khởi xướng. Tạo FAMILY_LINK status='pending' + đẩy yêu cầu đồng ý sang máy cha mẹ.
+       Kiểm tra trần BR-FAM-06 (≤4 guardian/dependent). KHÔNG kích hoạt cho tới khi có consent."""
+
+async def confirm_link(link_id: str, voice_ok: bool, face_b64: str) -> FamilyLink:
+    """Cha mẹ đồng ý: yêu cầu ĐỒNG THỜI voice_ok==True VÀ ekyc.verify_face đạt (liveness+match) — BR-FAM-01.
+       Ghi CONSENT(scope='family_link'). Đạt → status='active'; thiếu một điều kiện → giữ 'pending'."""
+
+async def revoke_link(link_id: str, by: str) -> FamilyLink:
+    """Cha mẹ thu hồi (BR-FAM-04). status='revoked'; cập nhật CONSENT.status='revoked'; ngừng mọi thông báo."""
+
+async def notify_guardians(dependent_phone: str, event: dict) -> None:
+    """BR-FAM-03: với mọi link 'active', đẩy ui_card{parent_action_result|family_alert} real-time về guardian.
+       KHÔNG kèm PIN/OTP/số dư đầy đủ trừ khi link.show_balance==True (BR-FAM-05)."""
+
+async def raise_family_alert(dependent_phone: str, risk: Risk) -> FamilyAlert:
+    """BR-FAM-07: từ detect_fraud + vnSocial → tạo FAMILY_ALERT, đẩy đồng thời cho cha mẹ & guardian."""
+```
+> **BẤT BIẾN:** `family_service` **không** expose bất kỳ hàm nào cho phép guardian thao tác tiền của dependent (BR-FAM-02). Mọi giao dịch vẫn do chính dependent thực hiện qua các flow/luồng chuẩn (với xác thực của dependent).
+
 ---
 
 ## 13. Luồng hội thoại (intents & flows)
@@ -418,6 +469,14 @@ Mỗi flow = `flows/<name>_flow.py` trả `dict` node, merge qua `flows/index.py
 - `cashflow_forecast_flow` — dự báo dòng tiền, cảnh báo cháy túi, `ui_card{kind:forecast}`.
 - `savings_goal_flow` — đặt mục tiêu bằng giọng nói, bật gửi góp tự động, `ui_card{kind:goal}`, gamification (streak/huy hiệu).
 - `fraud_alert_flow` — cảnh báo giao dịch bất thường / xu hướng lừa đảo.
+
+**Mới (An tâm Gia đình):**
+- `family_link_flow` — người trẻ nói "Liên kết tài khoản cho mẹ" → tạo link `pending` → đẩy yêu cầu sang máy cha mẹ → cha mẹ xác nhận **giọng nói + eKYC** → `active`, emit `ui_card{kind:family_link}` trên cả hai máy (BR-FAM-01).
+- `parent_assisted_flow` — **tái dùng** các luồng kế thừa của cha mẹ (`card_lock`, `card_swallowed`, `transaction`…) nhưng gắn cờ liên kết: hoàn tất → `notify_guardians()` đẩy `ui_card{kind:parent_action_result}` về người trẻ ("Mẹ vừa tự khóa thẻ thành công"). Giao dịch lớn vẫn theo BR-FAM-08.
+- `family_alert_flow` — engine phát hiện bất thường/lừa đảo trên tài khoản cha mẹ → `raise_family_alert()` → `ui_card{kind:family_alert}` real-time cho cả hai (BR-FAM-07).
+- `family_summary_flow` — người trẻ hỏi "Tháng này mẹ tiêu thế nào?" → tóm tắt **chỉ-đọc, giới hạn theo quyền riêng tư** (không lộ chi tiết nếu `show_balance==false` — BR-FAM-05).
+
+> **Lưu ý flow gia đình:** không có flow nào cho phép người trẻ *thực hiện* giao dịch trên tài khoản cha mẹ (BR-FAM-02). `family_link_flow` chỉ tạo/hủy liên kết; `family_alert_flow`/`family_summary_flow` chỉ đọc/thông báo.
 
 **Luồng chuẩn (ví dụ chuyển tiền >10tr):**
 ```
@@ -443,8 +502,9 @@ Hai view Next.js (kế thừa & nâng cấp từ POC). Có RBAC (xem §15).
 - **Hiệu quả:** tỷ lệ hoàn tất (containment), tỷ lệ chuyển nhân viên, thời gian xử lý TB, WER, độ trễ.
 - **Hài lòng & phản hồi:** CSAT (1–5), phân bố đánh giá, nghiệp vụ bị đánh giá thấp.
 - **Vận hành:** hàng đợi escalation, lý do chuyển, thời gian chờ (SLA), khối lượng theo giờ.
+- **An tâm Gia đình (NEW):** số liên kết kích hoạt, tỷ lệ cha mẹ tự hoàn tất giao dịch, số cảnh báo gia đình đã gửi/đã đọc, thời gian từ phát hiện bất thường → guardian nhận cảnh báo.
 
-Dữ liệu hành vi đẩy qua **VNPT SmartUX**. Escalation reasons: *khách yêu cầu, bot không hiểu, khóa thẻ khẩn cấp, khóa dịch vụ, chuyển tiền, mở tiết kiệm, tra số dư, tra lịch sử*.
+Dữ liệu hành vi đẩy qua **VNPT SmartUX**. Escalation reasons: *khách yêu cầu, bot không hiểu, khóa thẻ khẩn cấp, khóa dịch vụ, chuyển tiền, mở tiết kiệm, tra số dư, tra lịch sử, liên kết gia đình*.
 
 ---
 
@@ -455,6 +515,7 @@ Dữ liệu hành vi đẩy qua **VNPT SmartUX**. Escalation reasons: *khách y�
 3. **Tuân thủ:** **QĐ 2345/QĐ-NHNN** (sinh trắc giao dịch lớn — BR-TRF-07) & **NĐ 13/2023/NĐ-CP** (dữ liệu cá nhân — CONSENT). Không hiển thị PIN/OTP dạng rõ ở môi trường thật.
 4. **Demo-only nguy hiểm:** `/internal/auth/latest-otp`, `demo-reset`, `activate-all-*`, kyc mock — **chỉ bật khi `FEATURE_DEMO=true`**, mặc định tắt.
 5. **Chống lạm dụng:** rate-limit endpoint nhạy cảm; idempotency chuyển tiền; cưỡng chế thứ tự PIN→OTP.
+6. **Lớp gia đình (NĐ 13/2023 + QĐ 2345):** liên kết cần **consent hai phía** (BR-FAM-01), **quyền rút lại** bất kỳ lúc nào (BR-FAM-04), **tối thiểu hóa dữ liệu** chia sẻ với guardian (chỉ cảnh báo/trạng thái, mặc định ẩn số dư — BR-FAM-05). Guardian **không có quyền giao dịch** (BR-FAM-02); giao dịch lớn của cha mẹ vẫn cần sinh trắc của chính cha mẹ (BR-FAM-08). Ghi **audit log** cho mọi thao tác tạo/hủy liên kết.
 
 ---
 
@@ -472,6 +533,7 @@ Dữ liệu hành vi đẩy qua **VNPT SmartUX**. Escalation reasons: *khách y�
 | Audio/VAD | `WEB_AUDIO_OUT_SAMPLE_RATE=24000`, `WEB_AUDIO_OUT_CHUNK_MS=40`, `WEB_VAD_*`, `WEB_ALLOW_INTERRUPTIONS` | Audio |
 | Idle/Agent | `IDLE_TIMEOUT_SECS=20`, `MAX_IDLE_REPROMPTS=2`, `AGENT_AVAILABLE_START=8`, `AGENT_AVAILABLE_END=22` | Hành vi cuộc gọi |
 | Nghiệp vụ | `TRANSFER_KYC_THRESHOLD=10000000`, `TRANSFER_DAILY_KYC_THRESHOLD=20000000`, `MAX_AUTH_ATTEMPTS=5`, `LOCK_MINUTES=15`, `OTP_TTL_MINUTES=5` | Hằng số (khớp §7) |
+| Gia đình | `FAMILY_MAX_GUARDIANS=4`, `FAMILY_MAX_DEPENDENTS=4`, `FAMILY_SHOW_BALANCE_DEFAULT=false` | Hằng số lớp gia đình (khớp §7.5) |
 | DB | `DB_SOURCE=json|postgres`, `DATABASE_URL`, `POSTGRES_*` | Persistence |
 | S3 | `S3_ENDPOINT`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`, `S3_BUCKET`, `S3_REGION`, `MINIO_SERVER` | Ghi âm |
 | Logging | `LOG_LEVEL`, `LOG_TO_FILE`, `LOG_DIR` | loguru (có redaction) |
@@ -526,8 +588,11 @@ DURATION_S=30 bash voice2text/tests/run_smoke_verification.sh   # probe verifica
 **Phase 5 — Engine Dự báo & luồng Gen Z.** `prediction_service.py` (categorize/forecast/nudges/fraud/personalize/sentiment) + `spending_insight/cashflow_forecast/savings_goal/fraud_alert` flows + `ui_card`.
 *Nghiệm thu:* hỏi "tháng này tiêu gì nhiều nhất?" trả insight + card; cảnh báo cháy túi hoạt động; mục tiêu tiết kiệm + gửi góp tự động (BR-SAV-02).
 
-**Phase 6 — Frontend.** `/user` (voice + thẻ trực quan động + popup xác thực, dark mode, nhận diện VCB) ; `/user-management` (dashboard hiệu suất + escalation) ; `/admin` (CRUD + analytics + log). `lib/voiceCall.ts` (PCM16 duplex, barge-in, action_result).
-*Nghiệm thu:* gọi voicebot từ browser hoạt động; dashboard hiển thị KPI từ `/analytics/summary`; escalation tiếp nhận/hoàn tất được.
+**Phase 5.5 — Lớp "An tâm Gia đình".** `services/family_service.py` (create/confirm/revoke link, notify_guardians, raise_family_alert) + mockapi `family` domain (§9.3) + FAMILY_LINK/FAMILY_ALERT (§10) + flows `family_link/parent_assisted/family_alert/family_summary` + `ui_card{family_link|family_alert|parent_action_result}` + unit test cho **mọi BR-FAM (§7.5)**.
+*Nghiệm thu:* liên kết chỉ kích hoạt khi cha mẹ đồng ý **giọng nói + eKYC** (BR-FAM-01); cha mẹ khóa thẻ bằng giọng nói → guardian nhận `parent_action_result` real-time; cảnh báo bất thường tài khoản cha mẹ đẩy đồng thời 2 phía (BR-FAM-07); **không có** đường nào để guardian giao dịch tiền cha mẹ (BR-FAM-02); cha mẹ thu hồi liên kết được (BR-FAM-04).
+
+**Phase 6 — Frontend.** `/user` (voice + thẻ trực quan động + popup xác thực, dark mode, nhận diện VCB, **thẻ family_link/family_alert + màn hình quản lý liên kết gia đình**) ; `/user-management` (dashboard hiệu suất + escalation + **chỉ số lớp gia đình**) ; `/admin` (CRUD + analytics + log). `lib/voiceCall.ts` (PCM16 duplex, barge-in, action_result).
+*Nghiệm thu:* gọi voicebot từ browser hoạt động; dashboard hiển thị KPI từ `/analytics/summary`; escalation tiếp nhận/hoàn tất được; thẻ cảnh báo gia đình hiển thị real-time trên máy người trẻ.
 
 **Phase 7 — Bảo mật & tuân thủ.** RBAC/SSO, PII masking, audit log, `FEATURE_DEMO` gating, rate-limit, alignment QĐ2345/NĐ13, CONSENT.
 *Nghiệm thu:* route quản trị chặn khi thiếu quyền; demo endpoints tắt khi `FEATURE_DEMO=false`; log không lộ PIN/OTP/số điện thoại đầy đủ.
@@ -540,6 +605,7 @@ DURATION_S=30 bash voice2text/tests/run_smoke_verification.sh   # probe verifica
 ## 19. Definition of Done & checklist chất lượng
 
 - [ ] Mọi giá trị §7 implement đúng và **có unit test**.
+- [ ] **Mọi quy tắc BR-FAM (§7.5) có unit test**; nguyên tắc một trục được kiểm chứng (guardian không thể giao dịch tiền cha mẹ — BR-FAM-02).
 - [ ] AI chỉ dùng **adapter VNPT** (không gọi provider trực tiếp trong flow).
 - [ ] Không có secret trong code; mọi cấu hình qua `.env`.
 - [ ] Số dư/giao dịch là **int VND**; không float.
@@ -548,6 +614,7 @@ DURATION_S=30 bash voice2text/tests/run_smoke_verification.sh   # probe verifica
 - [ ] `execute_pending()` idempotent; thứ tự PIN→OTP→(eKYC) cưỡng chế.
 - [ ] Chuyển tiền >10tr/ >20tr-ngày bắt buộc eKYC (QĐ 2345).
 - [ ] Mỗi câu trả lời thoại quan trọng kèm `ui_card` cho lớp trực quan.
+- [ ] **Lớp gia đình:** liên kết cần consent hai phía (giọng nói + eKYC); cha mẹ thu hồi được; guardian chỉ nhận cảnh báo/kết quả, không có quyền giao dịch; cảnh báo gia đình đẩy real-time 2 phía.
 - [ ] Dashboard hiệu suất lấy số liệu thật từ `/analytics/summary` & `/escalations`.
 - [ ] Repo cài đặt 1 lệnh; CI xanh; demo chạy ≥ 3 lần không lỗi.
 - [ ] Mọi tham chiếu "SHB" cũ đã đổi thành "VCB".

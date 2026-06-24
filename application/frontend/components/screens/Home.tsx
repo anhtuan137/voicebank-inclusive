@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Robot } from "../primitives";
 import { Icon } from "../Icon";
 import { user, favorites, vnd } from "@/lib/mock";
+import { useLiveData } from "@/lib/LiveData";
 import type { Screen } from "@/lib/types";
 
 const QUICK: { label: string; to: Screen; icon: keyof typeof Icon }[] = [
@@ -13,11 +14,17 @@ const QUICK: { label: string; to: Screen; icon: keyof typeof Icon }[] = [
   { label: "Mở tiết kiệm",      to: "savings",   icon: "piggy"     },
 ];
 
-export function Home({ go }: { go: (s: Screen) => void }) {
+export function Home({ go, onTransfer }: { go: (s: Screen) => void; onTransfer?: () => void }) {
+  const transfer = () => { setOpen(false); return onTransfer ? onTransfer() : go("transfer"); };
   const [open, setOpen]               = useState(false);
   const [atTop, setAtTop]             = useState(true);
   const [balanceVisible, setBalance]  = useState(false);
   const [copied, setCopied]           = useState(false);
+
+  // Số dư & số tài khoản lấy "trực tiếp" từ mockapi khi nối được; offline → mock.
+  const { profile, connected } = useLiveData();
+  const balance = profile?.account_balance ?? user.balance;
+  const account = profile?.account_number ?? user.account;
 
   useEffect(() => {
     const el = document.querySelector(".screen") as HTMLElement | null;
@@ -28,7 +35,7 @@ export function Home({ go }: { go: (s: Screen) => void }) {
   }, []);
 
   const copyAccount = () => {
-    navigator.clipboard.writeText(user.account).then(() => {
+    navigator.clipboard.writeText(account).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     });
@@ -98,7 +105,7 @@ export function Home({ go }: { go: (s: Screen) => void }) {
         {/* Row 2 — account number */}
         <div className="acct-field">
           <span className="acct-lbl">Số tài khoản</span>
-          <span className="acct-val">{user.account}</span>
+          <span className="acct-val">{account}</span>
           <button
             className={`acct-icn${copied ? " ok" : ""}`}
             onClick={copyAccount}
@@ -111,9 +118,21 @@ export function Home({ go }: { go: (s: Screen) => void }) {
 
         {/* Row 3 — balance */}
         <div className="acct-field">
-          <span className="acct-lbl">Số dư</span>
+          <span className="acct-lbl">
+            Số dư
+            {connected && (
+              <span title="Số dư trực tiếp từ Mock Bank Core" style={{
+                marginLeft: 6, display: "inline-flex", alignItems: "center", gap: 3,
+                fontSize: 9.5, fontWeight: 700, color: "var(--g700)",
+                background: "var(--g100)", padding: "1px 6px", borderRadius: 99,
+              }}>
+                <span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--g600)" }} />
+                Trực tiếp
+              </span>
+            )}
+          </span>
           <span className={`acct-val${balanceVisible ? "" : " acct-bal-hidden"}`}>
-            {balanceVisible ? vnd(user.balance) : "*********"}
+            {balanceVisible ? vnd(balance) : "*********"}
           </span>
           <button
             className="acct-icn"
@@ -160,7 +179,7 @@ export function Home({ go }: { go: (s: Screen) => void }) {
                 <button key={f.label} className="fav-item"
                   onClick={() => {
                     if (f.label === "Mở tiết kiệm") go("savings");
-                    else if (f.label.includes("Chuyển")) go("transfer");
+                    else if (f.label.includes("Chuyển")) transfer();
                     else if (f.label.includes("Gia đình")) go("family");
                     else if (f.label.includes("xem phim") || f.label.includes("điện thoại")) go("billpay");
                   }}
@@ -237,7 +256,7 @@ export function Home({ go }: { go: (s: Screen) => void }) {
               {QUICK.map((q) => {
                 const I = Icon[q.icon];
                 return (
-                  <button key={q.label} className="widget-chip" onClick={() => go(q.to)}>
+                  <button key={q.label} className="widget-chip" onClick={() => (q.to === "transfer" ? transfer() : go(q.to))}>
                     <I size={14} /> {q.label}
                   </button>
                 );

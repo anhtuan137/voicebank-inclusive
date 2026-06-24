@@ -1,0 +1,29 @@
+{
+  "_comment": "Biểu lãi suất & sổ tiết kiệm seed (§7.3, §10). rate = %/năm. Lãi đơn: gốc × (rate/100) × (term/12) — BR-SAV-04.",
+  "interest_rates": [
+    { "term_months": 1, "rate": 4.75 },
+    { "term_months": 2, "rate": 4.75 },
+    { "term_months": 3, "rate": 5.1 },
+    { "term_months": 6, "rate": 6.2 },
+    { "term_months": 9, "rate": 6.5 },
+    { "term_months": 12, "rate": 7.4 },
+    { "term_months": 18, "rate": 7.8 },
+    { "term_months": 24, "rate": 8.0 },
+    { "term_months": 36, "rate": 8.3 }
+  ],
+  "savings_accounts": [
+    {
+      "id": "s1",
+      "owner_phone": "0790123456",
+      "type": "flexible",
+      "principal": 10000000,
+      "term_months": 6,
+      "rate": 6.2,
+      "open_date": "2026-03-01",
+      "maturity_date": "2026-09-01",
+      "maturity_option": "principal_interest_to_checking",
+      "status": "active",
+      "auto_deposit": null
+    }
+  ]
+}

@@ -1,0 +1,488 @@
+/* ============================================================
+   Admin Console (/admin) — Phase 6
+   Port React của legacy-dashboard. Mọi class scope dưới .admin-console
+   để không đụng design system của giao diện khách hàng (globals.css).
+   Tái dùng token màu --g*, --ink, --muted, --line… từ globals.css.
+   ============================================================ */
+
+.admin-console {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.admin-console .sidebar {
+  background: linear-gradient(180deg, var(--g800), var(--g900));
+  color: #eafbf1;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  overflow-y: auto;
+}
+.admin-console .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.admin-console .brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: var(--g800);
+  flex-shrink: 0;
+}
+.admin-console .brand-title {
+  font-weight: 850;
+  font-size: 15px;
+}
+.admin-console .brand-sub {
+  font-size: 12px;
+  opacity: 0.75;
+}
+.admin-console .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.admin-console .nav button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  border-radius: 11px;
+  color: #d6f0e0;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.15s;
+}
+.admin-console .nav button svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.9;
+  flex-shrink: 0;
+}
+.admin-console .nav button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.admin-console .nav button.active {
+  background: #fff;
+  color: var(--g800);
+}
+.admin-console .user-card {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.admin-console .avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--g500);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ── Main ── */
+.admin-console .main {
+  overflow-y: auto;
+  padding: 22px 26px 40px;
+}
+.admin-console .topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.admin-console .topbar h1 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 850;
+}
+.admin-console .topbar p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.admin-console .tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-console .control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.admin-console .control input {
+  border: none;
+  outline: none;
+  font: inherit;
+  background: transparent;
+  min-width: 190px;
+}
+
+/* ── Cards / grid ── */
+.admin-console .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+}
+.admin-console .card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.admin-console .card h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+}
+.admin-console .grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.admin-console .family-layout {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 1100px) {
+  .admin-console .grid4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-console .family-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── KPI ── */
+.admin-console .kpi {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.admin-console .kpi-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-console .kpi-value {
+  font-size: 26px;
+  font-weight: 900;
+  margin: 6px 0 4px;
+  letter-spacing: -0.5px;
+}
+.admin-console .delta {
+  font-size: 12px;
+  color: var(--muted);
+}
+.admin-console .delta.up b {
+  color: var(--g600);
+}
+.admin-console .delta.down b {
+  color: var(--red);
+}
+.admin-console .kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--g050);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.admin-console .kpi-icon.warning {
+  background: #fff4e0;
+}
+.admin-console .kpi-icon.danger {
+  background: #ffe9e7;
+}
+
+/* ── Badges ── */
+.admin-console .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.admin-console .badge.green { background: #e7f7e6; color: #0a7b42; }
+.admin-console .badge.orange { background: #fff2dd; color: #b76a00; }
+.admin-console .badge.red { background: #ffe7e5; color: #d33232; }
+.admin-console .badge.blue { background: #e8f1ff; color: #2868d9; }
+.admin-console .badge.gray { background: #f0f2f1; color: #606d66; }
+.admin-console .badge.purple { background: #f1e9ff; color: #7c3aed; }
+
+/* ── Chips (filter) ── */
+.admin-console .filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.admin-console .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink2);
+}
+.admin-console .chip b {
+  color: var(--muted);
+}
+.admin-console .chip.active {
+  background: #edfaec;
+  border-color: #bee5b5;
+  color: var(--g800);
+}
+.admin-console .chip.active b {
+  color: var(--g700);
+}
+
+/* ── Table ── */
+.admin-console .table-wrap {
+  overflow-x: auto;
+}
+.admin-console table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.admin-console thead th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-console tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.admin-console tbody td small {
+  color: var(--muted);
+}
+.admin-console tbody tr {
+  cursor: pointer;
+}
+.admin-console tbody tr:hover {
+  background: var(--g050);
+}
+.admin-console tbody tr.selected {
+  background: #edfaec;
+}
+.admin-console td.empty,
+.admin-console .empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 26px;
+}
+.admin-console .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* ── Detail panel ── */
+.admin-console .small-panel {
+  background: var(--g050);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 14px;
+  font-size: 13.5px;
+}
+.admin-console .small-panel p {
+  margin: 8px 0 0;
+  color: var(--ink2);
+}
+.admin-console .info-grid {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  overflow: hidden;
+}
+.admin-console .info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--card);
+  padding: 11px 13px;
+  font-size: 13.5px;
+}
+.admin-console .info-row > span {
+  color: var(--muted);
+}
+.admin-console .info-row > b {
+  text-align: right;
+}
+.admin-console .access-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 12px 14px;
+}
+.admin-console .access-item small {
+  color: var(--muted);
+}
+
+/* ── Toggle ── */
+.admin-console .toggle {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: #cfd8d2;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.admin-console .toggle.on {
+  background: var(--g500);
+}
+.admin-console .toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.admin-console .toggle .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.admin-console .toggle.on .knob {
+  transform: translateX(18px);
+}
+
+/* ── Buttons ── */
+.admin-console .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.admin-console .btn {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 11px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.admin-console .btn:hover {
+  background: var(--g050);
+}
+.admin-console .btn.primary {
+  background: var(--g700);
+  border-color: var(--g700);
+  color: #fff;
+}
+.admin-console .btn.primary:hover {
+  background: var(--g800);
+}
+.admin-console .btn.red {
+  background: #fff;
+  border-color: #f3c9c6;
+  color: var(--red);
+}
+.admin-console .btn.red:hover {
+  background: #fff2f1;
+}
+
+/* ── Placeholder (tab chưa port) ── */
+.admin-console .placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 60vh;
+  color: var(--muted);
+  text-align: center;
+}
+.admin-console .placeholder .big {
+  font-size: 44px;
+}
+
+/* ── Toast ── */
+.admin-console .toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--g900);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 50;
+}
+.admin-console .toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
