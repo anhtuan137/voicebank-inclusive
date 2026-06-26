@@ -3,9 +3,9 @@ và các endpoint DEMO (demo-reset, activate-all) — §9.3."""
 from __future__ import annotations
 
 import random
-from datetime import datetime
+from datetime import date, datetime
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from mockapi import rules
@@ -50,6 +50,46 @@ def wallet_balance(phone: str) -> dict:
 @router.get("/vcb-pay/usage-guide")
 def usage_guide() -> dict:
     return {"guide": "VCB Pay: ví điện tử tích hợp — thanh toán QR, nạp tiền điện thoại, mua vé. Số dư ví tách biệt với tài khoản thanh toán."}
+
+
+# ── Thanh toán hoá đơn (vcb_pay) — trừ tài khoản & ghi giao dịch ───────────────
+class BillPaymentBody(BaseModel):
+    phone: str
+    service: str            # "Điện" | "Nước" | "Internet" | "Học phí"…
+    biller: str = ""        # tên nhà cung cấp (EVN, SAWACO…)
+    bill_code: str = ""
+    amount: int
+
+
+@router.post("/vcb-pay/bill-payment")
+def bill_payment(body: BillPaymentBody) -> dict:
+    c = customer_or_404(body.phone)
+    if body.amount <= 0:
+        raise HTTPException(status_code=400, detail={"code": "BAD_AMOUNT", "message": "Số tiền không hợp lệ."})
+    if c["card_status"] == "locked":
+        raise HTTPException(status_code=400, detail={"code": "CARD_LOCKED", "message": "Thẻ đang bị khoá."})
+    if body.amount > c["account_balance"]:
+        raise HTTPException(status_code=400, detail={"code": "INSUFFICIENT_BALANCE", "message": "Số dư không đủ."})
+
+    c["account_balance"] -= body.amount
+    desc = f"Thanh toan {body.service}".strip()
+    if body.biller:
+        desc = f"{desc} - {body.biller}"
+    txn = store.add_transaction({
+        "card_last4": c["card_last4"],
+        "date": date.today().isoformat(),
+        "amount": -body.amount,
+        "desc": desc,
+        "transaction_type": "bill_payment",
+        "category": "Hoá đơn",
+        "bill_code": body.bill_code,
+    })
+    return {
+        "status": "paid",
+        "transaction_id": txn["id"],
+        "amount": body.amount,
+        "balance": c["account_balance"],
+    }
 
 
 # ── Callback / tổng đài viên (BR-AGT-01/02) ───────────────────────────────────

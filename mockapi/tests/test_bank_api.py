@@ -127,6 +127,23 @@ def test_savings_freeze_only_active():
     assert client.post("/savings/unfreeze", json={"id": "s1"}).json()["status"] == "active"
 
 
+# ── Bill payment (vcb_pay) ─────────────────────────────────────────────────────
+def test_bill_payment_debits_and_records_txn():
+    r = client.post("/vcb-pay/bill-payment", json={
+        "phone": PHONE, "service": "Điện", "biller": "EVN", "bill_code": "PE-EVN-01", "amount": 350_000,
+    }).json()
+    assert r["status"] == "paid"
+    assert r["balance"] == BALANCE - 350_000
+    txns = client.get("/transactions", params={"phone": PHONE}).json()["transactions"]
+    assert txns[0]["transaction_type"] == "bill_payment" and txns[0]["amount"] == -350_000
+
+
+def test_bill_payment_rejects_overdraft():
+    assert client.post("/vcb-pay/bill-payment", json={
+        "phone": PHONE, "service": "Điện", "amount": BALANCE + 1,
+    }).status_code == 400
+
+
 # ── Misc / Agent ──────────────────────────────────────────────────────────────
 def test_callback_creates_record():
     r = client.post("/callback", json={"phone": PHONE, "time": "14:00"}).json()

@@ -120,4 +120,22 @@ export const bankApi = {
   // Card / service
   cardLock: (phone = DEMO_PHONE) => post<{ card_status: string }>("/card/lock", { phone }),
   cardUnlock: (phone = DEMO_PHONE) => post<{ card_status: string }>("/card/unlock", { phone }),
+  serviceLock: (service: string, phone = DEMO_PHONE) =>
+    post<{ service: string; active: boolean }>("/service/lock", { phone, service }),
+
+  // Thanh toán hoá đơn (vcb_pay) — trừ tài khoản & ghi giao dịch
+  billPay: (b: { service: string; biller?: string; bill_code?: string; amount: number; phone?: string }) =>
+    post<{ status: "paid"; transaction_id: string; amount: number; balance: number }>(
+      "/vcb-pay/bill-payment", { phone: DEMO_PHONE, biller: "", bill_code: "", ...b },
+    ),
 };
+
+/** Map nhãn dịch vụ ở FE → tên dịch vụ backend (BR-SVC-01 chỉ có SMS/Internet Banking).
+ *  Trả null nếu không khớp (vd "Rút tiền ATM") → caller bỏ qua sync, giữ trải nghiệm local. */
+export function backendServiceName(label: string): string | null {
+  const l = label.toLowerCase();
+  if (l.includes("sms")) return "SMS Banking";
+  if (l.includes("ngân hàng điện tử") || l.includes("internet") || l.includes("thanh toán online"))
+    return "Internet Banking";
+  return null;
+}

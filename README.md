@@ -13,12 +13,12 @@ vnFace, SmartReader, vnSocial, SmartUX).
 | Phase | Nội dung | Trạng thái |
 |---|---|---|
 | **0** | Scaffold: cấu trúc repo, Docker Compose, `.env.example`, Makefile, CI, health endpoints | ✅ Done |
-| 1 | Mock Bank Core (`mockapi`) + quy tắc §7 | ✅ Done (39 route §9.3 + §7 + 40 unit test) |
+| 1 | Mock Bank Core (`mockapi`) + quy tắc §7 | ✅ Done (40 route §9.3 + §7 + 42 unit test) |
 | 2 | Orchestrator skeleton + WebSocket + verification | ⏳ |
 | 3 | Adapter VNPT + audio profiles | ⏳ |
 | 4 | FlowManager + 11 luồng lõi | ⏳ |
 | 5 | Engine Dự báo & luồng Gen Z | ⏳ |
-| 6 | Frontend Next.js (`/user`, `/user-management`, `/admin`) | ⏳ |
+| 6 | Frontend Next.js (`/user`, `/user-management`, `/admin`) | 🟢 Gần xong (flow `/user` nối mockapi · `/admin` 6 tab · `/user-management`; còn voice call thật — chặn bởi Phase 2/3) |
 | 7 | Bảo mật & tuân thủ (RBAC, PII, QĐ2345/NĐ13) | ⏳ |
 | 8 | Test, WER, CI/CD, deploy | ⏳ |
 

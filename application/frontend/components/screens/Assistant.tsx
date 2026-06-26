@@ -29,7 +29,7 @@ import {
   user, transactions,
   familyMembers, familyAlerts, type FamilyStatus,
 } from "@/lib/mock";
-import { recordUserAction, bankApi } from "@/lib/api";
+import { recordUserAction, bankApi, backendServiceName } from "@/lib/api";
 import { useLiveData } from "@/lib/LiveData";
 import type { Screen } from "@/lib/types";
 
@@ -50,6 +50,8 @@ interface SecureOp {
   authCap: string;        // câu dẫn trên thẻ quét mặt
   doneTitle: string;      // vd "Đã khoá thẻ"
   doneSub: string;
+  kind?: "card" | "service";  // để biết gọi backend nào khi hoàn tất
+  serviceLabel?: string;      // nhãn dịch vụ FE (cho service_lock)
 }
 // Phiếu hỗ trợ (card_swallowed / callback / transfer→tổng đài).
 interface Ticket {
@@ -99,6 +101,7 @@ interface Msg {
 interface Draft {
   recipient?: string; bank?: string; account?: string; amount?: number; note?: string;
   term?: number;
+  bill?: { service: string; provider: string; code: string };
   receipt?: Receipt;
   goalName?: string; goalTarget?: number; goalAuto?: number;
   secure?: SecureOp;
@@ -293,6 +296,7 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
       authCap: "Để đảm bảo chính bạn yêu cầu, vui lòng xác thực khuôn mặt.",
       doneTitle: "Đã khoá thẻ",
       doneSub: `${CARD_LABEL} đã được tạm khoá. Bạn có thể mở lại bất cứ lúc nào.`,
+      kind: "card",
     });
   }
   // service_lock: hỏi dịch vụ muốn khoá trước.
@@ -509,6 +513,7 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
       const b = findBiller(text);
       if (!b) { pushAn("Tôi chưa rõ hoá đơn bạn cần. Bạn chọn: Điện, Nước, Internet hoặc Học phí nhé."); return; }
       d.amount = b.amount;
+      d.bill = { service: b.category, provider: b.provider, code: b.code };
       openConfirm({
         opName: "Thanh toán hoá đơn",
         amount: b.amount,
@@ -563,6 +568,8 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
         authCap: "Vui lòng xác thực khuôn mặt để khoá dịch vụ.",
         doneTitle: "Đã khoá dịch vụ",
         doneSub: `Dịch vụ "${svc}" đã được tạm khoá. Bạn có thể mở lại bất cứ lúc nào.`,
+        kind: "service",
+        serviceLabel: svc,
       });
       return;
     }
@@ -712,6 +719,8 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
     recordUserAction({ op: r.opName, amount: r.amount, detail: r.subtitle });
     // Phase 6: ghi thật vào Mock Bank Core để áp dụng §7 (số dư trừ thật, eKYC>10tr…).
     if (r.opName === "Chuyển tiền") void syncTransferToBackend(d);
+    else if (r.opName === "Mở sổ tiết kiệm") void syncSavingsToBackend(d);
+    else if (r.opName === "Thanh toán hoá đơn") void syncBillpayToBackend(d);
   }
 
   // Chuyển tiền thật qua mockapi: verify → (eKYC nếu >10tr) → execute → làm mới số dư.
@@ -731,6 +740,31 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
       refresh();  // số dư trên Trang chủ cập nhật theo giao dịch vừa thực hiện
     } catch {
       /* backend chưa sẵn sàng → demo vẫn chạy bằng dữ liệu local */
+    }
+  }
+
+  // Mở sổ tiết kiệm thật: trừ gốc ngay (BR-SAV-06) + ghi sổ → làm mới số dư.
+  async function syncSavingsToBackend(d: Draft) {
+    try {
+      await bankApi.savingsOpen({ amount: d.amount!, term_months: d.term ?? 6 });
+      refresh();
+    } catch {
+      /* offline → giữ trải nghiệm local */
+    }
+  }
+
+  // Thanh toán hoá đơn thật: trừ tài khoản + ghi giao dịch → làm mới số dư & lịch sử.
+  async function syncBillpayToBackend(d: Draft) {
+    try {
+      await bankApi.billPay({
+        service: d.bill?.service ?? "Hoá đơn",
+        biller: d.bill?.provider,
+        bill_code: d.bill?.code,
+        amount: d.amount!,
+      });
+      refresh();
+    } catch {
+      /* offline → giữ trải nghiệm local */
     }
   }
   // Mục tiêu tiết kiệm: lập mục tiêu là thiết lập gửi góp (không phải giao dịch giá
@@ -765,6 +799,7 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
     pushAn(undefined, { kind: "lockDone" });
     pushAn("Đã khoá thẻ khẩn cấp. Bạn cần tôi giúp gì thêm không?");
     recordUserAction({ op: "Khoá thẻ khẩn cấp (gian lận)", kind: "fraud", status: "Đã khoá", detail: `${CARD_LABEL} · do giao dịch nghi gian lận` });
+    void (async () => { try { await bankApi.cardLock(); refresh(); } catch { /* offline */ } })();
   }
 
   // —— Thao tác bảo mật chung (card_lock / service_lock): xác nhận → quét mặt → xong ——
@@ -785,6 +820,20 @@ export function Assistant({ go, rate, launch, onLaunchHandled }: {
     pushAn(undefined, { kind: "secureDone", op });
     pushAn("Bạn cần tôi giúp gì thêm không?");
     recordUserAction({ op: op.doneTitle, kind: "support", status: "Đã khoá", detail: op.doneSub });
+    void syncSecureToBackend(op);
+  }
+
+  // Khoá thẻ / khoá dịch vụ thật qua mockapi → trạng thái thẻ trên Trang chủ đổi theo.
+  async function syncSecureToBackend(op: SecureOp) {
+    try {
+      if (op.kind === "card") { await bankApi.cardLock(); refresh(); return; }
+      if (op.kind === "service" && op.serviceLabel) {
+        const name = backendServiceName(op.serviceLabel);
+        if (name) { await bankApi.serviceLock(name); refresh(); }
+      }
+    } catch {
+      /* offline → giữ trải nghiệm local */
+    }
   }
   // —— Đổi/tạo mã PIN: màn xác nhận thông tin (bước 4) → SMS OTP (bước 5) ——
   function pinInfo(): PinInfo {

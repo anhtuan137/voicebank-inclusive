@@ -120,7 +120,7 @@ mở `https://<IP-máy>:18891/user`, bỏ qua cảnh báo cert. Đổi WiFi/IP �
 
 ## 7. Trạng thái hiện tại (cập nhật mỗi phiên)
 
-> Cập nhật lần cuối: **2026-06-24**
+> Cập nhật lần cuối: **2026-06-26**
 
 | Phase | Nội dung | Trạng thái |
 |---|---|---|
@@ -130,7 +130,7 @@ mở `https://<IP-máy>:18891/user`, bỏ qua cảnh báo cert. Đổi WiFi/IP �
 | 3 | Adapter VNPT + audio profiles | ⏳ |
 | 4 | FlowManager + 11 luồng lõi | ⏳ |
 | 5 | Engine Dự báo & luồng Gen Z | ⏳ (backend chưa; **4 flow Gen Z đã hội thoại hoá ở FE** — spending/forecast/savings_goal/fraud trong chat Trợ lý An) |
-| 6 | Frontend Next.js | 🔵 **Đang làm** — `/user` shell + 13 screen đã có (Home, Assistant, BillPay PIN→OTP→eKYC, Family, Forecast, Transfer, Savings, Goal, Fraud, Bills, History, Support, Accessibility). `/admin` & `/user-management` chưa port từ legacy-dashboard. |
+| 6 | Frontend Next.js | 🟢 **Gần xong** — `/user` shell + 13 screen (các flow chính **đã nối mockapi**: chuyển tiền, tiết kiệm, hoá đơn, khoá thẻ/dịch vụ); `/admin` **6 tab React** (Tổng quan/Giám sát/Gia đình/Ticket/Báo cáo/Cài đặt) đọc `/api/v1/dashboard/*`; `/user-management` (hiệu suất + escalation + chỉ số gia đình). Còn lại **D. voice call thật** (`lib/voiceCall.ts`) — **chặn** vì cần Phase 2/3 (WS `/ws/bot`). |
 | 7 | Bảo mật & tuân thủ | ⏳ |
 | 8 | Test, WER, CI/CD, deploy | ⏳ |
 
@@ -146,10 +146,31 @@ số dư). Các luồng khác (tiết kiệm/hoá đơn/khoá thẻ…) vẫn lo
 **Lưu ý dual-backend:** store chỉ seed Postgres `bank_customers` khi bảng RỖNG → đổi
 `db/database.json` xong phải `DELETE FROM bank_customers` (hoặc chạy lại `db/seed.py`) để nạp lại.
 
-**Việc tiếp theo gợi ý:** nối nốt savings/billpay/card vào mockapi (cùng pattern `onAuthed`),
-hoặc Phase 2 (WebSocket `/ws/bot` ở voice2text), hoặc port legacy-dashboard sang `/admin`.
+**Việc tiếp theo gợi ý:** Phase 2 (WebSocket `/ws/bot` ở voice2text) — mở khoá mảng D Phase 6
+(`lib/voiceCall.ts` voicebot thật từ browser, hiện đang chặn). Hoặc Phase 3 (adapter VNPT).
 
 ## 8. Nhật ký phiên (mới nhất ở trên)
+
+- **2026-06-26** — **Làm nốt Phase 6 (mảng A+B+C; D bị chặn).** (A) Nối nốt các flow `/user` vào
+  mockapi theo pattern `syncTransferToBackend`: **tiết kiệm** (`syncSavingsToBackend`→`/savings/open`,
+  BR-SAV-06 trừ gốc), **hoá đơn** (`syncBillpayToBackend`→endpoint MỚI `POST /vcb-pay/bill-payment`
+  trừ tài khoản + ghi giao dịch `bill_payment`), **khoá thẻ/dịch vụ** (`syncSecureToBackend`→
+  `/card/lock` | `/service/lock`; thêm `kind` vào `SecureOp` + `backendServiceName()` map nhãn FE→
+  "SMS/Internet Banking", nhãn ngoài map (vd "Rút tiền ATM") bỏ qua sync), khoá thẻ do gian lận
+  (`onFraudLocked`→`/card/lock`). `bankApi` thêm `serviceLock/billPay`. (B) **`/admin` port đủ 6
+  tab React** (trước chỉ có Family): `OverviewAdmin/MonitorAdmin/TicketsAdmin/ReportsAdmin/
+  SettingsAdmin` đọc `lib/dashboardApi.ts` (client mới gõ kiểu, fetch `/api/v1/dashboard/*`, offline→
+  thẻ "mất kết nối"); Ticket tiếp nhận/hoàn tất qua PATCH (fallback cục bộ nếu json), Settings toggle
+  bảo mật. Helper chung `app/admin/parts.tsx` (`useAsync/KpiGrid/OfflineCard`); gỡ Placeholder; CSS
+  thêm bars/insight/transcript. (C) **`/user-management` mới** (tái dùng admin.css): hiệu suất KPI +
+  hàng đợi escalation (tiếp nhận→handling→done, state cục bộ) + chỉ số "An tâm Gia đình" + cảnh báo.
+  Backend: `mockapi/routers/misc.py` +endpoint bill-payment (+import `date`,`HTTPException`); 2 test
+  mới (`test_bill_payment_*`). **D (voice call thật) CHƯA làm — chặn bởi Phase 2/3** (chưa có WS).
+  **Verify:** FE typecheck + `next build` pass (3 route /user /admin /user-management), backend **42
+  test pass**, ruff sạch; smoke live: bill-payment trừ 14.65tr→14.3tr, 5 endpoint dashboard trả đúng
+  shape, ticket PATCH 200. **Lưu ý:** /admin & /user-management đọc dashboard endpoint — Monitor/
+  Tickets/Settings cần `DB_SOURCE=postgres` để có dữ liệu live (json mode trả snapshot tĩnh, write→503
+  nên FE fallback cục bộ).
 
 - **2026-06-24** — **Fix lịch sử hiện sai người nhận khi chuyển theo tên.** Chuyển "theo tên"
   → STK bị che (4 số) → FE gửi STK dự phòng `0011000999888` (của Nguyễn Văn Bình trong seed) →

@@ -464,6 +464,63 @@
   font-size: 44px;
 }
 
+/* ── Bars (cơ cấu yêu cầu / lý do escalation) ── */
+.admin-console .bar-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+  margin: 9px 0;
+  font-size: 13px;
+}
+.admin-console .bar-label { color: var(--ink2); }
+.admin-console .bar {
+  height: 9px;
+  border-radius: 999px;
+  background: var(--g050);
+  overflow: hidden;
+}
+.admin-console .bar-fill { height: 100%; border-radius: 999px; }
+.admin-console .bar-pct { text-align: right; color: var(--muted); }
+
+/* ── Insights ── */
+.admin-console .insight-list { display: flex; flex-direction: column; gap: 10px; }
+.admin-console .insight {
+  display: flex;
+  gap: 12px;
+  background: var(--g050);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 12px 14px;
+}
+.admin-console .insight-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--card); display: inline-flex;
+  align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0;
+}
+.admin-console .insight b { font-size: 14px; }
+.admin-console .insight p { margin: 4px 0 0; color: var(--ink2); font-size: 13px; }
+
+/* ── Transcript ── */
+.admin-console .transcript { display: flex; flex-direction: column; gap: 10px; max-height: 420px; overflow-y: auto; }
+.admin-console .bubble {
+  max-width: 88%;
+  padding: 9px 12px;
+  border-radius: 13px;
+  font-size: 13.5px;
+}
+.admin-console .bubble small { display: block; opacity: 0.7; font-size: 11px; margin-bottom: 3px; }
+.admin-console .bubble.bot { align-self: flex-start; background: var(--g050); border: 1px solid var(--line); }
+.admin-console .bubble.user { align-self: flex-end; background: #e8f1ff; }
+
+.admin-console code {
+  background: var(--g050);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 12.5px;
+}
+
 /* ── Toast ── */
 .admin-console .toast {
   position: fixed;

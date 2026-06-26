@@ -7,20 +7,25 @@ import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import "./admin.css";
 import FamilyAdmin from "./FamilyAdmin";
+import OverviewAdmin from "./OverviewAdmin";
+import MonitorAdmin from "./MonitorAdmin";
+import TicketsAdmin from "./TicketsAdmin";
+import ReportsAdmin from "./ReportsAdmin";
+import SettingsAdmin from "./SettingsAdmin";
 
 type Section = "overview" | "monitor" | "family" | "tickets" | "reports" | "settings";
 
-const NAV: { key: Section; label: string; icon: React.ReactNode; ported?: boolean }[] = [
+const NAV: { key: Section; label: string; icon: React.ReactNode }[] = [
   { key: "overview", label: "Tổng quan", icon: <IconGrid /> },
   { key: "monitor", label: "Giám sát hội thoại", icon: <IconMonitor /> },
-  { key: "family", label: "An tâm Gia đình", icon: <IconHeart />, ported: true },
+  { key: "family", label: "An tâm Gia đình", icon: <IconHeart /> },
   { key: "tickets", label: "Ticket hỗ trợ", icon: <IconTicket /> },
   { key: "reports", label: "Báo cáo", icon: <IconChart /> },
   { key: "settings", label: "Cài đặt", icon: <IconGear /> },
 ];
 
 export default function AdminPage() {
-  const [section, setSection] = useState<Section>("family");
+  const [section, setSection] = useState<Section>("overview");
   const [toastMsg, setToastMsg] = useState("");
   const [toastOn, setToastOn] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -70,30 +75,15 @@ export default function AdminPage() {
       </aside>
 
       <main className="main">
-        {section === "family" ? (
-          <FamilyAdmin toast={toast} />
-        ) : (
-          <Placeholder label={NAV.find((n) => n.key === section)?.label ?? ""} />
-        )}
+        {section === "overview" && <OverviewAdmin />}
+        {section === "monitor" && <MonitorAdmin />}
+        {section === "family" && <FamilyAdmin toast={toast} />}
+        {section === "tickets" && <TicketsAdmin toast={toast} />}
+        {section === "reports" && <ReportsAdmin />}
+        {section === "settings" && <SettingsAdmin toast={toast} />}
       </main>
 
       <div className={`toast ${toastOn ? "show" : ""}`}>{toastMsg}</div>
-    </div>
-  );
-}
-
-function Placeholder({ label }: { label: string }) {
-  return (
-    <div className="placeholder">
-      <div className="big">🚧</div>
-      <h2 style={{ margin: 0 }}>{label}</h2>
-      <p style={{ maxWidth: 420 }}>
-        Tab này chưa được port sang Next.js. Hiện có ở console tĩnh{" "}
-        <Link href="/dashboard" style={{ color: "var(--g700)", fontWeight: 700 }}>
-          /dashboard
-        </Link>
-        . Sẽ chuyển dần sang React trong Phase 6.
-      </p>
     </div>
   );
 }
